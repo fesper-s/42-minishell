@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+         #
+#    By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/13 14:02:20 by fesper-s          #+#    #+#              #
-#    Updated: 2022/12/28 14:54:17 by fesper-s         ###   ########.fr        #
+#    Updated: 2022/12/28 16:50:20 by gussoare         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ OBJS	= $(SRCS:.c=.o)
 
 $(NAME):	$(OBJS)
 			make -C ./libft
-			cc $^ $(CFLAGS) $(LIBFT) -o $@
+			cc $^ $(CFLAGS) $(LIBFT) -o $@ -lreadline
 
 all:		$(NAME)
 
