@@ -1,28 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/13 14:04:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2022/12/28 14:42:55 by fesper-s         ###   ########.fr       */
+/*   Created: 2022/05/05 08:40:58 by fesper-s          #+#    #+#             */
+/*   Updated: 2022/05/26 07:57:37 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int argc, char **argv, char **envp)
+void	ft_bzero(void *s, size_t n)
 {
-	(void) argv;
-	(void) envp;
-	if (argc != 1)
+	size_t			i;
+	unsigned char	*str;
+
+	str = (unsigned char *) s;
+	i = 0;
+	while (n > 0)
 	{
-		ft_putstr_fd("This program not take arguments\n", 2);
-		return (1);
+		str[i] = 0;
+		i++;
+		n--;
 	}
-	while (1)
-	{
-	}
-	return (0);
 }

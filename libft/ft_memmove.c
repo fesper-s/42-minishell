@@ -1,28 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/13 14:04:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2022/12/28 14:42:55 by fesper-s         ###   ########.fr       */
+/*   Created: 2022/05/04 11:48:32 by fesper-s          #+#    #+#             */
+/*   Updated: 2022/05/30 08:02:09 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int argc, char **argv, char **envp)
+void	*ft_memmove(void *dst, const void *src, size_t len)
 {
-	(void) argv;
-	(void) envp;
-	if (argc != 1)
+	char		*str_dst;
+	const char	*str_src;
+
+	if (!len || dst == src)
+		return (dst);
+	str_dst = (char *) dst;
+	str_src = (const char *) src;
+	if (dst > src)
 	{
-		ft_putstr_fd("This program not take arguments\n", 2);
-		return (1);
+		while (len--)
+			str_dst[len] = str_src[len];
 	}
-	while (1)
+	else
 	{
+		str_dst = ft_memcpy(str_dst, str_src, len);
 	}
-	return (0);
+	return (dst);
 }

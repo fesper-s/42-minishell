@@ -1,28 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_memchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/13 14:04:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2022/12/28 14:42:55 by fesper-s         ###   ########.fr       */
+/*   Created: 2022/05/06 13:59:33 by fesper-s          #+#    #+#             */
+/*   Updated: 2022/05/17 09:38:54 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int argc, char **argv, char **envp)
+void	*ft_memchr(const void *s, int c, size_t n)
 {
-	(void) argv;
-	(void) envp;
-	if (argc != 1)
+	unsigned char	uc_c;
+	unsigned char	*str_s;
+
+	uc_c = (unsigned char) c;
+	str_s = (unsigned char *) s;
+	while (n--)
 	{
-		ft_putstr_fd("This program not take arguments\n", 2);
-		return (1);
-	}
-	while (1)
-	{
+		if (uc_c == *str_s)
+			return (&*str_s);
+		str_s++;
 	}
 	return (0);
 }

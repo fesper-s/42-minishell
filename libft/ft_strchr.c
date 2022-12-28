@@ -1,28 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/13 14:04:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2022/12/28 14:42:55 by fesper-s         ###   ########.fr       */
+/*   Created: 2022/05/04 13:49:33 by fesper-s          #+#    #+#             */
+/*   Updated: 2022/05/19 08:29:32 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int argc, char **argv, char **envp)
+char	*ft_strchr(const char *s, int c)
 {
-	(void) argv;
-	(void) envp;
-	if (argc != 1)
+	char	*str;
+	char	find;
+
+	str = (char *) s;
+	find = (char) c;
+	while (*str != find)
 	{
-		ft_putstr_fd("This program not take arguments\n", 2);
-		return (1);
+		if (*str == 0)
+			return (0);
+		str++;
 	}
-	while (1)
-	{
-	}
-	return (0);
+	return (str);
 }

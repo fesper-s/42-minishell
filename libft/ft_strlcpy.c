@@ -1,28 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/13 14:04:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2022/12/28 14:42:55 by fesper-s         ###   ########.fr       */
+/*   Created: 2022/05/04 12:57:21 by fesper-s          #+#    #+#             */
+/*   Updated: 2022/05/18 08:08:50 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int argc, char **argv, char **envp)
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {
-	(void) argv;
-	(void) envp;
-	if (argc != 1)
+	size_t			len_src;
+	size_t			i;
+	unsigned char	*str_src;
+
+	str_src = (unsigned char *) src;
+	len_src = ft_strlen(src);
+	if (!dstsize)
+		return (len_src);
+	i = 0;
+	while (str_src[i] != 0 && i < dstsize - 1)
 	{
-		ft_putstr_fd("This program not take arguments\n", 2);
-		return (1);
+		dst[i] = str_src[i];
+		i++;
 	}
-	while (1)
-	{
-	}
-	return (0);
+	dst[i] = 0;
+	return (len_src);
 }

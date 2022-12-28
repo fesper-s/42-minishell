@@ -1,28 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_lstadd_back_bonus.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/13 14:04:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2022/12/28 14:42:55 by fesper-s         ###   ########.fr       */
+/*   Created: 2022/05/24 14:36:13 by fesper-s          #+#    #+#             */
+/*   Updated: 2022/05/25 09:28:42 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int argc, char **argv, char **envp)
+void	ft_lstadd_back(t_list **lst, t_list *new)
 {
-	(void) argv;
-	(void) envp;
-	if (argc != 1)
+	t_list	*temp;
+
+	if (!lst)
+		return ;
+	if (!*lst)
 	{
-		ft_putstr_fd("This program not take arguments\n", 2);
-		return (1);
+		*lst = new;
+		return ;
 	}
-	while (1)
-	{
-	}
-	return (0);
+	temp = ft_lstlast(*lst);
+	temp->next = new;
 }

@@ -1,28 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/13 14:04:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2022/12/28 14:42:55 by fesper-s         ###   ########.fr       */
+/*   Created: 2022/05/10 14:04:32 by fesper-s          #+#    #+#             */
+/*   Updated: 2022/05/19 08:01:29 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int argc, char **argv, char **envp)
+char	*ft_strdup(const char *s)
 {
-	(void) argv;
-	(void) envp;
-	if (argc != 1)
+	char	*new_str;
+	int		len_s;
+	int		i;
+
+	len_s = ft_strlen(s);
+	new_str = malloc((len_s + 1) * sizeof(char));
+	if (new_str == 0)
+		return (0);
+	i = 0;
+	while (i < len_s)
 	{
-		ft_putstr_fd("This program not take arguments\n", 2);
-		return (1);
+		new_str[i] = s[i];
+		i++;
 	}
-	while (1)
-	{
-	}
-	return (0);
+	new_str[i] = 0;
+	return (new_str);
 }

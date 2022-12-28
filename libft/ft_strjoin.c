@@ -1,28 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/13 14:04:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2022/12/28 14:42:55 by fesper-s         ###   ########.fr       */
+/*   Created: 2022/05/11 13:53:28 by fesper-s          #+#    #+#             */
+/*   Updated: 2022/05/26 08:35:10 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int argc, char **argv, char **envp)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	(void) argv;
-	(void) envp;
-	if (argc != 1)
-	{
-		ft_putstr_fd("This program not take arguments\n", 2);
-		return (1);
-	}
-	while (1)
-	{
-	}
-	return (0);
+	char	*new_str;
+	size_t	len_s1;
+	size_t	len_s2;
+
+	if (!s1 || !s2)
+		return (0);
+	len_s1 = ft_strlen(s1);
+	len_s2 = ft_strlen(s2);
+	new_str = malloc((len_s1 + len_s2 + 1) * sizeof(char));
+	if (new_str == 0)
+		return (0);
+	ft_strlcpy(new_str, s1, len_s1 + 1);
+	ft_strlcat(new_str, s2, len_s1 + len_s2 + 1);
+	return (new_str);
 }

@@ -1,28 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/13 14:04:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2022/12/28 14:42:55 by fesper-s         ###   ########.fr       */
+/*   Created: 2022/05/19 12:04:05 by fesper-s          #+#    #+#             */
+/*   Updated: 2022/05/26 08:39:59 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int argc, char **argv, char **envp)
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	(void) argv;
-	(void) envp;
-	if (argc != 1)
+	char	*str;
+	int		len_s;
+	int		i;
+
+	if (!s)
+		return (0);
+	len_s = ft_strlen(s);
+	str = malloc(len_s + 1 * sizeof(char));
+	if (str == 0)
+		return (0);
+	i = 0;
+	while (s[i] != 0)
 	{
-		ft_putstr_fd("This program not take arguments\n", 2);
-		return (1);
+		str[i] = f(i, s[i]);
+		i++;
 	}
-	while (1)
-	{
-	}
-	return (0);
+	str[i] = 0;
+	return (str);
 }

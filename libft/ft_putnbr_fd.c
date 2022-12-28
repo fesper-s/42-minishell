@@ -1,28 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/13 14:04:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2022/12/28 14:42:55 by fesper-s         ###   ########.fr       */
+/*   Created: 2022/05/24 08:15:44 by fesper-s          #+#    #+#             */
+/*   Updated: 2022/05/24 08:30:00 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int argc, char **argv, char **envp)
+void	ft_putnbr_fd(int n, int fd)
 {
-	(void) argv;
-	(void) envp;
-	if (argc != 1)
+	long	nbr;
+
+	nbr = (long) n;
+	if (nbr < 0)
 	{
-		ft_putstr_fd("This program not take arguments\n", 2);
-		return (1);
+		ft_putchar_fd('-', fd);
+		nbr *= -1;
 	}
-	while (1)
+	if (nbr >= 10)
 	{
+		ft_putnbr_fd(nbr / 10, fd);
+		nbr = nbr % 10;
 	}
-	return (0);
+	ft_putchar_fd(nbr + 48, fd);
 }

@@ -1,28 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_memcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/13 14:04:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2022/12/28 14:42:55 by fesper-s         ###   ########.fr       */
+/*   Created: 2022/05/06 14:00:30 by fesper-s          #+#    #+#             */
+/*   Updated: 2022/05/17 09:13:37 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int argc, char **argv, char **envp)
+int	ft_memcmp(const	void *s1, const void *s2, size_t n)
 {
-	(void) argv;
-	(void) envp;
-	if (argc != 1)
+	unsigned char	*str_s1;
+	unsigned char	*str_s2;
+
+	str_s1 = (unsigned char *) s1;
+	str_s2 = (unsigned char *) s2;
+	if (n == 0)
+		return (0);
+	while (n--)
 	{
-		ft_putstr_fd("This program not take arguments\n", 2);
-		return (1);
-	}
-	while (1)
-	{
+		if (*str_s1 != *str_s2)
+			return (*str_s1 - *str_s2);
+		str_s1++;
+		str_s2++;
 	}
 	return (0);
 }

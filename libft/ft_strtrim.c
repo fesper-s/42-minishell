@@ -1,28 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/13 14:04:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2022/12/28 14:42:55 by fesper-s         ###   ########.fr       */
+/*   Created: 2022/05/16 10:07:28 by fesper-s          #+#    #+#             */
+/*   Updated: 2022/05/26 08:37:44 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int argc, char **argv, char **envp)
+char	*ft_strtrim(char const *s1, char const *set)
+
 {
-	(void) argv;
-	(void) envp;
-	if (argc != 1)
-	{
-		ft_putstr_fd("This program not take arguments\n", 2);
-		return (1);
-	}
-	while (1)
-	{
-	}
-	return (0);
+	size_t	size_cut;
+	char	*result;
+
+	if (!s1 || !set)
+		return (0);
+	while (*s1 && ft_strchr(set, *s1))
+		s1++;
+	size_cut = ft_strlen(s1);
+	while (*s1 && ft_strchr(set, s1[size_cut]))
+		size_cut--;
+	result = ft_substr(s1, 0, size_cut + 1);
+	return (result);
 }

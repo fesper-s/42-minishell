@@ -1,28 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/13 14:04:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2022/12/28 14:42:55 by fesper-s         ###   ########.fr       */
+/*   Created: 2022/05/10 13:43:04 by fesper-s          #+#    #+#             */
+/*   Updated: 2022/05/26 08:03:31 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int argc, char **argv, char **envp)
+void	*ft_calloc(size_t count, size_t size)
 {
-	(void) argv;
-	(void) envp;
-	if (argc != 1)
+	void	*ptr;
+
+	if (count == 0 || size == 0)
 	{
-		ft_putstr_fd("This program not take arguments\n", 2);
-		return (1);
+		count = 1;
+		size = 1;
 	}
-	while (1)
-	{
-	}
-	return (0);
+	if ((count * size) / count != size)
+		return (0);
+	ptr = malloc(count * size);
+	if (ptr == 0)
+		return (0);
+	ft_bzero(ptr, count * size);
+	return (ptr);
 }

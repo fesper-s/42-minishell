@@ -1,28 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/13 14:04:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2022/12/28 14:42:55 by fesper-s         ###   ########.fr       */
+/*   Created: 2022/05/09 07:30:06 by fesper-s          #+#    #+#             */
+/*   Updated: 2022/05/20 13:57:36 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int argc, char **argv, char **envp)
+char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 {
-	(void) argv;
-	(void) envp;
-	if (argc != 1)
+	size_t	i;
+	size_t	j;
+
+	if (needle[0] == 0)
+		return ((char *) haystack);
+	i = 0;
+	while (haystack[i] != 0 && i < len)
 	{
-		ft_putstr_fd("This program not take arguments\n", 2);
-		return (1);
-	}
-	while (1)
-	{
+		j = 0;
+		if (haystack[i] == needle[j])
+		{
+			while (haystack[i + j] == needle[j] && len > i + j)
+			{
+				j++;
+				if (needle[j] == 0)
+					return ((char *) &haystack[i]);
+			}
+		}
+		i++;
 	}
 	return (0);
 }

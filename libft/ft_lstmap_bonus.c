@@ -1,28 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_lstmap_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/13 14:04:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2022/12/28 14:42:55 by fesper-s         ###   ########.fr       */
+/*   Created: 2022/05/27 07:44:51 by fesper-s          #+#    #+#             */
+/*   Updated: 2022/05/27 10:13:03 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int argc, char **argv, char **envp)
+t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
-	(void) argv;
-	(void) envp;
-	if (argc != 1)
+	t_list	*newlst;
+	t_list	*newcontent;
+
+	if (!lst)
+		return (0);
+	newlst = 0;
+	while (lst)
 	{
-		ft_putstr_fd("This program not take arguments\n", 2);
-		return (1);
+		newcontent = ft_lstnew(f(lst->content));
+		if (!newcontent)
+			ft_lstclear(&newcontent, *del);
+		else
+			ft_lstadd_back(&newlst, newcontent);
+		lst = lst->next;
 	}
-	while (1)
-	{
-	}
-	return (0);
+	return (newlst);
 }
