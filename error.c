@@ -1,25 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/13 14:04:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2022/12/28 14:54:46 by fesper-s         ###   ########.fr       */
+/*   Created: 2022/12/28 14:52:21 by fesper-s          #+#    #+#             */
+/*   Updated: 2022/12/28 14:55:54 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	main(int argc, char **argv, char **envp)
+int	print_error(char *str)
 {
-	(void) argv;
-	(void) envp;
-	if (argc != 1)
-		return (print_error("This program do not accept arguments\n"));
-	while (1)
-	{
-	}
-	return (0);
+	ft_putstr_fd(str, 2);
+	return (1);
 }
