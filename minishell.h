@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2022/12/28 14:54:03 by fesper-s         ###   ########.fr       */
+/*   Updated: 2022/12/28 16:02:24 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,9 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <stdlib.h>
+# include <signal.h>
 
-int	print_error(char *str);
+int		print_error(char *str);
+void	ignore_signal(void);
 
 #endif
