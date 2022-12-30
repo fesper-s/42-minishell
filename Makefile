@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+         #
+#    By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/13 14:02:20 by fesper-s          #+#    #+#              #
-#    Updated: 2022/12/28 16:50:20 by gussoare         ###   ########.fr        #
+#    Updated: 2022/12/30 17:31:57 by fesper-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CFLAGS	= -Wall -Wextra -Werror
 
 LIBFT	= ./libft/libft.a 
 
-SRCS	= ./main.c ./error.c
+SRCS	= ./main.c ./error.c ./signal.c
 
 OBJS	= $(SRCS:.c=.o)
 

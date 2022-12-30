@@ -1,33 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/13 14:04:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2022/12/30 17:32:27 by fesper-s         ###   ########.fr       */
+/*   Created: 2022/12/30 13:27:23 by fesper-s          #+#    #+#             */
+/*   Updated: 2022/12/30 17:32:01 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	main(int argc, char **argv, char **envp)
+void	handle_sigint(int signum)
 {
-	char	*cmd;
-
-	(void) argv;
-	(void) envp;
-	if (argc != 1)
-		return (print_error("This program do not accept arguments\n"));
-	while (1)
+	if (signum == SIGINT)
 	{
-		signals();
-		cmd = readline("minishell % ");
-		if (cmd)
-			add_history(cmd);
-		if (ft_strncmp(cmd, "exit", 4) == 0)
-			break ;
+		ioctl(STDIN_FILENO, TIOCSTI, "\n");
+		rl_replace_line("", 0);
+		rl_on_new_line();
 	}
-	return (0);
+}
+
+void	signals(void)
+{
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGTSTP, SIG_IGN);
 }
