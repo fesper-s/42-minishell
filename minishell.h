@@ -21,6 +21,7 @@
 # include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <sys/ioctl.h>
 
 // error.c
 int		print_error(char *str);
