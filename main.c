@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2022/12/30 17:32:27 by fesper-s         ###   ########.fr       */
+/*   Updated: 2022/12/30 18:11:41 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ int	main(int argc, char **argv, char **envp)
 		cmd = readline("minishell % ");
 		if (cmd)
 			add_history(cmd);
+		else
+			break ;
 		if (ft_strncmp(cmd, "exit", 4) == 0)
 			break ;
 	}
