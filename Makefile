@@ -6,13 +6,17 @@
 #    By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/13 14:02:20 by fesper-s          #+#    #+#              #
-#    Updated: 2022/12/30 17:31:57 by fesper-s         ###   ########.fr        #
+#    Updated: 2022/12/30 17:49:21 by fesper-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= minishell
 
 CFLAGS	= -Wall -Wextra -Werror
+
+CPPFLAGS = -I /opt/homebrew/Cellar/readline/8.2.1/include
+
+LDFLAGS	= -L /opt/homebrew/Cellar/readline/8.2.1/lib
 
 LIBFT	= ./libft/libft.a 
 
@@ -22,7 +26,7 @@ OBJS	= $(SRCS:.c=.o)
 
 $(NAME):	$(OBJS)
 			make -C ./libft
-			cc $^ $(CFLAGS) $(LIBFT) -o $@ -lreadline
+			cc $^ $(CFLAGS) $(LIBFT) -o $@ -lreadline $(CPPFLAGS) $(LDFLAGS)
 
 all:		$(NAME)
 
