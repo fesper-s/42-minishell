@@ -6,7 +6,7 @@
 #    By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/13 14:02:20 by fesper-s          #+#    #+#              #
-#    Updated: 2022/12/30 17:49:21 by fesper-s         ###   ########.fr        #
+#    Updated: 2022/12/31 17:26:18 by fesper-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ LDFLAGS	= -L /opt/homebrew/Cellar/readline/8.2.1/lib
 
 LIBFT	= ./libft/libft.a 
 
-SRCS	= ./main.c ./error.c ./signal.c
+SRCS	= ./main.c ./error.c ./signal.c ./utils.c
 
 OBJS	= $(SRCS:.c=.o)
 

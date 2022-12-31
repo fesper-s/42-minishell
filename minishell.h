@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2022/12/30 17:32:17 by fesper-s         ###   ########.fr       */
+/*   Updated: 2022/12/31 17:27:49 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,11 @@
 
 // error.c
 int		print_error(char *str);
+void	cmd_error(char *cmd);
 // signal.c
 void	signals(void);
 void	handle_sigint(int signum);
+// utils.c
+char	*find_path(char *cmd, char **envp);
 
 #endif
