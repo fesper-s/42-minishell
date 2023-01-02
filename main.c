@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/02 13:21:02 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/02 13:47:54 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,20 @@
 
 int	main(int argc, char **argv, char **envp)
 {
-	char	*cmd;
-	char	**cmds;
-	char	*path;
-	int		pid;
-
 	(void) argv;
 	if (argc != 1)
 		return (print_error("This program do not accept arguments\n"));
+	minishell(envp);
+	return (0);
+}
+
+void	minishell(char **envp)
+{
+	int		pid;
+	char	*cmd;
+	char	**cmds;
+	char	*path;
+
 	while (1)
 	{
 		signals();
@@ -43,5 +49,4 @@ int	main(int argc, char **argv, char **envp)
 		}
 		waitpid(pid, NULL, 0);
 	}
-	return (0);
 }

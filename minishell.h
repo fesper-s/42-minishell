@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/02 09:55:16 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/02 13:47:50 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # include <readline/history.h>
 # include <sys/ioctl.h>
 
+// main.c
+void	minishell(char **envp);
 // error.c
 int		print_error(char *str);
 void	cmd_error(char *cmd);
