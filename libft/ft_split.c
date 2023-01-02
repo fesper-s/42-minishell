@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 08:33:43 by fesper-s          #+#    #+#             */
-/*   Updated: 2022/05/30 07:57:36 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/02 13:46:41 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,14 @@ static size_t	ft_wordcount(char const *s, char c)
 	wordnbr = 0;
 	while (s[i])
 	{
-		if (s[i] != c && (s[i - 1] == c || i == 0))
+		if (!(s[i] == c))
+		{
 			wordnbr++;
-		i++;
+			while (s[i] && s[i] != c)
+				i++;
+		}
+		else
+			i++;
 	}
 	return (wordnbr);
 }
