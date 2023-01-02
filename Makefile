@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+         #
+#    By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/13 14:02:20 by fesper-s          #+#    #+#              #
-#    Updated: 2023/01/02 09:01:37 by fesper-s         ###   ########.fr        #
+#    Updated: 2023/01/02 13:29:57 by gussoare         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,13 +14,9 @@ NAME	= minishell
 
 CFLAGS	= -Wall -Wextra -Werror
 
-#CPPFLAGS = -I /opt/homebrew/Cellar/readline/8.2.1/include
+LDFLAGS = -L ~/.brew/opt/readline/lib
 
-#LDFLAGS	= -L /opt/homebrew/Cellar/readline/8.2.1/lib
-
-CPPFLAGS = -I ~/.brew/Cellar/readline/8.2.1/include
-
-LDFLAGS	= -L ~/.brew/Cellar/readline/8.2.1/lib
+CPPFLAGS = -I ~/.brew/opt/readline/include
 
 LIBFT	= ./libft/libft.a 
 
