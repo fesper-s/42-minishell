@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2022/12/31 17:27:49 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/02 09:55:16 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,7 @@ void	signals(void);
 void	handle_sigint(int signum);
 // utils.c
 char	*find_path(char *cmd, char **envp);
+char	**ft_trim(char **cmds);
+char	**get_cmds(char *cmd);
 
 #endif

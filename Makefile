@@ -6,7 +6,7 @@
 #    By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/13 14:02:20 by fesper-s          #+#    #+#              #
-#    Updated: 2022/12/31 17:26:18 by fesper-s         ###   ########.fr        #
+#    Updated: 2023/01/02 09:01:37 by fesper-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,9 +14,13 @@ NAME	= minishell
 
 CFLAGS	= -Wall -Wextra -Werror
 
-CPPFLAGS = -I /opt/homebrew/Cellar/readline/8.2.1/include
+#CPPFLAGS = -I /opt/homebrew/Cellar/readline/8.2.1/include
 
-LDFLAGS	= -L /opt/homebrew/Cellar/readline/8.2.1/lib
+#LDFLAGS	= -L /opt/homebrew/Cellar/readline/8.2.1/lib
+
+CPPFLAGS = -I ~/.brew/Cellar/readline/8.2.1/include
+
+LDFLAGS	= -L ~/.brew/Cellar/readline/8.2.1/lib
 
 LIBFT	= ./libft/libft.a 
 
