@@ -14,9 +14,13 @@ NAME	= minishell
 
 CFLAGS	= -Wall -Wextra -Werror
 
-LDFLAGS = -L ~/.brew/opt/readline/lib
+CPPFLAGS = -I /opt/homebrew/Cellar/readline/8.2.1/include
 
-CPPFLAGS = -I ~/.brew/opt/readline/include
+LDFLAGS = -L /opt/homebrew/Cellar/readline/8.2.1/lib
+
+CPPFLAGS += -I ~/.brew/opt/readline/include
+
+LDFLAGS += -L ~/.brew/opt/readline/lib
 
 LIBFT	= ./libft/libft.a 
 
