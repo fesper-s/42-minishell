@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/02 10:17:10 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/02 13:21:02 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,15 @@ int	main(int argc, char **argv, char **envp)
 			break ;
 		if (ft_strncmp(cmd, "exit", 5) == 0)
 			break ;
-		cmds = get_cmds(cmd);
-		path = find_path(cmds[0], envp);
 		pid = fork();
 		if (pid == -1)
 			print_error("Error on fork\n");
 		if (pid == 0)
+		{
+			cmds = get_cmds(cmd);
+			path = find_path(cmds[0], envp);
 			execve(path, cmds, envp);
+		}
 		waitpid(pid, NULL, 0);
 	}
 	return (0);
