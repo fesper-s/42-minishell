@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/02 13:47:54 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/03 07:49:34 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,18 @@ void	minishell(char **envp)
 			break ;
 		if (ft_strncmp(cmd, "exit", 5) == 0)
 			break ;
-		pid = fork();
-		if (pid == -1)
-			print_error("Error on fork\n");
-		if (pid == 0)
+		if (find_path(cmd, envp) != 0)
 		{
-			cmds = get_cmds(cmd);
-			path = find_path(cmds[0], envp);
-			execve(path, cmds, envp);
+			pid = fork();
+			if (pid == -1)
+				print_error("Error: no child process created\n");
+			if (pid == 0)
+			{
+				cmds = get_cmds(cmd);
+				path = find_path(cmds[0], envp);
+				execve(path, cmds, envp);
+			}
+			waitpid(pid, NULL, 0);
 		}
-		waitpid(pid, NULL, 0);
 	}
 }
