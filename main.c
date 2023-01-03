@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/03 08:00:34 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/03 10:28:12 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,32 @@ int	main(int argc, char **argv, char **envp)
 	return (0);
 }
 
-void	minishell(char **envp)
+void	cmd_process(char *cmd, char **envp)
 {
 	int		pid;
-	char	*cmd;
-	char	**cmds;
 	char	*path;
+	char	**cmds;
+
+	cmds = get_cmds(cmd);
+	free(cmd);
+	if (find_path(cmds[0]) != 0)
+	{
+		pid = fork();
+		if (pid == -1)
+			print_error("Error: no child process created\n");
+		if (pid == 0)
+		{
+			path = find_path(cmds[0]);
+			execve(path, cmds, envp);
+		}
+		waitpid(pid, NULL, 0);
+	}
+	free_str_splited(cmds);
+}
+
+void	minishell(char **envp)
+{
+	char	*cmd;
 
 	while (1)
 	{
@@ -38,18 +58,6 @@ void	minishell(char **envp)
 			break ;
 		if (ft_strncmp(cmd, "exit", 5) == 0)
 			break ;
-		cmds = get_cmds(cmd);
-		if (find_path(cmds[0], envp) != 0)
-		{
-			pid = fork();
-			if (pid == -1)
-				print_error("Error: no child process created\n");
-			if (pid == 0)
-			{
-				path = find_path(cmds[0], envp);
-				execve(path, cmds, envp);
-			}
-			waitpid(pid, NULL, 0);
-		}
+		cmd_process(cmd, envp);
 	}
 }

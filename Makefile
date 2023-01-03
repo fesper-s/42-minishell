@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+         #
+#    By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/13 14:02:20 by fesper-s          #+#    #+#              #
-#    Updated: 2023/01/02 13:32:25 by gussoare         ###   ########.fr        #
+#    Updated: 2023/01/03 10:36:29 by fesper-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= minishell
 
-CFLAGS	= -Wall -Wextra -Werror
+CFLAGS	= -g -Wall -Wextra -Werror
 
 CPPFLAGS = -I /opt/homebrew/Cellar/readline/8.2.1/include
 
@@ -40,6 +40,7 @@ clean:
 
 fclean:		clean
 			rm -f $(NAME)
+			rm -rf $(NAME).dSYM
 			make fclean -C ./libft
 
 re:			fclean all
