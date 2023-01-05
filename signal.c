@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/30 13:27:23 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/04 10:07:38 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/05 12:31:23 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	handle_sigint(int signum)
 {
 	if (signum == SIGINT)
 	{
+		g_status = 1;
 		ioctl(STDIN_FILENO, TIOCSTI, "\n");
 		rl_replace_line("", 0);
 		rl_on_new_line();

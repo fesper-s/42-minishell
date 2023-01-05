@@ -6,7 +6,7 @@
 #    By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/13 14:02:20 by fesper-s          #+#    #+#              #
-#    Updated: 2023/01/03 10:36:29 by fesper-s         ###   ########.fr        #
+#    Updated: 2023/01/04 13:53:20 by fesper-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ LDFLAGS += -L ~/.brew/opt/readline/lib
 
 LIBFT	= ./libft/libft.a 
 
-SRCS	= ./main.c ./error.c ./signal.c ./utils.c
+SRCS	= ./main.c ./error.c ./signal.c ./utils.c ./minishell.c
 
 OBJS	= $(SRCS:.c=.o)
 

@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 17:25:37 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/04 13:02:30 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/05 12:37:57 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,7 @@ char	*find_path(char *cmd)
 		}
 		free(cmd_path);
 	}
-	if (cmd[0] != '$')
-	{
-		cmd_error(cmd);
-		g_status = 127;
-	}
+	error_display(cmd);
 	free_str_splited(path);
 	return (0);
 }
