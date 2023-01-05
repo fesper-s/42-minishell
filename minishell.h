@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/03 10:31:17 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/05 12:38:33 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,17 @@
 # include <readline/history.h>
 # include <sys/ioctl.h>
 
-// main.c
+int	g_status;
+
+// minishell.c
+void	expand_var(char *cmd);
 void	cmd_process(char *cmd, char **envp);
 void	minishell(char **envp);
 // error.c
 int		print_error(char *str);
 void	cmd_error(char *cmd);
+void	error_display(char *cmd);
+char	*path_error(char *cmd, char **path);
 // signal.c
 void	signals(void);
 void	handle_sigint(int signum);
