@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/05 12:14:52 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/05 14:39:12 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,22 @@ typedef struct s_line
 	struct s_line	*next;
 }					t_line;
 
-// main.c
+int	g_status;
+
+// minishell.c
+void	expand_var(char *cmd);
 void	cmd_process(char *cmd, char **envp);
 void	minishell(char **envp);
+int		organize_line(t_line *line);
+// checker
+void	check_line(t_line *line);
+int		check_space(t_line *line);
+void	put_space(t_line *line, int x);
 // error.c
 int		print_error(char *str);
 void	cmd_error(char *cmd);
+void	error_display(char *cmd);
+char	*path_error(char *cmd, char **path);
 // signal.c
 void	signals(void);
 void	handle_sigint(int signum);

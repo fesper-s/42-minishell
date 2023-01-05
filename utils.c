@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 17:25:37 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/04 12:46:16 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/05 14:09:05 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	free_str_splited(char **str)
 char	*find_path(char *cmd)
 {
 	int		i;
-	char	*temp;
+	char	*buffer;
 	char	*env_path;
 	char	*cmd_path;
 	char	**path;
@@ -38,9 +38,9 @@ char	*find_path(char *cmd)
 	i = -1;
 	while (path[++i])
 	{
-		temp = ft_strjoin(path[i], "/");
-		cmd_path = ft_strjoin(temp, cmd);
-		free(temp);
+		buffer = ft_strjoin(path[i], "/");
+		cmd_path = ft_strjoin(buffer, cmd);
+		free(buffer);
 		if (access(cmd_path, F_OK | X_OK) == 0)
 		{
 			free_str_splited(path);
@@ -48,7 +48,7 @@ char	*find_path(char *cmd)
 		}
 		free(cmd_path);
 	}
-	cmd_error(cmd);
+	error_display(cmd);
 	free_str_splited(path);
 	return (0);
 }
