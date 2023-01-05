@@ -3,16 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 17:25:37 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/02 10:11:32 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/04 12:46:16 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*find_path(char *cmd, char **envp)
+int	free_str_splited(char **str)
+{
+	int	i;
+
+	i = -1;
+	if (!str)
+		return (0);
+	while (str[++i])
+		free(str[i]);
+	free(str);
+	return (0);
+}
+
+char	*find_path(char *cmd)
 {
 	int		i;
 	char	*temp;
@@ -20,13 +33,8 @@ char	*find_path(char *cmd, char **envp)
 	char	*cmd_path;
 	char	**path;
 
-	i = -1;
-	while (envp[++i])
-	{
-		if (ft_strnstr(envp[i], "PATH=", 5))
-			env_path = ft_strnstr(envp[i], "PATH=", 5);
-	}
-	path = ft_split(env_path + 5, ':');
+	env_path = getenv("PATH");
+	path = ft_split(env_path, ':');
 	i = -1;
 	while (path[++i])
 	{
@@ -34,10 +42,14 @@ char	*find_path(char *cmd, char **envp)
 		cmd_path = ft_strjoin(temp, cmd);
 		free(temp);
 		if (access(cmd_path, F_OK | X_OK) == 0)
+		{
+			free_str_splited(path);
 			return (cmd_path);
+		}
 		free(cmd_path);
 	}
 	cmd_error(cmd);
+	free_str_splited(path);
 	return (0);
 }
 
