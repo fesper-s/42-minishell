@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/06 10:03:38 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/06 12:49:13 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ typedef struct s_line
 {
 	char			*cmd;
 	char			**cmds;
-	char			**flags;
 	char			*infile;
 	char			*outfile;
 	struct s_line	*next;
@@ -45,6 +44,9 @@ int		organize_line(t_line *line);
 void	check_line(t_line *line);
 int		check_space(t_line *line);
 void	put_space(t_line *line, int x);
+//init
+void	init_files(t_line *line, char **split);
+void	init_cmds(t_line *line, char **split);
 // error.c
 int		print_error(char *str);
 void	cmd_error(char *cmd);
@@ -58,5 +60,6 @@ int		free_str_splited(char **str);
 char	*find_path(char *cmd);
 char	**ft_trim(char **cmds);
 char	**get_cmds(char *cmd);
+size_t	cmds_count(char **split);
 
 #endif
