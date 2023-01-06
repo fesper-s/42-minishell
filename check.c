@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 14:42:32 by gussoare          #+#    #+#             */
-/*   Updated: 2023/01/05 14:45:01 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/06 10:22:38 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,19 +86,15 @@ void	check_line(t_line *line)
 	}
 }
 
-int organize_line(t_line *line)
+int	organize_line(t_line *line)
 {
-	int		i;
 	char	**split_line;
 
-	i = -1;
 	if (!line->cmd)
 		return (0);
 	check_line(line);
 	check_space(line);
 	split_line = ft_split(line->cmd, ' ');
-	while (split_line[++i])
-		printf("cmd[%d]--> %s\n", i, split_line[i]);
-
+	(void)split_line;
 	return (1);
 }
