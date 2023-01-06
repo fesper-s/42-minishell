@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/06 09:58:29 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/06 10:16:47 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,24 +57,25 @@ void	cmd_process(char *cmd, char **envp)
 
 void	minishell(char **envp)
 {
-	char	*cmd;
+	t_line	line;
 
 	while (1)
 	{
 		signals();
-		cmd = readline("minishell % ");
-		if (cmd)
-			add_history(cmd);
+		line.cmd = readline("minishell % ");
+		if (line.cmd)
+			add_history(line.cmd);
 		else
 		{
 			printf("exit\n");
 			break ;
 		}
-		if (ft_strncmp(cmd, "exit", 5) == 0)
+		organize_line(&line);
+		if (ft_strncmp(line.cmd, "exit", 5) == 0)
 		{
 			printf("exit\n");
 			break ;
 		}
-		cmd_process(cmd, envp);
+		cmd_process(line.cmd, envp);
 	}
 }

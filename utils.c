@@ -3,23 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 17:25:37 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/05 12:37:57 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/05 14:09:05 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_str_splited(char **str)
+int	free_str_splited(char **str)
 {
 	int	i;
 
 	i = -1;
+	if (!str)
+		return (0);
 	while (str[++i])
 		free(str[i]);
 	free(str);
+	return (0);
 }
 
 char	*find_path(char *cmd)
