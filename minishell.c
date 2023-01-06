@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/05 12:30:34 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/06 09:58:29 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ void	cmd_process(char *cmd, char **envp)
 	char	**cmds;
 
 	cmds = get_cmds(cmd);
-	free(cmd);
 	if (!cmd[0])
 		return ;
 	if (find_path(cmds[0]) != 0)
