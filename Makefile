@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+         #
+#    By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/13 14:02:20 by fesper-s          #+#    #+#              #
-#    Updated: 2023/01/05 14:45:35 by gussoare         ###   ########.fr        #
+#    Updated: 2023/01/06 11:43:11 by fesper-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,8 @@ LDFLAGS += -L ~/.brew/opt/readline/lib
 
 LIBFT	= ./libft/libft.a 
 
-SRCS	= ./main.c ./error.c ./signal.c ./utils.c ./minishell.c ./check.c
+SRCS	= ./main.c ./error.c ./signal.c ./utils.c ./minishell.c ./check.c \
+		  ./builtins.c
 
 OBJS	= $(SRCS:.c=.o)
 
