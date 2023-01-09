@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 14:52:21 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/05 12:38:01 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/09 10:58:28 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,11 @@ char	*path_error(char *cmd, char **path)
 	}
 	free_str_splited(path);
 	return (0);
+}
+
+void	dir_error(char *path)
+{
+	ft_putstr_fd("cd: no such file or directory: ", 2);
+	ft_putstr_fd(path, 2);
+	ft_putstr_fd("\n", 2);
 }

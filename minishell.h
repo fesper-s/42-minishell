@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/06 10:03:38 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/09 10:57:40 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ int		print_error(char *str);
 void	cmd_error(char *cmd);
 void	error_display(char *cmd);
 char	*path_error(char *cmd, char **path);
+void	dir_error(char *path);
 // signal.c
 void	signals(void);
 void	handle_sigint(int signum);
@@ -58,5 +59,7 @@ int		free_str_splited(char **str);
 char	*find_path(char *cmd);
 char	**ft_trim(char **cmds);
 char	**get_cmds(char *cmd);
+// builtins.c
+int		handle_builtins(char **cmds);
 
 #endif
