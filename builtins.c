@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 10:42:52 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/09 10:20:15 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/09 11:12:09 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ int	handle_builtins(char **cmds)
 	}
 	if (!ft_strncmp(cmds[0], "cd", 3))
 	{
-		printf("Enter CD\n");
+		if (chdir(cmds[1]) < 0)
+			dir_error(cmds[1]);
 		return (1);
 	}
 	return (0);
