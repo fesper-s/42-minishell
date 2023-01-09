@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/09 11:13:15 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/09 12:10:21 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	cmd_process(char *cmd, char **envp)
 	cmds = get_cmds(cmd);
 	if (!cmd[0])
 		return ;
-	isbuiltin = handle_builtins(cmds);
+	isbuiltin = handle_builtins(cmds, envp);
 	if (find_path(cmds[0]) && !isbuiltin)
 	{
 		g_status = 0;
