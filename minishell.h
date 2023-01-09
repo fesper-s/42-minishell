@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/09 10:57:40 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/09 11:13:12 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ typedef struct s_line
 {
 	char			*cmd;
 	char			**cmds;
-	char			**flags;
 	char			*infile;
 	char			*outfile;
 	struct s_line	*next;
@@ -45,6 +44,10 @@ int		organize_line(t_line *line);
 void	check_line(t_line *line);
 int		check_space(t_line *line);
 void	put_space(t_line *line, int x);
+//init
+void	init_values(t_line *line);
+void	init_files(t_line *line, char **split);
+void	init_cmds(t_line *line, char **split);
 // error.c
 int		print_error(char *str);
 void	cmd_error(char *cmd);
@@ -59,6 +62,7 @@ int		free_str_splited(char **str);
 char	*find_path(char *cmd);
 char	**ft_trim(char **cmds);
 char	**get_cmds(char *cmd);
+size_t	cmds_count(char **split);
 // builtins.c
 int		handle_builtins(char **cmds);
 

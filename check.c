@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 14:42:32 by gussoare          #+#    #+#             */
-/*   Updated: 2023/01/06 10:22:38 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/09 10:39:07 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,9 +92,11 @@ int	organize_line(t_line *line)
 
 	if (!line->cmd)
 		return (0);
+	init_values(line);
 	check_line(line);
 	check_space(line);
 	split_line = ft_split(line->cmd, ' ');
-	(void)split_line;
+	init_files(line, split_line);
+	init_cmds(line, split_line);
 	return (1);
 }
