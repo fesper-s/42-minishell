@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/09 10:39:41 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/09 11:13:15 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void	expand_var(char *cmd)
 {
 	if (cmd[0] == '$')
 	{
+		if (!cmd[1])
+			cmd_error(cmd);
 		if (cmd[1] == '?')
 		{
 			printf("minishell: %d", g_status);
@@ -32,13 +34,15 @@ void	expand_var(char *cmd)
 void	cmd_process(char *cmd, char **envp)
 {
 	int		pid;
+	int		isbuiltin;
 	char	*path;
 	char	**cmds;
 
 	cmds = get_cmds(cmd);
 	if (!cmd[0])
 		return ;
-	if (find_path(cmds[0]) != 0)
+	isbuiltin = handle_builtins(cmds);
+	if (find_path(cmds[0]) && !isbuiltin)
 	{
 		g_status = 0;
 		pid = fork();
