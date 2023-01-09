@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 10:42:52 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/08 18:27:58 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/09 10:20:15 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 int	handle_builtins(char **cmds)
 {
+	int	i;
+
 	if (!ft_strncmp(cmds[0], "echo", 5))
 	{
-		int	i;
-
 		i = 0;
 		while (cmds[++i])
 		{
