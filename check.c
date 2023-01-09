@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 14:42:32 by gussoare          #+#    #+#             */
-/*   Updated: 2023/01/06 12:48:48 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/09 10:39:07 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,28 +88,15 @@ void	check_line(t_line *line)
 
 int	organize_line(t_line *line)
 {
-	int		i;
 	char	**split_line;
 
 	if (!line->cmd)
 		return (0);
+	init_values(line);
 	check_line(line);
 	check_space(line);
 	split_line = ft_split(line->cmd, ' ');
-	i = -1;
-	printf("-----SEPARANDO A LINHA DO COMANDO-----\n");
-	while (split_line[++i])
-		printf("cmd[%d]--> %s\n", i, split_line[i]);
 	init_files(line, split_line);
 	init_cmds(line, split_line);
-	printf("-----ARMAZENANDO INFILE E OUTFILE-----\n");
-	if (line->infile)
-		printf("infile--> %s\n", line->infile);
-	if (line->outfile)
-		printf("outfile--> %s\n", line->outfile);
-	i = -1;
-	printf("-----ARMAZENANDO COMANDOS-----\n");
-	while (line->cmds[++i])
-		printf("cmds[%d]--> %s\n", i, line->cmds[i]);
 	return (1);
 }

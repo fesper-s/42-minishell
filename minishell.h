@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/06 12:49:13 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/09 10:35:22 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	check_line(t_line *line);
 int		check_space(t_line *line);
 void	put_space(t_line *line, int x);
 //init
+void	init_values(t_line *line);
 void	init_files(t_line *line, char **split);
 void	init_cmds(t_line *line, char **split);
 // error.c

@@ -52,3 +52,10 @@ void	init_cmds(t_line *line, char **split)
 	}
 	line->cmds[j] = 0;
 }
+
+void	init_values(t_line *line)
+{
+	line->cmds = NULL;
+	line->infile = NULL;
+	line->outfile = NULL;
+}

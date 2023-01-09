@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/06 12:44:36 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/09 10:39:41 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ void	minishell(char **envp)
 			printf("exit\n");
 			break ;
 		}
-		printf("-----INICIANDO PROCESSO DOS COMANDOS-----\n");
 		cmd_process(line.cmd, envp);
 	}
 }
