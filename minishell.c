@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/10 10:28:26 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/10 13:08:20 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,18 +31,16 @@ void	expand_var(char *cmd)
 	}
 }
 
-void	cmd_process(char *cmd, char **envp)
+void	cmd_process(t_line **line, char **envp)
 {
 	int		pid;
 	int		isbuiltin;
 	char	*path;
-	char	**cmds;
 
-	cmds = get_cmds(cmd);
-	if (!cmd[0])
+	if (!(*line)->cmds)
 		return ;
-	isbuiltin = handle_builtins(cmds);
-	if (find_path(cmds[0]) && !isbuiltin)
+	isbuiltin = handle_builtins((*line)->cmds);
+	if (find_path((*line)->cmds[0]) && !isbuiltin)
 	{
 		g_status = 0;
 		pid = fork();
@@ -50,13 +48,13 @@ void	cmd_process(char *cmd, char **envp)
 			print_error("Error: no child process created\n");
 		if (pid == 0)
 		{
-			path = find_path(cmds[0]);
-			execve(path, cmds, envp);
+			path = find_path((*line)->cmds[0]);
+			execve(path, (*line)->cmds, envp);
 		}
 		waitpid(pid, NULL, 0);
 	}
-	expand_var(cmds[0]);
-	free_str_splited(cmds);
+	expand_var((*line)->cmds[0]);
+	free_str_splited((*line)->cmds);
 }
 
 int	organize_line(t_line **line)
@@ -76,6 +74,7 @@ int	organize_line(t_line **line)
 	init_cmds(line, split_line);
 	check_for_pipes(line, (*line)->cmds);
 	(*line) = head;
+	/*
 	printf("-----Init Infile and Outfile-----\n");
 	if ((*line)->infile)
 		printf("infile--> %s\n", (*line)->infile);
@@ -93,6 +92,7 @@ int	organize_line(t_line **line)
 		(*line) = (*line)->next;
 	}
 	(*line) = head;
+	*/
 	free(split_line);
 	return (1);
 }
@@ -119,8 +119,8 @@ void	minishell(char **envp)
 			printf("exit\n");
 			break ;
 		}
-		printf("-----Starting CMD Process\n");
-		cmd_process(line->cmd, envp);
+		//printf("-----Starting CMD Process\n");
+		cmd_process(&line, envp);
 		free(line->cmd);
 	}
 }

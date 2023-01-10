@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/10 10:27:57 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/10 12:01:57 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	g_status;
 
 // minishell.c
 void	expand_var(char *cmd);
-void	cmd_process(char *cmd, char **envp);
+void	cmd_process(t_line **line, char **envp);
 void	minishell(char **envp);
 int		organize_line(t_line **line);
 // check.c
