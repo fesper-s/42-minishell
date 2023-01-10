@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/09 12:10:21 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/10 14:21:17 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	expand_var(char *cmd)
 	}
 }
 
-void	cmd_process(char *cmd, char **envp)
+void	cmd_process(char *cmd, char **env)
 {
 	int		pid;
 	int		isbuiltin;
@@ -41,7 +41,7 @@ void	cmd_process(char *cmd, char **envp)
 	cmds = get_cmds(cmd);
 	if (!cmd[0])
 		return ;
-	isbuiltin = handle_builtins(cmds, envp);
+	isbuiltin = handle_builtins(cmds, env);
 	if (find_path(cmds[0]) && !isbuiltin)
 	{
 		g_status = 0;
@@ -51,7 +51,7 @@ void	cmd_process(char *cmd, char **envp)
 		if (pid == 0)
 		{
 			path = find_path(cmds[0]);
-			execve(path, cmds, envp);
+			execve(path, cmds, env);
 		}
 		waitpid(pid, NULL, 0);
 	}
@@ -59,12 +59,31 @@ void	cmd_process(char *cmd, char **envp)
 	free_str_splited(cmds);
 }
 
+char	**get_env(char **envp)
+{
+	char	**env;
+	int		i;
+
+	i = 0;
+	while (envp[i])
+		i++;
+	env = malloc(sizeof(char *) * (i + 1));
+	i = -1;
+	while (envp[++i])
+		env[i] = envp[i];
+	env[i] = 0;
+	return (env);
+}
+
 void	minishell(char **envp)
 {
 	t_line	line;
-
+	char	**env;
+	
+	env = get_env(envp);
 	while (1)
 	{
+		
 		signals();
 		line.cmd = readline("minishell % ");
 		if (line.cmd)
@@ -80,6 +99,6 @@ void	minishell(char **envp)
 			printf("exit\n");
 			break ;
 		}
-		cmd_process(line.cmd, envp);
+		cmd_process(line.cmd, env);
 	}
 }

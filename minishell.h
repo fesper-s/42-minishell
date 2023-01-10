@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/09 12:10:43 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/10 14:11:21 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,14 @@ int	g_status;
 
 // minishell.c
 void	expand_var(char *cmd);
-void	cmd_process(char *cmd, char **envp);
+void	cmd_process(char *cmd, char **env);
+char	**get_env(char **envp);
 void	minishell(char **envp);
-int		organize_line(t_line *line);
 // checker
 void	check_line(t_line *line);
 int		check_space(t_line *line);
 void	put_space(t_line *line, int x);
+int		organize_line(t_line *line);
 //init
 void	init_values(t_line *line);
 void	init_files(t_line *line, char **split);
@@ -64,6 +65,11 @@ char	**ft_trim(char **cmds);
 char	**get_cmds(char *cmd);
 size_t	cmds_count(char **split);
 // builtins.c
-int		handle_builtins(char **cmds, char **envp);
+int		handle_pwd_and_env(char **cmds, char **env, char *pwd);
+int		handle_builtins(char **cmds, char **env);
+// builtins2.c
+void	relative_path(char **cmds, char **env, char *pwd, int i);
+void	chpwd(char **cmds, char **env, char *pwd, int i);
+int		handle_cd(char **cmds, char **env, char *pwd, int i);
 
 #endif
