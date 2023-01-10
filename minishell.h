@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/10 12:01:57 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/10 14:34:44 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ int	g_status;
 
 // minishell.c
 void	expand_var(char *cmd);
-void	cmd_process(t_line **line, char **envp);
+void	cmd_process(t_line **line, char **env);
+char	**get_env(char **envp);
 void	minishell(char **envp);
 int		organize_line(t_line **line);
 // check.c
@@ -71,6 +72,11 @@ int		ft_lst_size(t_line *lst);
 int		cmds_until_pipe(char **cmds);
 t_line	*ft_lst_last(t_line *lst);
 // builtins.c
-int		handle_builtins(char **cmds);
+int		handle_pwd_and_env(char **cmds, char **env, char *pwd);
+int		handle_builtins(char **cmds, char **env);
+// builtins2.c
+void	relative_path(char **cmds, char **env, char *pwd, int i);
+void	chpwd(char **cmds, char **env, char *pwd, int i);
+int		handle_cd(char **cmds, char **env, char *pwd, int i);
 
 #endif

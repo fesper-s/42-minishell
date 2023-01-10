@@ -56,7 +56,7 @@ void	init_cmds(t_line **line, char **split)
 void	init_linked_list(t_line **line, char **before_pipe, char **after_pipe)
 {
 	ft_lst_add_back(line, ft_lst_new(after_pipe, (*line)->infile, \
-			(*line)->outfile));
+		(*line)->outfile));
 	free((*line)->cmds);
 	(*line)->cmds = before_pipe;
 	(*line) = (*line)->next;
