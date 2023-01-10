@@ -53,38 +53,12 @@ void	init_cmds(t_line **line, char **split)
 	(*line)->cmds[j] = 0;
 }
 
-void	init_values(t_line **line)
-{
-	(*line)->cmds = NULL;
-	(*line)->infile = NULL;
-	(*line)->outfile = NULL;
-}
-
 void	init_linked_list(t_line **line, char **before_pipe, char **after_pipe)
 {
-	//int	i;
-
-	ft_lst_add_back(line, ft_lst_new(after_pipe, (*line)->infile, (*line)->outfile));
-	//free(line->cmds);
-	//line->cmds = before_pipe;
-	/*
-	i = -1;
-	while(line)
-	{
-		while (line->cmds[++i])
-			printf("cmds[%d]--> %s\n", i, line->cmds[i]);
-		line = line->next;
-	}
-	*/
-	/*
-	i = -1;
-	printf("-----Before pipe-----\n");
-	while (before_pipe[++i])
-		printf("cmds[%d]--> %s\n", i, before_pipe[i]);
-	i = -1;
-	printf("-----After pipe-----\n");
-	while (after_pipe[++i])
-		printf("cmds[%d]--> %s\n", i, after_pipe[i]);
-	*/
-(void)before_pipe;
+	ft_lst_add_back(line, ft_lst_new(after_pipe, (*line)->infile, \
+			(*line)->outfile));
+	free((*line)->cmds);
+	(*line)->cmds = before_pipe;
+	(*line) = (*line)->next;
+	check_for_pipes(line, (*line)->cmds);
 }

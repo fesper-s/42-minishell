@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 14:42:32 by gussoare          #+#    #+#             */
-/*   Updated: 2023/01/09 14:36:49 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/10 10:50:06 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,28 +16,30 @@ void	check_for_pipes(t_line **line, char **cmds)
 {
 	int		i;
 	int		j;
-	int		n_cmds;
 	char	**before_pipe;
 	char	**after_pipe;
 
-	n_cmds = cmds_count(cmds);
 	i = -1;
 	j = 0;
 	before_pipe = malloc((cmds_until_pipe(cmds) + 1) * sizeof(char *));
-	after_pipe = malloc((n_cmds - cmds_until_pipe(cmds) + 1) * sizeof(char *));
-	while (cmds[++i])
+	after_pipe = malloc((cmds_count(cmds) - cmds_until_pipe(cmds) + 1) \
+			* sizeof(char *));
+	if (cmds_count(cmds) != cmds_until_pipe(cmds))
 	{
-		if (cmds[i][0] == '|')
+		while (cmds[++i])
 		{
-			while (cmds[++i])
-				after_pipe[j++] = cmds[i];
-			break ;
+			if (cmds[i][0] == '|')
+			{
+				while (cmds[++i])
+					after_pipe[j++] = cmds[i];
+				break ;
+			}
+			before_pipe[i] = cmds[i];
 		}
-		before_pipe[i] = cmds[i];
+		before_pipe[cmds_until_pipe(cmds)] = 0;
+		after_pipe[j] = 0;
+		init_linked_list(line, before_pipe, after_pipe);
 	}
-	before_pipe[cmds_until_pipe(cmds)] = 0;
-	after_pipe[j] = 0;
-	init_linked_list(line, before_pipe, after_pipe);
 }
 
 void	put_space(t_line **line, int x)

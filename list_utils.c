@@ -44,8 +44,8 @@ t_line	*ft_lst_new(char **cmds, char *infile, char *outfile)
 	if (!new)
 		return (0);
 	new->cmds = cmds;
-    new->infile = infile;
-    new->outfile = outfile;
+	new->infile = infile;
+	new->outfile = outfile;
 	new->next = 0;
 	return (new);
 }
@@ -63,15 +63,15 @@ int	ft_lst_size(t_line *lst)
 	return (i);
 }
 
-int cmds_until_pipe(char **cmds)
+int	cmds_until_pipe(char **cmds)
 {
-    int i;
+	int	i;
 
-    i = -1;
-    while(cmds[++i])
-    {
-        if (cmds[i][0] == '|')
-            break ;
-    }
-    return (i);
+	i = -1;
+	while (cmds[++i])
+	{
+		if (cmds[i][0] == '|')
+			break ;
+	}
+	return (i);
 }
