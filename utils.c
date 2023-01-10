@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 17:25:37 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/06 12:46:12 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/10 10:02:00 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ char	**get_cmds(char *cmd)
 	return (cmds);
 }
 
-size_t	cmds_count(char **split)
+int	cmds_count(char **split)
 {
 	int	i;
 

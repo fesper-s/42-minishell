@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 10:42:52 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/10 14:11:33 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/10 14:40:45 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ int	handle_pwd_and_env(char **cmds, char **env, char *pwd)
 
 int	handle_export(char **cmds, char **env)
 {
-	int	i;
-	char **buffer;
+	int		i;
+	char	**buffer;
 
 	i = cmds_count(env);
 	buffer = malloc(sizeof(char *) * (i + 2));
@@ -46,7 +46,7 @@ int	handle_export(char **cmds, char **env)
 	while (env[++i])
 		buffer[i] = env[i];
 	buffer[i] = cmds[1];
-	buffer[i + 1] = 0; 
+	buffer[i + 1] = 0;
 	free(env);
 	i = -1;
 	while (buffer[++i])
