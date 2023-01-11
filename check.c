@@ -6,13 +6,43 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 14:42:32 by gussoare          #+#    #+#             */
-/*   Updated: 2023/01/09 10:39:07 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/10 10:50:06 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	put_space(t_line *line, int x)
+void	check_for_pipes(t_line **line, char **cmds)
+{
+	int		i;
+	int		j;
+	char	**before_pipe;
+	char	**after_pipe;
+
+	i = -1;
+	j = 0;
+	before_pipe = malloc((cmds_until_pipe(cmds) + 1) * sizeof(char *));
+	after_pipe = malloc((cmds_count(cmds) - cmds_until_pipe(cmds) + 1) \
+			* sizeof(char *));
+	if (cmds_count(cmds) != cmds_until_pipe(cmds))
+	{
+		while (cmds[++i])
+		{
+			if (cmds[i][0] == '|')
+			{
+				while (cmds[++i])
+					after_pipe[j++] = cmds[i];
+				break ;
+			}
+			before_pipe[i] = cmds[i];
+		}
+		before_pipe[cmds_until_pipe(cmds)] = 0;
+		after_pipe[j] = 0;
+		init_linked_list(line, before_pipe, after_pipe);
+	}
+}
+
+void	put_space(t_line **line, int x)
 {
 	int		i;
 	int		j;
@@ -21,9 +51,9 @@ void	put_space(t_line *line, int x)
 
 	i = 0;
 	j = 0;
-	len = ft_strlen(line->cmd);
+	len = ft_strlen((*line)->cmd);
 	new_cmd = malloc((len + 2) * sizeof(char));
-	while (line->cmd[i])
+	while ((*line)->cmd[i])
 	{
 		if (x == j)
 		{
@@ -31,34 +61,34 @@ void	put_space(t_line *line, int x)
 		}
 		else
 		{
-			new_cmd[j] = line->cmd[i++];
+			new_cmd[j] = (*line)->cmd[i++];
 			j++;
 		}
 	}
 	new_cmd[j] = 0;
-	free(line->cmd);
-	line->cmd = ft_strdup(new_cmd);
+	free((*line)->cmd);
+	(*line)->cmd = ft_strdup(new_cmd);
 	free(new_cmd);
 }
 
-int	check_space(t_line *line)
+int	check_space(t_line **line)
 {
 	int	i;
 
 	i = 0;
-	while (line->cmd[i])
+	while ((*line)->cmd[i])
 	{
-		if (line->cmd[i] == '<' && (line->cmd[i + 1] != ' ' \
-				&& line->cmd[i + 1] != '<'))
+		if ((*line)->cmd[i] == '<' && ((*line)->cmd[i + 1] != ' ' \
+				&& (*line)->cmd[i + 1] != '<'))
 			put_space(line, i + 1);
-		else if ((line->cmd[i] != ' ' && line->cmd[i] != '>' \
-				&& line->cmd[i + 1] == '>'))
+		else if (((*line)->cmd[i] != ' ' && (*line)->cmd[i] != '>' \
+				&& (*line)->cmd[i + 1] == '>'))
 			put_space(line, i + 1);
-		else if (line->cmd[i] == '>' && (line->cmd[i + 1] != ' ' \
-				&& line->cmd[i + 1] != '>' && line->cmd[i + 1] != 0))
+		else if ((*line)->cmd[i] == '>' && ((*line)->cmd[i + 1] != ' ' \
+				&& (*line)->cmd[i + 1] != '>' && (*line)->cmd[i + 1] != 0))
 			put_space(line, i + 1);
-		else if ((line->cmd[i] == '|' && line->cmd[i + 1] != ' ') \
-				|| (line->cmd[i] != ' ' && line->cmd[i + 1] == '|'))
+		else if (((*line)->cmd[i] == '|' && (*line)->cmd[i + 1] != ' ') \
+				|| ((*line)->cmd[i] != ' ' && (*line)->cmd[i + 1] == '|'))
 			put_space(line, i + 1);
 		else
 			i++;
@@ -84,19 +114,4 @@ void	check_line(t_line *line)
 			exit(EXIT_FAILURE);
 		}
 	}
-}
-
-int	organize_line(t_line *line)
-{
-	char	**split_line;
-
-	if (!line->cmd)
-		return (0);
-	init_values(line);
-	check_line(line);
-	check_space(line);
-	split_line = ft_split(line->cmd, ' ');
-	init_files(line, split_line);
-	init_cmds(line, split_line);
-	return (1);
 }

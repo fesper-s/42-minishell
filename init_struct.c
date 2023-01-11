@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	init_files(t_line *line, char **split)
+void	init_files(t_line **line, char **split)
 {
 	int	i;
 
@@ -20,13 +20,13 @@ void	init_files(t_line *line, char **split)
 	while (split[++i])
 	{
 		if (ft_strlen(split[i]) == 1 && split[i][0] == '<')
-			line->infile = split[i + 1];
+			(*line)->infile = split[i + 1];
 		else if (ft_strlen(split[i]) == 1 && split[i][0] == '>')
-			line->outfile = split[i + 1];
+			(*line)->outfile = split[i + 1];
 	}
 }
 
-void	init_cmds(t_line *line, char **split)
+void	init_cmds(t_line **line, char **split)
 {
 	int	i;
 	int	j;
@@ -35,27 +35,30 @@ void	init_cmds(t_line *line, char **split)
 	j = 0;
 	i = -1;
 	len = cmds_count(split);
-	if (line->infile)
+	if ((*line)->infile)
 	{
 		len -= 2;
 		i = 1;
 	}
-	else if (line->outfile)
+	else if ((*line)->outfile)
 		len -= 2;
-	line->cmds = malloc((len + 1) * sizeof(char *));
+	(*line)->cmds = malloc((len + 1) * sizeof(char *));
 	while (split[++i])
 	{
 		if (split[i][0] == '>')
 			break ;
-		line->cmds[j] = split[i];
+		(*line)->cmds[j] = split[i];
 		j++;
 	}
-	line->cmds[j] = 0;
+	(*line)->cmds[j] = 0;
 }
 
-void	init_values(t_line *line)
+void	init_linked_list(t_line **line, char **before_pipe, char **after_pipe)
 {
-	line->cmds = NULL;
-	line->infile = NULL;
-	line->outfile = NULL;
+	ft_lst_add_back(line, ft_lst_new(after_pipe, (*line)->infile, \
+		(*line)->outfile));
+	free((*line)->cmds);
+	(*line)->cmds = before_pipe;
+	(*line) = (*line)->next;
+	check_for_pipes(line, (*line)->cmds);
 }
