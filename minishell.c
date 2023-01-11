@@ -3,17 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/10 14:40:27 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/11 09:06:48 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	expand_var(char *cmd)
+void	expand_var(char *cmd, t_env *env)
 {
+	int	i;
+
 	if (cmd[0] == '$')
 	{
 		if (!cmd[1])
@@ -26,12 +28,17 @@ void	expand_var(char *cmd)
 			printf(": command not found\n");
 		}
 		else if (getenv(&cmd[1]) != NULL)
-			printf("minishell: %s\n", getenv(&cmd[1]));
+		{
+			i = 0;
+			while (ft_strncmp(env->env[i], &cmd[1], ft_strlen(&cmd[1])))
+				i++;
+			printf("minishell: %s\n", env->env[i] + ft_strlen(&cmd[1]) + 1);
+		}
 		g_status = 127;
 	}
 }
 
-void	cmd_process(t_line **line, char **env)
+void	cmd_process(t_line **line, t_env **env)
 {
 	int		pid;
 	int		isbuiltin;
@@ -49,21 +56,21 @@ void	cmd_process(t_line **line, char **env)
 		if (pid == 0)
 		{
 			path = find_path((*line)->cmds[0]);
-			execve(path, (*line)->cmds, env);
+			execve(path, (*line)->cmds, (*env)->env);
 		}
 		waitpid(pid, NULL, 0);
 	}
-	expand_var((*line)->cmds[0]);
+	expand_var((*line)->cmds[0], *env);
 	free_str_splited((*line)->cmds);
 }
 
 int	organize_line(t_line **line)
 {
-	int		i;
+	//int		i;
 	char	**split_line;
 	void	*head;
 
-	i = -1;
+	//i = -1;
 	if (!(*line)->cmd)
 		return (0);
 	head = (*line);
@@ -116,9 +123,10 @@ char	**get_env(char **envp)
 void	minishell(char **envp)
 {
 	t_line	*line;
-	char	**env;
+	t_env	*env;
 
-	env = get_env(envp);
+	env = malloc(sizeof(t_env));
+	env->env = get_env(envp);
 	while (1)
 	{
 		line = ft_lst_new(NULL, NULL, NULL);
@@ -138,7 +146,7 @@ void	minishell(char **envp)
 			break ;
 		}
 		//printf("-----Starting CMD Process\n");
-		cmd_process(&line, env);
+		cmd_process(&line, &env);
 		free(line->cmd);
 	}
 }
