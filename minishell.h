@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/11 08:44:35 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/11 10:08:13 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,26 @@ typedef struct s_line
 	char			**cmds;
 	char			*infile;
 	char			*outfile;
+	int				infile_id;
+	int				outfile_id;
 	struct s_line	*next;
 }					t_line;
+
+typedef struct s_env
+{
+	char	**env;
+}			t_env;
 
 int	g_status;
 
 // minishell.c
-void	expand_var(char *cmd);
-void	cmd_process(t_line **line, char **env, int pipe);
+void	expand_var(char *cmd, t_env *env);
+void	cmd_process(t_line **line, t_env **env, int pipe, int *fd);
 char	**get_env(char **envp);
 void	minishell(char **envp);
 int		organize_line(t_line **line);
+// drawer.c
+int		open_drawer(t_line **line, int pipe);
 // check.c
 void	check_line(t_line *line);
 int		check_space(t_line **line);
@@ -72,11 +81,12 @@ int		ft_lst_size(t_line *lst);
 int		cmds_until_pipe(char **cmds);
 t_line	*ft_lst_last(t_line *lst);
 // builtins.c
-int		handle_pwd_and_env(char **cmds, char **env, char *pwd);
-int		handle_builtins(char **cmds, char **env);
+int		handle_pwd_and_env(char **cmds, t_env *env);
+int		handle_exports(char **cmds, t_env **env);
+int		handle_builtins(char **cmds, t_env **env);
 // builtins2.c
-void	relative_path(char **cmds, char **env, char *pwd, int i);
-void	chpwd(char **cmds, char **env, char *pwd, int i);
-int		handle_cd(char **cmds, char **env, char *pwd, int i);
+void	relative_path(char *cmd, t_env **env, char *pwd, int j);
+void	chpwd(char *cmd, t_env **env, int j);
+int		handle_cd(char **cmds, t_env **env);
 
 #endif

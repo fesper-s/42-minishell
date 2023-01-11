@@ -6,61 +6,65 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 09:39:12 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/10 14:22:04 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/11 08:22:06 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	relative_path(char **cmds, char **env, char *pwd, int i)
+void	relative_path(char *cmd, t_env **env, char *pwd, int j)
 {
 	char	**buffer;
-	int		j;
+	int		i;
 
-	if (!ft_strncmp(cmds[1], "..", 3))
+	if (!ft_strncmp(cmd, "..", 3))
 	{
-		buffer = ft_split(env[i], '/');
-		j = 0;
-		while (buffer[j])
-			j++;
-		pwd = ft_strtrim(env[i], buffer[j - 1]);
+		buffer = ft_split((*env)->env[j], '/');
+		i = 0;
+		while (buffer[i])
+			i++;
+		pwd = ft_strtrim((*env)->env[j], buffer[i - 1]);
 		pwd = ft_strtrim(pwd, "/");
-		env[i] = ft_strdup(pwd);
+		(*env)->env[j] = ft_strdup(pwd);
 	}
-	else if (ft_strncmp(cmds[1], ".", 2))
+	else if (ft_strncmp(cmd, ".", 2))
 	{
-		pwd = ft_strdup(env[i]);
+		pwd = ft_strdup((*env)->env[j]);
 		pwd = ft_strjoin(pwd, "/");
-		pwd = ft_strjoin(pwd, cmds[1]);
-		env[i] = ft_strdup(pwd);
+		pwd = ft_strjoin(pwd, cmd);
+		(*env)->env[j] = ft_strdup(pwd);
 	}
 }
 
-void	chpwd(char **cmds, char **env, char *pwd, int i)
+void	chpwd(char *cmd, t_env **env, int j)
 {
-	int	j;
+	int		i;
+	char	*buffer;
 
-	if (!ft_strncmp(env[i], "PWD=", 4))
+	buffer = NULL;
+	if (!ft_strncmp((*env)->env[j], "PWD=", 4))
 	{
-		j = 0;
-		while (cmds[1][j])
-			j++;
-		if (cmds[1][j - 1] == '/')
-			cmds[1][j - 1] = 0;
-		if (cmds[1][0] == '/')
+		i = 0;
+		while (cmd[i])
+			i++;
+		if (cmd[i - 1] == '/')
+			cmd[i - 1] = 0;
+		if (cmd[0] == '/')
 		{
-			pwd = "PWD=";
-			pwd = ft_strjoin(pwd, cmds[1]);
-			env[i] = ft_strdup(pwd);
+			buffer = "PWD=";
+			buffer = ft_strjoin(buffer, cmd);
+			(*env)->env[j] = ft_strdup(buffer);
 		}
 		else
-			relative_path(cmds, env, pwd, i);
-		free(pwd);
+			relative_path(cmd, env, buffer, j);
+		free(buffer);
 	}
 }
 
-int	handle_cd(char **cmds, char **env, char *pwd, int i)
+int	handle_cd(char **cmds, t_env **env)
 {
+	int	i;
+
 	if (chdir(cmds[1]) < 0)
 	{
 		dir_error(cmds[1]);
@@ -68,8 +72,8 @@ int	handle_cd(char **cmds, char **env, char *pwd, int i)
 		return (2);
 	}
 	i = -1;
-	while (env[++i])
-		chpwd(cmds, env, pwd, i);
+	while ((*env)->env[++i])
+		chpwd(cmds[1], env, i);
 	g_status = 0;
 	return (1);
 }

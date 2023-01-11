@@ -3,66 +3,65 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 10:42:52 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/10 14:40:45 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/11 09:04:22 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	handle_pwd_and_env(char **cmds, char **env, char *pwd)
+int	handle_pwd_and_env(char **cmds, t_env *env)
 {
-	int	i;
+	int		i;
+	char	*buffer;
 
 	if (!ft_strncmp(cmds[0], "pwd", 4))
 	{
 		i = 0;
-		while (ft_strncmp(env[i], "PWD=", 4))
+		while (ft_strncmp(env->env[i], "PWD=", 4))
 			i++;
-		pwd = ft_strdup(env[i]);
-		pwd = ft_strtrim(pwd, "PWD=");
-		printf("%s\n", pwd);
+		buffer = ft_strdup(env->env[i]);
+		buffer = ft_strtrim(buffer, "PWD=");
+		printf("%s\n", buffer);
+		free(buffer);
 	}
 	if (!ft_strncmp(cmds[0], "env", 4))
 	{
 		i = -1;
-		while (env[++i])
-			printf("%s\n", env[i]);
+		while (env->env[++i])
+			printf("%s\n", env->env[i]);
 	}
 	g_status = 0;
 	return (1);
 }
 
-int	handle_export(char **cmds, char **env)
+int	handle_export(char **cmds, t_env **env)
 {
 	int		i;
 	char	**buffer;
 
-	i = cmds_count(env);
+	i = cmds_count((*env)->env);
 	buffer = malloc(sizeof(char *) * (i + 2));
 	i = -1;
-	while (env[++i])
-		buffer[i] = env[i];
+	while ((*env)->env[++i])
+		buffer[i] = (*env)->env[i];
 	buffer[i] = cmds[1];
 	buffer[i + 1] = 0;
-	free(env);
+	free((*env)->env);
 	i = -1;
 	while (buffer[++i])
-		env[i] = buffer[i];
+		(*env)->env[i] = buffer[i];
 	free(buffer);
 	g_status = 0;
 	return (1);
 }
 
-int	handle_builtins(char **cmds, char **env)
+int	handle_builtins(char **cmds, t_env **env)
 {
 	int		i;
-	char	*pwd;
 
-	pwd = NULL;
-	i = 0;
 	if (!ft_strncmp(cmds[0], "echo", 5))
 	{
 		i = 0;
@@ -79,9 +78,9 @@ int	handle_builtins(char **cmds, char **env)
 		return (1);
 	}
 	if (!ft_strncmp(cmds[0], "cd", 3))
-		return (handle_cd(cmds, env, pwd, i));
+		return (handle_cd(cmds, env));
 	if (!ft_strncmp(cmds[0], "pwd", 4) || !ft_strncmp(cmds[0], "env", 4))
-		return (handle_pwd_and_env(cmds, env, pwd));
+		return (handle_pwd_and_env(cmds, *env));
 	if (!ft_strncmp(cmds[0], "export", 7))
 		return (handle_export(cmds, env));
 	return (0);

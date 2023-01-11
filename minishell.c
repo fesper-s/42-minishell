@@ -6,14 +6,16 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/11 08:56:10 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/11 10:37:05 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	expand_var(char *cmd)
+void	expand_var(char *cmd, t_env *env)
 {
+	int	i;
+
 	if (cmd[0] == '$')
 	{
 		if (!cmd[1])
@@ -26,39 +28,24 @@ void	expand_var(char *cmd)
 			printf(": command not found\n");
 		}
 		else if (getenv(&cmd[1]) != NULL)
-			printf("minishell: %s\n", getenv(&cmd[1]));
+		{
+			i = 0;
+			while (ft_strncmp(env->env[i], &cmd[1], ft_strlen(&cmd[1])))
+				i++;
+			printf("minishell: %s\n", env->env[i] + ft_strlen(&cmd[1]) + 1);
+		}
 		g_status = 127;
 	}
 }
 
-void	cmd_process(t_line **line, char **env, int pipe)
+void	cmd_process(t_line **line, t_env **env, int pipe, int *fd)
 {
 	int		pid;
-	int		file;
 	int		isbuiltin;
 	char	*path;
-	int		list_n;
+	int		drawer;
 
-
-	list_n = ft_lst_size((*line));
-	if ((*line)->infile && pipe == list_n)
-	{
-		file = open((*line)->infile, O_RDONLY);
-		if (file == -1)
-		{
-			print_error("Error to open file\n");
-			exit(EXIT_FAILURE);
-		}
-	}
-	if ((*line)->outfile && list_n == 1)
-	{
-		file = open((*line)->outfile, O_RDONLY);
-		if (file == -1)
-		{
-			print_error("Error to open file\n");
-			exit(EXIT_FAILURE);
-		}
-	}
+	drawer = open_drawer(line, pipe);
 	if (!(*line)->cmds)
 		return ;
 	isbuiltin = handle_builtins((*line)->cmds, env);
@@ -70,12 +57,27 @@ void	cmd_process(t_line **line, char **env, int pipe)
 			print_error("Error: no child process created\n");
 		if (pid == 0)
 		{
+			if (drawer == 1)
+			{
+				dup2((*line)->infile_id, STDIN_FILENO);
+				dup2(fd[1], STDOUT_FILENO);
+				close(fd[0]);
+				close(fd[1]);
+			}
+			if (drawer == 2)
+			{
+				dup2((*line)->outfile_id, STDOUT_FILENO);
+				dup2(fd[0], STDIN_FILENO);
+				close(fd[0]);
+				close(fd[1]);
+			}
 			path = find_path((*line)->cmds[0]);
-			execve(path, (*line)->cmds, env);
+			execve(path, (*line)->cmds, (*env)->env);
+
 		}
 		waitpid(pid, NULL, 0);
 	}
-	expand_var((*line)->cmds[0]);
+	expand_var((*line)->cmds[0], *env);
 	free_str_splited((*line)->cmds);
 }
 
@@ -138,11 +140,18 @@ char	**get_env(char **envp)
 void	minishell(char **envp)
 {
 	t_line	*line;
-	char	**env;
+	t_env	*env;
 	void	*head;
-	int		pipe;
+	int		pipes;
+	int		fd[2];
 
-	env = get_env(envp);
+	env = malloc(sizeof(t_env));
+	env->env = get_env(envp);
+	if (pipe(fd) == -1)
+	{
+		ft_putendl_fd(strerror(32), 2);
+		exit(EXIT_FAILURE);
+	}
 	while (1)
 	{
 		line = ft_lst_new(NULL, NULL, NULL);
@@ -163,10 +172,10 @@ void	minishell(char **envp)
 			break ;
 		}
 		//printf("-----Starting CMD Process\n");
-		pipe = ft_lst_size(line);
+		pipes = ft_lst_size(line);
 		while (line)
 		{
-			cmd_process(&line, env, pipe);
+			cmd_process(&line, &env, pipes, fd);
 			line = line->next;
 		}
 		line = head;
