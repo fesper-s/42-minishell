@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/10 14:11:21 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/11 07:44:14 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,16 @@ typedef struct s_line
 	struct s_line	*next;
 }					t_line;
 
+typedef struct s_env
+{
+	char	**env;
+}			t_env;
+
 int	g_status;
 
 // minishell.c
 void	expand_var(char *cmd);
-void	cmd_process(char *cmd, char **env);
+void	cmd_process(char *cmd, t_env **env);
 char	**get_env(char **envp);
 void	minishell(char **envp);
 // checker
@@ -65,11 +70,12 @@ char	**ft_trim(char **cmds);
 char	**get_cmds(char *cmd);
 size_t	cmds_count(char **split);
 // builtins.c
-int		handle_pwd_and_env(char **cmds, char **env, char *pwd);
-int		handle_builtins(char **cmds, char **env);
+int		handle_pwd_and_env(char **cmds, t_env *env);
+int		handle_exports(char **cmds, t_env **env);
+int		handle_builtins(char **cmds, t_env **env);
 // builtins2.c
-void	relative_path(char **cmds, char **env, char *pwd, int i);
-void	chpwd(char **cmds, char **env, char *pwd, int i);
-int		handle_cd(char **cmds, char **env, char *pwd, int i);
+void	relative_path(char *cmd, t_env **env, char *pwd, int j);
+void	chpwd(char *cmd, t_env **env, int j);
+int		handle_cd(char **cmds, t_env **env);
 
 #endif

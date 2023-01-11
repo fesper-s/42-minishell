@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/10 14:21:17 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/11 07:45:34 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	expand_var(char *cmd)
 	}
 }
 
-void	cmd_process(char *cmd, char **env)
+void	cmd_process(char *cmd, t_env **env)
 {
 	int		pid;
 	int		isbuiltin;
@@ -51,7 +51,7 @@ void	cmd_process(char *cmd, char **env)
 		if (pid == 0)
 		{
 			path = find_path(cmds[0]);
-			execve(path, cmds, env);
+			execve(path, cmds, (*env)->env);
 		}
 		waitpid(pid, NULL, 0);
 	}
@@ -78,12 +78,12 @@ char	**get_env(char **envp)
 void	minishell(char **envp)
 {
 	t_line	line;
-	char	**env;
-	
-	env = get_env(envp);
+	t_env	*env;
+
+	env = malloc(sizeof(t_env));
+	env->env = get_env(envp);
 	while (1)
 	{
-		
 		signals();
 		line.cmd = readline("minishell % ");
 		if (line.cmd)
@@ -99,6 +99,6 @@ void	minishell(char **envp)
 			printf("exit\n");
 			break ;
 		}
-		cmd_process(line.cmd, env);
+		cmd_process(line.cmd, &env);
 	}
 }
