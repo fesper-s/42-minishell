@@ -6,14 +6,16 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/11 07:45:34 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/11 08:38:56 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	expand_var(char *cmd)
+void	expand_var(char *cmd, t_env *env)
 {
+	int	i;
+
 	if (cmd[0] == '$')
 	{
 		if (!cmd[1])
@@ -26,7 +28,12 @@ void	expand_var(char *cmd)
 			printf(": command not found\n");
 		}
 		else if (getenv(&cmd[1]) != NULL)
-			printf("minishell: %s\n", getenv(&cmd[1]));
+		{
+			i = 0;
+			while (ft_strncmp(env->env[i], &cmd[1], ft_strlen(&cmd[1])))
+				i++;
+			printf("minishell: %s\n", env->env[i] + ft_strlen(&cmd[1]) + 1);
+		}
 		g_status = 127;
 	}
 }
@@ -55,7 +62,7 @@ void	cmd_process(char *cmd, t_env **env)
 		}
 		waitpid(pid, NULL, 0);
 	}
-	expand_var(cmds[0]);
+	expand_var(cmds[0], *env);
 	free_str_splited(cmds);
 }
 

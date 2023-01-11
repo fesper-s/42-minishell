@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/11 07:44:14 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/11 08:37:25 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ typedef struct s_env
 int	g_status;
 
 // minishell.c
-void	expand_var(char *cmd);
+void	expand_var(char *cmd, t_env *env);
 void	cmd_process(char *cmd, t_env **env);
 char	**get_env(char **envp);
 void	minishell(char **envp);
