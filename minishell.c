@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/10 14:40:27 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/11 08:56:10 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,34 @@ void	expand_var(char *cmd)
 	}
 }
 
-void	cmd_process(t_line **line, char **env)
+void	cmd_process(t_line **line, char **env, int pipe)
 {
 	int		pid;
+	int		file;
 	int		isbuiltin;
 	char	*path;
+	int		list_n;
 
+
+	list_n = ft_lst_size((*line));
+	if ((*line)->infile && pipe == list_n)
+	{
+		file = open((*line)->infile, O_RDONLY);
+		if (file == -1)
+		{
+			print_error("Error to open file\n");
+			exit(EXIT_FAILURE);
+		}
+	}
+	if ((*line)->outfile && list_n == 1)
+	{
+		file = open((*line)->outfile, O_RDONLY);
+		if (file == -1)
+		{
+			print_error("Error to open file\n");
+			exit(EXIT_FAILURE);
+		}
+	}
 	if (!(*line)->cmds)
 		return ;
 	isbuiltin = handle_builtins((*line)->cmds, env);
@@ -59,11 +81,11 @@ void	cmd_process(t_line **line, char **env)
 
 int	organize_line(t_line **line)
 {
-	int		i;
+	//int		i;
 	char	**split_line;
 	void	*head;
 
-	i = -1;
+	//i = -1;
 	if (!(*line)->cmd)
 		return (0);
 	head = (*line);
@@ -117,11 +139,14 @@ void	minishell(char **envp)
 {
 	t_line	*line;
 	char	**env;
+	void	*head;
+	int		pipe;
 
 	env = get_env(envp);
 	while (1)
 	{
 		line = ft_lst_new(NULL, NULL, NULL);
+		head = line;
 		signals();
 		line->cmd = readline("minishell % ");
 		if (line->cmd)
@@ -138,7 +163,13 @@ void	minishell(char **envp)
 			break ;
 		}
 		//printf("-----Starting CMD Process\n");
-		cmd_process(&line, env);
+		pipe = ft_lst_size(line);
+		while (line)
+		{
+			cmd_process(&line, env, pipe);
+			line = line->next;
+		}
+		line = head;
 		free(line->cmd);
 	}
 }
