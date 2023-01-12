@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 10:42:52 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/11 09:04:22 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/12 09:19:16 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,12 @@ int	handle_export(char **cmds, t_env **env)
 	i = -1;
 	while ((*env)->env[++i])
 		buffer[i] = (*env)->env[i];
-	buffer[i] = cmds[1];
+	buffer[i] = ft_strdup(cmds[1]);
 	buffer[i + 1] = 0;
-	free((*env)->env);
 	i = -1;
 	while (buffer[++i])
 		(*env)->env[i] = buffer[i];
+	(*env)->env[i] = 0;
 	free(buffer);
 	g_status = 0;
 	return (1);

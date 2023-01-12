@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/11 10:08:13 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/12 09:38:58 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,11 @@ int	g_status;
 
 // minishell.c
 void	expand_var(char *cmd, t_env *env);
-void	cmd_process(t_line **line, t_env **env, int pipe, int *fd);
+void	cmd_process(t_line **line, t_env **env);
 char	**get_env(char **envp);
 void	minishell(char **envp);
 int		organize_line(t_line **line);
-// drawer.c
-int		open_drawer(t_line **line, int pipe);
-// check.c
+//check.c
 void	check_line(t_line *line);
 int		check_space(t_line **line);
 void	put_space(t_line **line, int x);
