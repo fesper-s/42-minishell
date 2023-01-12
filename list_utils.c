@@ -46,6 +46,7 @@ t_line	*ft_lst_new(char **cmds, char *infile, char *outfile)
 	new->cmds = cmds;
 	new->infile = infile;
 	new->outfile = outfile;
+	new->cmd = NULL;
 	new->next = 0;
 	return (new);
 }
@@ -61,6 +62,21 @@ int	ft_lst_size(t_line *lst)
 		i++;
 	}
 	return (i);
+}
+
+void	lst_free(t_line **lst)
+{
+	t_line	*buffer;
+	t_line	*del;
+
+	buffer = *lst;
+	while (buffer)
+	{
+		del = buffer;
+		buffer = buffer->next;
+		free(del);
+	}
+	*lst = NULL;
 }
 
 int	cmds_until_pipe(char **cmds)

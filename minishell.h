@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/11 09:04:52 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/12 10:44:44 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void	cmd_error(char *cmd);
 void	error_display(char *cmd);
 char	*path_error(char *cmd, char **path);
 void	dir_error(char *path);
+void	export_error(char *str);
 // signal.c
 void	signals(void);
 void	handle_sigint(int signum);
@@ -69,6 +70,7 @@ int		free_str_splited(char **str);
 char	*find_path(char *cmd);
 char	**ft_trim(char **cmds);
 char	**get_cmds(char *cmd);
+void	lst_free(t_line **lst);
 int		cmds_count(char **split);
 // list_utils.c
 void	ft_lst_add_back(t_line **lst, t_line *new);

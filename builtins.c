@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 10:42:52 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/11 09:04:22 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/12 11:10:40 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,19 +42,30 @@ int	handle_export(char **cmds, t_env **env)
 	int		i;
 	char	**buffer;
 
-	i = cmds_count((*env)->env);
-	buffer = malloc(sizeof(char *) * (i + 2));
-	i = -1;
-	while ((*env)->env[++i])
-		buffer[i] = (*env)->env[i];
-	buffer[i] = cmds[1];
-	buffer[i + 1] = 0;
-	free((*env)->env);
-	i = -1;
-	while (buffer[++i])
-		(*env)->env[i] = buffer[i];
-	free(buffer);
-	g_status = 0;
+	if (ft_isalpha(cmds[1][0]) || cmds[1][0] == '_')
+	{
+		i = 0;
+		while (cmds[1][++i])
+		if (ft_isalpha(cmds[1][i]) && ft_isdigit(cmds[1][i]))
+		{
+			export_error(cmds[1]);
+			return (1);
+		}
+		i = cmds_count((*env)->env);
+		buffer = malloc(sizeof(char *) * (i + 2));
+		i = -1;
+		while ((*env)->env[++i])
+			buffer[i] = (*env)->env[i];
+		buffer[i] = ft_strdup(cmds[1]);
+		buffer[i + 1] = 0;
+		i = -1;
+		while (buffer[++i])
+			(*env)->env[i] = buffer[i];
+		(*env)->env[i] = 0;
+		g_status = 0;
+	}
+	else
+		export_error(cmds[1]);
 	return (1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/11 09:06:48 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/12 10:30:00 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,19 @@ void	expand_var(char *cmd, t_env *env)
 	{
 		if (!cmd[1])
 			cmd_error(cmd);
-		if (cmd[1] == '?')
+		else if (cmd[1] == '?')
 		{
 			printf("minishell: %d", g_status);
 			if (cmd[2] != 0)
 				printf("%s", &cmd[2]);
 			printf(": command not found\n");
 		}
-		else if (getenv(&cmd[1]) != NULL)
+		else
 		{
-			i = 0;
-			while (ft_strncmp(env->env[i], &cmd[1], ft_strlen(&cmd[1])))
-				i++;
-			printf("minishell: %s\n", env->env[i] + ft_strlen(&cmd[1]) + 1);
+			i = -1;
+			while (env->env[++i])
+				if (!ft_strncmp(env->env[i], &cmd[1], ft_strlen(&cmd[1])))
+					printf("minishell: %s\n", env->env[i] + ft_strlen(&cmd[1]) + 1);
 		}
 		g_status = 127;
 	}
@@ -44,10 +44,10 @@ void	cmd_process(t_line **line, t_env **env)
 	int		isbuiltin;
 	char	*path;
 
-	if (!(*line)->cmds)
+	if (!(*line)->cmds[0])
 		return ;
 	isbuiltin = handle_builtins((*line)->cmds, env);
-	if (find_path((*line)->cmds[0]) && !isbuiltin)
+	if (!isbuiltin && find_path((*line)->cmds[0]))
 	{
 		g_status = 0;
 		pid = fork();
@@ -147,6 +147,6 @@ void	minishell(char **envp)
 		}
 		//printf("-----Starting CMD Process\n");
 		cmd_process(&line, &env);
-		free(line->cmd);
+		lst_free(&line);
 	}
 }
