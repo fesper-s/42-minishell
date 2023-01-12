@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 10:42:52 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/12 11:10:40 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/12 13:32:06 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,14 @@ int	handle_export(char **cmds, t_env **env)
 	{
 		i = 0;
 		while (cmds[1][++i])
-		if (ft_isalpha(cmds[1][i]) && ft_isdigit(cmds[1][i]))
 		{
-			export_error(cmds[1]);
-			return (1);
+			if (cmds[1][i] == '=')
+				break ;
+			if (!ft_isalnum(cmds[1][i]))
+			{
+				export_error(cmds[1]);
+				return (1);
+			}
 		}
 		i = cmds_count((*env)->env);
 		buffer = malloc(sizeof(char *) * (i + 2));
