@@ -6,33 +6,46 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/11 09:06:48 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/13 12:14:21 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	expand_var(char *cmd, t_env *env)
+void	expand_var(t_line **line, t_env *env)
 {
-	int	i;
+	int		i;
+	int		j;
+	char	*buffer;
 
-	if (cmd[0] == '$')
+	if ((*line)->cmds[0][0] == '$')
 	{
-		if (!cmd[1])
-			cmd_error(cmd);
-		if (cmd[1] == '?')
+		if (!(*line)->cmds[0][1])
+			cmd_error((*line)->cmds[0]);
+		else if ((*line)->cmds[0][1] == '?')
 		{
 			printf("minishell: %d", g_status);
-			if (cmd[2] != 0)
-				printf("%s", &cmd[2]);
+			if ((*line)->cmds[0][2] != 0)
+				printf("%s", &(*line)->cmds[0][2]);
 			printf(": command not found\n");
 		}
-		else if (getenv(&cmd[1]) != NULL)
+		else
 		{
-			i = 0;
-			while (ft_strncmp(env->env[i], &cmd[1], ft_strlen(&cmd[1])))
-				i++;
-			printf("minishell: %s\n", env->env[i] + ft_strlen(&cmd[1]) + 1);
+			i = -1;
+			while (env->env[++i])
+			{
+				if (!ft_strncmp(env->env[i], &(*line)->cmds[0][1], \
+					ft_strlen(&(*line)->cmds[0][1])))
+				{
+					j = 0;
+					while (env->env[i][j] != '=')
+						j++;
+					buffer = malloc(sizeof(char) * (ft_strlen(env->env[i]) - j + 1));
+					buffer = ft_strdup(env->env[i] + j + 1);
+					free((*line)->cmds[0]);
+					(*line)->cmds[0] = ft_strdup(buffer);
+				}
+			}
 		}
 		g_status = 127;
 	}
@@ -44,10 +57,11 @@ void	cmd_process(t_line **line, t_env **env)
 	int		isbuiltin;
 	char	*path;
 
-	if (!(*line)->cmds)
+	if (!(*line)->cmds[0])
 		return ;
+	expand_var(line, *env);
 	isbuiltin = handle_builtins((*line)->cmds, env);
-	if (find_path((*line)->cmds[0]) && !isbuiltin)
+	if (!isbuiltin && find_path((*line)->cmds[0]))
 	{
 		g_status = 0;
 		pid = fork();
@@ -60,8 +74,7 @@ void	cmd_process(t_line **line, t_env **env)
 		}
 		waitpid(pid, NULL, 0);
 	}
-	expand_var((*line)->cmds[0], *env);
-	free_str_splited((*line)->cmds);
+	//free_str_splited((*line)->cmds);
 }
 
 int	organize_line(t_line **line)
@@ -147,6 +160,6 @@ void	minishell(char **envp)
 		}
 		//printf("-----Starting CMD Process\n");
 		cmd_process(&line, &env);
-		free(line->cmd);
+		lst_free(&line);
 	}
 }

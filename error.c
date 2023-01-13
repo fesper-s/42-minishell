@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 14:52:21 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/09 10:58:28 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/12 10:43:49 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,12 @@ void	dir_error(char *path)
 	ft_putstr_fd("cd: no such file or directory: ", 2);
 	ft_putstr_fd(path, 2);
 	ft_putstr_fd("\n", 2);
+}
+
+void	export_error(char *str)
+{
+	ft_putstr_fd("minishell: export: `", 2);
+	ft_putstr_fd(str, 2);
+	ft_putstr_fd("': not a valid identifier\n", 2);
+	g_status = 1;
 }

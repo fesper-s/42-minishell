@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 10:42:52 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/11 09:04:22 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/13 12:08:16 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,19 +42,34 @@ int	handle_export(char **cmds, t_env **env)
 	int		i;
 	char	**buffer;
 
-	i = cmds_count((*env)->env);
-	buffer = malloc(sizeof(char *) * (i + 2));
-	i = -1;
-	while ((*env)->env[++i])
-		buffer[i] = (*env)->env[i];
-	buffer[i] = cmds[1];
-	buffer[i + 1] = 0;
-	free((*env)->env);
-	i = -1;
-	while (buffer[++i])
-		(*env)->env[i] = buffer[i];
-	free(buffer);
-	g_status = 0;
+	if (ft_isalpha(cmds[1][0]) || cmds[1][0] == '_')
+	{
+		i = 0;
+		while (cmds[1][++i])
+		{
+			if (cmds[1][i] == '=')
+				break ;
+			if (!ft_isalnum(cmds[1][i]))
+			{
+				export_error(cmds[1]);
+				return (1);
+			}
+		}
+		i = cmds_count((*env)->env);
+		buffer = malloc(sizeof(char *) * (i + 2));
+		i = -1;
+		while ((*env)->env[++i])
+			buffer[i] = (*env)->env[i];
+		buffer[i] = ft_strdup(cmds[1]);
+		buffer[i + 1] = 0;
+		i = -1;
+		while (buffer[++i])
+			(*env)->env[i] = buffer[i];
+		(*env)->env[i] = 0;
+		g_status = 0;
+	}
+	else
+		export_error(cmds[1]);
 	return (1);
 }
 
@@ -64,6 +79,12 @@ int	handle_builtins(char **cmds, t_env **env)
 
 	if (!ft_strncmp(cmds[0], "echo", 5))
 	{
+		g_status = 0;
+		if (cmds[1] == NULL)
+		{
+			printf("\n");
+			return (1);
+		}
 		i = 0;
 		while (cmds[++i])
 		{
@@ -74,7 +95,6 @@ int	handle_builtins(char **cmds, t_env **env)
 		}
 		if (ft_strncmp(cmds[1], "-n", 3))
 			printf("\n");
-		g_status = 0;
 		return (1);
 	}
 	if (!ft_strncmp(cmds[0], "cd", 3))
