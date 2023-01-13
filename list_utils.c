@@ -66,6 +66,21 @@ int	ft_lst_size(t_line *lst)
 	return (i);
 }
 
+void	lst_free(t_line **lst)
+{
+	t_line	*buffer;
+	t_line	*del;
+
+	buffer = *lst;
+	while (buffer)
+	{
+		del = buffer;
+		buffer = buffer->next;
+		free(del);
+	}
+	*lst = NULL;
+}
+
 int	cmds_until_pipe(char **cmds)
 {
 	int	i;

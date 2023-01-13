@@ -6,100 +6,119 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/12 11:45:04 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/13 12:56:50 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	expand_var(char *cmd, t_env *env)
+void	expand_var(t_line **line, t_env *env)
 {
-	int	i;
+	int		i;
+	int		j;
+	char	*buffer;
 
-	if (cmd[0] == '$')
+	if ((*line)->cmds[0][0] == '$')
 	{
-		if (!cmd[1])
-			cmd_error(cmd);
-		if (cmd[1] == '?')
+		if (!(*line)->cmds[0][1])
+			cmd_error((*line)->cmds[0]);
+		else if ((*line)->cmds[0][1] == '?')
 		{
 			printf("minishell: %d", g_status);
-			if (cmd[2] != 0)
-				printf("%s", &cmd[2]);
+			if ((*line)->cmds[0][2] != 0)
+				printf("%s", &(*line)->cmds[0][2]);
 			printf(": command not found\n");
 		}
-		else if (getenv(&cmd[1]) != NULL)
+		else
 		{
-			i = 0;
-			while (ft_strncmp(env->env[i], &cmd[1], ft_strlen(&cmd[1])))
-				i++;
-			printf("minishell: %s\n", env->env[i] + ft_strlen(&cmd[1]) + 1);
+			i = -1;
+			while (env->env[++i])
+			{
+				if (!ft_strncmp(env->env[i], &(*line)->cmds[0][1], \
+					ft_strlen(&(*line)->cmds[0][1])))
+				{
+					j = 0;
+					while (env->env[i][j] != '=')
+						j++;
+					buffer = malloc(sizeof(char) * (ft_strlen(env->env[i]) - j + 1));
+					buffer = ft_strdup(env->env[i] + j + 1);
+					free((*line)->cmds[0]);
+					(*line)->cmds[0] = ft_strdup(buffer);
+				}
+			}
 		}
 		g_status = 127;
 	}
 }
 
-static void pipeline(t_line **line)
+static void	pipeline(t_line **line)
 {
-    int fd[2];
-    pid_t pid;
-    int fdd = 0;                /* Backup */
-	char *path;
+	int		fd[2];
+	pid_t	pid;
+	int		fdd;
+	char	*path;
 
-    while ((*line))
+	fdd = 0;
+	while ((*line))
 	{
 		path = find_path((*line)->cmds[0]);
-        pipe(fd);               /* Sharing bidiflow */
-        if ((pid = fork()) == -1) 
+		if (!path)
 		{
-            print_error("FORK\n");
-            exit(EXIT_FAILURE);
-        }
-        else if (pid == 0)
-		{
-            dup2(fdd, 0);
-            if ((*line)->next != 0)
-            	dup2(fd[1], 1);
-            close(fd[0]);
-            execve(path, (*line)->cmds, NULL);
 			free(path);
-        }
-        else {
-            wait(NULL);         /* Collect childs */
-            close(fd[1]);
-            fdd = fd[0];
-            (*line) = (*line)->next;
-        }
-    }
+			break ;
+		}
+		pipe(fd);
+		pid = fork();
+		if (pid == -1)
+		{
+			print_error("Error: fork\n");
+			break ;
+		}
+		else if (pid == 0)
+		{
+			dup2(fdd, 0);
+			if ((*line)->next != 0)
+				dup2(fd[1], 1);
+			close(fd[0]);
+			execve(path, (*line)->cmds, NULL);
+			free(path);
+		}
+		else
+		{
+			wait(NULL);
+			close(fd[1]);
+			fdd = fd[0];
+			(*line) = (*line)->next;
+		}
+	}
 }
 
 void	cmd_process(t_line **line, t_env **env)
 {
-	//int		pid;
 	int		isbuiltin;
-	void *head;
+	void	*head;
 
 	head = (*line);
 	if (!(*line)->cmds[0])
 		return ;
+	expand_var(line, *env);
 	isbuiltin = handle_builtins((*line)->cmds, env);
-	if (find_path((*line)->cmds[0]) && !isbuiltin)
+	if (!isbuiltin && find_path((*line)->cmds[0]))
 	{
 		g_status = 0;
 		pipeline(line);
 		(*line) = head;
 	}
-	expand_var((*line)->cmds[0], *env);
 	free_str_splited((*line)->cmds);
 }
 
 int	organize_line(t_line **line)
 {
-	int		i;
+	//int		i;
 	char	**split_line;
 	void	*head;
-	
 
-	i = -1;
+	//i = -1;
 	if (!(*line)->cmd)
 		return (0);
 	head = (*line);
@@ -110,7 +129,7 @@ int	organize_line(t_line **line)
 	init_cmds(line, split_line);
 	check_for_pipes(line, (*line)->cmds);
 	(*line) = head;
-
+	/*
 	printf("-----Init Infile and Outfile-----\n");
 	if ((*line)->infile)
 		printf("infile--> %s\n", (*line)->infile);
@@ -128,7 +147,7 @@ int	organize_line(t_line **line)
 		(*line) = (*line)->next;
 	}
 	(*line) = head;
-	
+	*/
 	free(split_line);
 	return (1);
 }
@@ -179,6 +198,6 @@ void	minishell(char **envp)
 		//printf("-----Starting CMD Process\n");
 		cmd_process(&line, &env);
 		line = head;
-		free(line->cmd);
+		lst_free(&line);
 	}
 }
