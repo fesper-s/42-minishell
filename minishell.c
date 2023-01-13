@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/13 12:14:21 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/13 12:56:50 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,54 @@ void	expand_var(t_line **line, t_env *env)
 	}
 }
 
-void	cmd_process(t_line **line, t_env **env)
+static void	pipeline(t_line **line)
 {
-	int		pid;
-	int		isbuiltin;
+	int		fd[2];
+	pid_t	pid;
+	int		fdd;
 	char	*path;
 
+	fdd = 0;
+	while ((*line))
+	{
+		path = find_path((*line)->cmds[0]);
+		if (!path)
+		{
+			free(path);
+			break ;
+		}
+		pipe(fd);
+		pid = fork();
+		if (pid == -1)
+		{
+			print_error("Error: fork\n");
+			break ;
+		}
+		else if (pid == 0)
+		{
+			dup2(fdd, 0);
+			if ((*line)->next != 0)
+				dup2(fd[1], 1);
+			close(fd[0]);
+			execve(path, (*line)->cmds, NULL);
+			free(path);
+		}
+		else
+		{
+			wait(NULL);
+			close(fd[1]);
+			fdd = fd[0];
+			(*line) = (*line)->next;
+		}
+	}
+}
+
+void	cmd_process(t_line **line, t_env **env)
+{
+	int		isbuiltin;
+	void	*head;
+
+	head = (*line);
 	if (!(*line)->cmds[0])
 		return ;
 	expand_var(line, *env);
@@ -64,17 +106,10 @@ void	cmd_process(t_line **line, t_env **env)
 	if (!isbuiltin && find_path((*line)->cmds[0]))
 	{
 		g_status = 0;
-		pid = fork();
-		if (pid == -1)
-			print_error("Error: no child process created\n");
-		if (pid == 0)
-		{
-			path = find_path((*line)->cmds[0]);
-			execve(path, (*line)->cmds, (*env)->env);
-		}
-		waitpid(pid, NULL, 0);
+		pipeline(line);
+		(*line) = head;
 	}
-	//free_str_splited((*line)->cmds);
+	free_str_splited((*line)->cmds);
 }
 
 int	organize_line(t_line **line)
@@ -137,12 +172,14 @@ void	minishell(char **envp)
 {
 	t_line	*line;
 	t_env	*env;
+	void	*head;
 
 	env = malloc(sizeof(t_env));
 	env->env = get_env(envp);
 	while (1)
 	{
 		line = ft_lst_new(NULL, NULL, NULL);
+		head = line;
 		signals();
 		line->cmd = readline("minishell % ");
 		if (line->cmd)
@@ -160,6 +197,7 @@ void	minishell(char **envp)
 		}
 		//printf("-----Starting CMD Process\n");
 		cmd_process(&line, &env);
+		line = head;
 		lst_free(&line);
 	}
 }

@@ -47,6 +47,8 @@ t_line	*ft_lst_new(char **cmds, char *infile, char *outfile)
 	new->infile = infile;
 	new->outfile = outfile;
 	new->cmd = NULL;
+	new->infile_id = 0;
+	new->outfile_id = 0;
 	new->next = 0;
 	return (new);
 }

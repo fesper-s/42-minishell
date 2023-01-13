@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/13 10:10:31 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/13 12:36:30 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ typedef struct s_line
 	char			**cmds;
 	char			*infile;
 	char			*outfile;
+	int				infile_id;
+	int				outfile_id;
 	struct s_line	*next;
 }					t_line;
 
@@ -46,7 +48,7 @@ void	cmd_process(t_line **line, t_env **env);
 char	**get_env(char **envp);
 void	minishell(char **envp);
 int		organize_line(t_line **line);
-// check.c
+//check.c
 void	check_line(t_line *line);
 int		check_space(t_line **line);
 void	put_space(t_line **line, int x);
@@ -59,7 +61,6 @@ void	init_linked_list(t_line **line, char **before_pipe, char **after_pipe);
 int		print_error(char *str);
 void	cmd_error(char *cmd);
 void	error_display(char *cmd);
-char	*path_error(char *cmd, char **path);
 void	dir_error(char *path);
 void	export_error(char *str);
 // signal.c

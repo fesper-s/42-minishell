@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 14:52:21 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/12 10:43:49 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/13 12:36:21 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,6 @@ void	error_display(char *cmd)
 		cmd_error(cmd);
 		g_status = 127;
 	}
-}
-
-char	*path_error(char *cmd, char **path)
-{
-	if (cmd[0] != '$')
-	{
-		cmd_error(cmd);
-		g_status = 127;
-	}
-	free_str_splited(path);
-	return (0);
 }
 
 void	dir_error(char *path)
