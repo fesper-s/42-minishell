@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 10:42:52 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/12 13:32:06 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/13 12:08:16 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,12 @@ int	handle_builtins(char **cmds, t_env **env)
 
 	if (!ft_strncmp(cmds[0], "echo", 5))
 	{
+		g_status = 0;
+		if (cmds[1] == NULL)
+		{
+			printf("\n");
+			return (1);
+		}
 		i = 0;
 		while (cmds[++i])
 		{
@@ -89,7 +95,6 @@ int	handle_builtins(char **cmds, t_env **env)
 		}
 		if (ft_strncmp(cmds[1], "-n", 3))
 			printf("\n");
-		g_status = 0;
 		return (1);
 	}
 	if (!ft_strncmp(cmds[0], "cd", 3))

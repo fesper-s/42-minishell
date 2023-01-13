@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/13 10:43:28 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/13 12:14:21 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 void	expand_var(t_line **line, t_env *env)
 {
 	int		i;
+	int		j;
 	char	*buffer;
 
 	if ((*line)->cmds[0][0] == '$')
@@ -36,10 +37,12 @@ void	expand_var(t_line **line, t_env *env)
 				if (!ft_strncmp(env->env[i], &(*line)->cmds[0][1], \
 					ft_strlen(&(*line)->cmds[0][1])))
 				{
-					printf("env -> %s\n", env->env[i]);
-					buffer = malloc(sizeof(char) * (ft_strlen(env->env[i]) - \
-						(ft_strlen(&(*line)->cmds[0][1]) + 1) + 1));
-					buffer = env->env[i] + ft_strlen(&(*line)->cmds[0][1]) + 1;
+					j = 0;
+					while (env->env[i][j] != '=')
+						j++;
+					buffer = malloc(sizeof(char) * (ft_strlen(env->env[i]) - j + 1));
+					buffer = ft_strdup(env->env[i] + j + 1);
+					free((*line)->cmds[0]);
 					(*line)->cmds[0] = ft_strdup(buffer);
 				}
 			}
