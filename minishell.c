@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/13 10:37:23 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/13 10:43:28 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,13 @@ void	expand_var(t_line **line, t_env *env)
 			{
 				if (!ft_strncmp(env->env[i], &(*line)->cmds[0][1], \
 					ft_strlen(&(*line)->cmds[0][1])))
-					{
-						printf("env -> %s\n", env->env[i]);
-						buffer = malloc(sizeof(char) * (ft_strlen(env->env[i]) - \
-							(ft_strlen(&(*line)->cmds[0][1]) + 1) + 1));
-						buffer = env->env[i] + ft_strlen(&(*line)->cmds[0][1]) + 1;
-						(*line)->cmds[0] = ft_strdup(buffer);
-					}
+				{
+					printf("env -> %s\n", env->env[i]);
+					buffer = malloc(sizeof(char) * (ft_strlen(env->env[i]) - \
+						(ft_strlen(&(*line)->cmds[0][1]) + 1) + 1));
+					buffer = env->env[i] + ft_strlen(&(*line)->cmds[0][1]) + 1;
+					(*line)->cmds[0] = ft_strdup(buffer);
+				}
 			}
 		}
 		g_status = 127;
