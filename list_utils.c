@@ -81,7 +81,7 @@ void	lst_free(t_line **lst)
 	*lst = NULL;
 }
 
-int	cmds_until_pipe(char **cmds)
+int	cmds_til_pipe(char **cmds)
 {
 	int	i;
 
