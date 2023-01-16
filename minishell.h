@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/13 12:36:30 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/16 12:26:51 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct s_line
 typedef struct s_env
 {
 	char	**env;
+	char	*home;
 }			t_env;
 
 int	g_status;
@@ -86,6 +87,7 @@ int		handle_builtins(char **cmds, t_env **env);
 // builtins2.c
 void	relative_path(char *cmd, t_env **env, char *pwd, int j);
 void	chpwd(char *cmd, t_env **env, int j);
+char	*tilde_home(char *cmd, char *home);
 int		handle_cd(char **cmds, t_env **env);
 
 #endif
