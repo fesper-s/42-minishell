@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/13 12:56:50 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/16 09:00:54 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void	expand_var(t_line **line, t_env *env)
 
 static void	pipeline(t_line **line)
 {
+	int		size;
 	int		fd[2];
 	pid_t	pid;
 	int		fdd;
@@ -68,6 +69,7 @@ static void	pipeline(t_line **line)
 			break ;
 		}
 		pipe(fd);
+		size = ft_lst_size((*line));
 		pid = fork();
 		if (pid == -1)
 		{
@@ -84,12 +86,14 @@ static void	pipeline(t_line **line)
 			free(path);
 		}
 		else
-		{
-			wait(NULL);
+		{		
+			while (--size)
+				waitpid(-1, NULL, 0);
 			close(fd[1]);
 			fdd = fd[0];
 			(*line) = (*line)->next;
 		}
+
 	}
 }
 
@@ -114,11 +118,9 @@ void	cmd_process(t_line **line, t_env **env)
 
 int	organize_line(t_line **line)
 {
-	//int		i;
 	char	**split_line;
 	void	*head;
 
-	//i = -1;
 	if (!(*line)->cmd)
 		return (0);
 	head = (*line);
@@ -129,25 +131,6 @@ int	organize_line(t_line **line)
 	init_cmds(line, split_line);
 	check_for_pipes(line, (*line)->cmds);
 	(*line) = head;
-	/*
-	printf("-----Init Infile and Outfile-----\n");
-	if ((*line)->infile)
-		printf("infile--> %s\n", (*line)->infile);
-	if ((*line)->outfile)
-		printf("outfile--> %s\n", (*line)->outfile);
-	i = -1;
-	printf("-----first list-----\n");
-	while ((*line))
-	{
-		while ((*line)->cmds[++i])
-			printf("cmds[%d]--> %s\n", i, (*line)->cmds[i]);
-		i = -1;
-		if ((*line)->next)
-			printf("-----Next list-----\n");
-		(*line) = (*line)->next;
-	}
-	(*line) = head;
-	*/
 	free(split_line);
 	return (1);
 }
@@ -195,7 +178,6 @@ void	minishell(char **envp)
 			printf("exit\n");
 			break ;
 		}
-		//printf("-----Starting CMD Process\n");
 		cmd_process(&line, &env);
 		line = head;
 		lst_free(&line);
