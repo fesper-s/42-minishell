@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/16 09:00:54 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/16 11:33:06 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ static void	pipeline(t_line **line)
 	char	*path;
 
 	fdd = 0;
+	size = ft_lst_size((*line));
 	while ((*line))
 	{
 		path = find_path((*line)->cmds[0]);
@@ -69,7 +70,6 @@ static void	pipeline(t_line **line)
 			break ;
 		}
 		pipe(fd);
-		size = ft_lst_size((*line));
 		pid = fork();
 		if (pid == -1)
 		{
@@ -83,18 +83,17 @@ static void	pipeline(t_line **line)
 				dup2(fd[1], 1);
 			close(fd[0]);
 			execve(path, (*line)->cmds, NULL);
-			free(path);
 		}
 		else
-		{		
-			while (--size)
-				waitpid(-1, NULL, 0);
+		{
 			close(fd[1]);
 			fdd = fd[0];
 			(*line) = (*line)->next;
+			free(path);
 		}
-
-	}
+	}	
+	while (size--)
+			waitpid(-1, NULL, 0);
 }
 
 void	cmd_process(t_line **line, t_env **env)
