@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/17 10:39:43 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/17 10:40:01 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,12 @@ int	g_status;
 
 // minishell.c
 void	expand_var(t_line **line, t_env *env);
+void	pipeline(t_line **line, int size);
 void	cmd_process(t_line **line, t_env **env);
 char	**get_env(char **envp);
 void	minishell(char **envp);
-int		organize_line(t_line **line);
 //check.c
+int		organize_line(t_line **line);
 void	check_line(t_line *line);
 int		check_space(t_line **line);
 void	put_space(t_line **line, int x);
@@ -77,7 +78,7 @@ int		cmds_count(char **split);
 void	ft_lst_add_back(t_line **lst, t_line *new);
 t_line	*ft_lst_new(char **cmds, char *infile, char *outfile);
 int		ft_lst_size(t_line *lst);
-int		cmds_until_pipe(char **cmds);
+int		cmds_til_pipe(char **cmds);
 t_line	*ft_lst_last(t_line *lst);
 // builtins.c
 int		handle_pwd_and_env(char **cmds, t_env *env);

@@ -6,39 +6,57 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 14:42:32 by gussoare          #+#    #+#             */
-/*   Updated: 2023/01/10 10:50:06 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/16 13:06:21 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+int	organize_line(t_line **line)
+{
+	char	**split_line;
+	void	*head;
+
+	if (!(*line)->cmd)
+		return (0);
+	head = (*line);
+	check_line(*line);
+	check_space(line);
+	split_line = ft_split((*line)->cmd, ' ');
+	init_files(line, split_line);
+	init_cmds(line, split_line);
+	check_for_pipes(line, (*line)->cmds);
+	(*line) = head;
+	free(split_line);
+	return (1);
+}
+
 void	check_for_pipes(t_line **line, char **cmds)
 {
 	int		i;
 	int		j;
-	char	**before_pipe;
-	char	**after_pipe;
+	char	**b_p;
+	char	**a_p;
 
 	i = -1;
 	j = 0;
-	before_pipe = malloc((cmds_until_pipe(cmds) + 1) * sizeof(char *));
-	after_pipe = malloc((cmds_count(cmds) - cmds_until_pipe(cmds) + 1) \
-			* sizeof(char *));
-	if (cmds_count(cmds) != cmds_until_pipe(cmds))
+	b_p = malloc((cmds_til_pipe(cmds) + 1) * sizeof(char *));
+	a_p = malloc((cmds_count(cmds) - cmds_til_pipe(cmds) + 1) * sizeof(char *));
+	if (cmds_count(cmds) != cmds_til_pipe(cmds))
 	{
 		while (cmds[++i])
 		{
 			if (cmds[i][0] == '|')
 			{
 				while (cmds[++i])
-					after_pipe[j++] = cmds[i];
+					a_p[j++] = cmds[i];
 				break ;
 			}
-			before_pipe[i] = cmds[i];
+			b_p[i] = cmds[i];
 		}
-		before_pipe[cmds_until_pipe(cmds)] = 0;
-		after_pipe[j] = 0;
-		init_linked_list(line, before_pipe, after_pipe);
+		b_p[cmds_til_pipe(cmds)] = 0;
+		a_p[j] = 0;
+		init_linked_list(line, b_p, a_p);
 	}
 }
 
