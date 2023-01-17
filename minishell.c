@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/16 09:37:38 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/17 10:46:21 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	expand_var(t_line **line, t_env *env)
 
 static void	pipeline(t_line **line)
 {
-	int		size;
+	//int		size;
 	int		fd[2];
 	pid_t	pid;
 	int		fdd;
@@ -69,7 +69,7 @@ static void	pipeline(t_line **line)
 			break ;
 		}
 		pipe(fd);
-		size = ft_lst_size((*line));
+		//size = ft_lst_size((*line));
 		pid = fork();
 		if (pid == -1)
 		{
