@@ -80,16 +80,3 @@ void	lst_free(t_line **lst)
 	}
 	*lst = NULL;
 }
-
-int	cmds_til_pipe(char **cmds)
-{
-	int	i;
-
-	i = -1;
-	while (cmds[++i])
-	{
-		if (cmds[i][0] == '|')
-			break ;
-	}
-	return (i);
-}

@@ -12,6 +12,22 @@
 
 #include "minishell.h"
 
+char	**get_env(char **envp)
+{
+	char	**env;
+	int		i;
+
+	i = 0;
+	while (envp[i])
+		i++;
+	env = malloc(sizeof(char *) * (i + 1));
+	i = -1;
+	while (envp[++i])
+		env[i] = envp[i];
+	env[i] = 0;
+	return (env);
+}
+
 void	init_files(t_line **line, char **split)
 {
 	int	i;
