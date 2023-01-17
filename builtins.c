@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 10:42:52 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/17 12:49:04 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/17 13:06:31 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,28 +71,6 @@ int	handle_export(char **cmds, t_env **env)
 	else
 		export_error(cmds[1]);
 	return (1);
-}
-
-void	check_newline(char **cmds, int *newline, int *buffer, int i)
-{
-	int	j;
-
-	if (!ft_strncmp(cmds[i], "-n", 2))
-	{
-		*newline = 1;
-		j = 1;
-		while (cmds[i][j])
-		{
-			if (cmds[i][j] != 'n')
-				break ;
-			j++;
-			if (!cmds[i][j])
-			{
-				*newline = 0;
-				*buffer = 1;
-			}
-		}
-	}
 }
 
 void	handle_echo(char **cmds)

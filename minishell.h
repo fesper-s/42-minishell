@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/17 10:56:27 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/17 13:27:34 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ int	g_status;
 
 // minishell.c
 void	expand_var(t_line **line, t_env *env);
+void	exec_cmds(t_line **line, pid_t pid, int fdd, int *fd);
 void	pipeline(t_line **line, int size);
 void	cmd_process(t_line **line, t_env **env);
-char	**get_env(char **envp);
 void	minishell(char **envp);
 //check.c
 int		organize_line(t_line **line);
@@ -54,7 +54,8 @@ void	check_line(t_line *line);
 int		check_space(t_line **line);
 void	put_space(t_line **line, int x);
 void	check_for_pipes(t_line **line, char **cmds);
-//init
+//init_struct.c
+char	**get_env(char **envp);
 void	init_files(t_line **line, char **split);
 void	init_cmds(t_line **line, char **split);
 void	init_linked_list(t_line **line, char **before_pipe, char **after_pipe);
@@ -73,6 +74,9 @@ char	*find_path(char *cmd);
 char	**ft_trim(char **cmds);
 char	**get_cmds(char *cmd);
 void	lst_free(t_line **lst);
+// builtins_utils.c
+int		is_flag(char **cmds, int i);
+void	check_newline(char **cmds, int *newline, int *buffer, int i);
 int		cmds_count(char **split);
 // list_utils.c
 void	ft_lst_add_back(t_line **lst, t_line *new);
@@ -83,6 +87,7 @@ t_line	*ft_lst_last(t_line *lst);
 // builtins.c
 int		handle_pwd_and_env(char **cmds, t_env *env);
 int		handle_exports(char **cmds, t_env **env);
+void	handle_echo(char **cmds);
 int		handle_builtins(char **cmds, t_env **env);
 // chdir.c
 void	relative_path(char *cmd, t_env **env, char *pwd, int j);

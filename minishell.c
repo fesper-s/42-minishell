@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/17 10:39:54 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/17 13:25:23 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	expand_var(t_line **line, t_env *env)
 	}
 }
 
-static void	exec_cmds(t_line **line, pid_t pid, int fdd, int *fd)
+void	exec_cmds(t_line **line, pid_t pid, int fdd, int *fd)
 {
 	char	*path;
 
@@ -117,22 +117,6 @@ void	cmd_process(t_line **line, t_env **env)
 		(*line) = head;
 	}
 	free_str_splited((*line)->cmds);
-}
-
-char	**get_env(char **envp)
-{
-	char	**env;
-	int		i;
-
-	i = 0;
-	while (envp[i])
-		i++;
-	env = malloc(sizeof(char *) * (i + 1));
-	i = -1;
-	while (envp[++i])
-		env[i] = envp[i];
-	env[i] = 0;
-	return (env);
 }
 
 void	minishell(char **envp)
