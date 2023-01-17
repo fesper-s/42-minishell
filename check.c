@@ -6,12 +6,29 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 14:42:32 by gussoare          #+#    #+#             */
-/*   Updated: 2023/01/16 13:06:21 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/17 12:41:41 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
+void	check_quotes(t_line **line)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while ((*line)->cmds[i])
+	{
+		j = 0;
+		while ((*line)->cmds[i][j])
+		{
+			if (*line cmd)
+		}
+	}
+}
+*/
 int	organize_line(t_line **line)
 {
 	char	**split_line;
@@ -25,6 +42,7 @@ int	organize_line(t_line **line)
 	split_line = ft_split((*line)->cmd, ' ');
 	init_files(line, split_line);
 	init_cmds(line, split_line);
+//	check_quotes(line);
 	check_for_pipes(line, (*line)->cmds);
 	(*line) = head;
 	free(split_line);
