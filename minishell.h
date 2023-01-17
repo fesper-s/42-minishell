@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/16 12:26:51 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/17 10:39:43 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ typedef struct s_line
 typedef struct s_env
 {
 	char	**env;
-	char	*home;
 }			t_env;
 
 int	g_status;
