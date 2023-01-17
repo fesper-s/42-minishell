@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 10:42:52 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/17 10:38:53 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/17 12:49:04 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,51 @@ int	handle_export(char **cmds, t_env **env)
 	return (1);
 }
 
+void	check_newline(char **cmds, int *newline, int *buffer, int i)
+{
+	int	j;
+
+	if (!ft_strncmp(cmds[i], "-n", 2))
+	{
+		*newline = 1;
+		j = 1;
+		while (cmds[i][j])
+		{
+			if (cmds[i][j] != 'n')
+				break ;
+			j++;
+			if (!cmds[i][j])
+			{
+				*newline = 0;
+				*buffer = 1;
+			}
+		}
+	}
+}
+
+void	handle_echo(char **cmds)
+{
+	int	newline;
+	int	buffer;
+	int	i;
+
+	i = 0;
+	buffer = 0;
+	while (cmds[++i])
+	{
+		newline = 1;
+		check_newline(cmds, &newline, &buffer, i);
+		if (newline)
+			printf("%s", cmds[i]);
+		if (cmds[i + 1] != NULL && newline)
+			printf(" ");
+	}
+	if (!buffer)
+		printf("\n");
+}
+
 int	handle_builtins(char **cmds, t_env **env)
 {
-	int		i;
-
 	if (!ft_strncmp(cmds[0], "echo", 5))
 	{
 		g_status = 0;
@@ -85,16 +126,7 @@ int	handle_builtins(char **cmds, t_env **env)
 			printf("\n");
 			return (1);
 		}
-		i = 0;
-		while (cmds[++i])
-		{
-			if (ft_strncmp(cmds[i], "-n", 3))
-				printf("%s", cmds[i]);
-			if (cmds[i + 1] != NULL && ft_strncmp(cmds[i], "-n", 3))
-				printf(" ");
-		}
-		if (ft_strncmp(cmds[1], "-n", 3))
-			printf("\n");
+		handle_echo(cmds);
 		return (1);
 	}
 	if (!ft_strncmp(cmds[0], "cd", 3))
