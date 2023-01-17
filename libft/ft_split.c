@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 08:33:43 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/12 13:42:40 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/16 09:48:05 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,30 +15,22 @@
 static size_t	ft_wordcount(char const *s, char c)
 {
 	size_t	i;
-	size_t	j;
+	size_t	wordnbr;
 
-	i = 1;
-	j = -1;
-	while (*s && *s == c)
-		s++;
-	while (s[++j])
+	i = 0;
+	wordnbr = 0;
+	while (s[i])
 	{
-		if (s[j] != c && s[j - 1] == c)
+		if (!(s[i] == c))
+		{
+			wordnbr++;
+			while (s[i] && s[i] != c)
+				i++;
+		}
+		else
 			i++;
-		if (s[j] == '"')
-		{
-			j++;
-			while (s[j] != '"')
-				j++;
-		}
-		if (s[j] == 39)
-		{
-			j++;
-			while (s[j] != 39)
-				j++;
-		}
 	}
-	return (i);
+	return (wordnbr);
 }
 
 static size_t	ft_strsize(char const *s, char c)

@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 09:39:12 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/11 08:22:06 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/16 12:25:42 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,30 @@ void	chpwd(char *cmd, t_env **env, int j)
 	}
 }
 
+char	*tilde_home(char *cmd, char *home)
+{
+	char	*buffer;
+
+	buffer = malloc(sizeof(char) * (ft_strlen(home) + ft_strlen(cmd)));
+	buffer = home;
+	buffer = ft_strjoin(buffer, &cmd[1]);
+	free(cmd);
+	cmd = ft_strdup(buffer);
+	free(buffer);
+	return (cmd);
+}
+
 int	handle_cd(char **cmds, t_env **env)
 {
-	int	i;
+	char	*home;
+	int		i;
 
-	if (chdir(cmds[1]) < 0)
+	home = getenv("HOME");
+	if (cmds[1] && cmds[1][0] == '~')
+		cmds[1] = tilde_home(cmds[1], home);
+	if (!cmds[1])
+		chdir(home);
+	else if (chdir(cmds[1]) < 0)
 	{
 		dir_error(cmds[1]);
 		g_status = 1;
@@ -73,7 +92,12 @@ int	handle_cd(char **cmds, t_env **env)
 	}
 	i = -1;
 	while ((*env)->env[++i])
-		chpwd(cmds[1], env, i);
+	{
+		if (!cmds[1])
+			chpwd(home, env, i);
+		else
+			chpwd(cmds[1], env, i);
+	}
 	g_status = 0;
 	return (1);
 }
