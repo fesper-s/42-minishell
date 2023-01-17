@@ -6,31 +6,62 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 14:42:32 by gussoare          #+#    #+#             */
-/*   Updated: 2023/01/17 12:41:41 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/17 14:16:11 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*
+
+void	cut_quotes(t_line **line, int i, int len)
+{
+	char *temp;
+	int		k;
+	int		j;
+	
+	k = 0;
+	j = -1;
+	temp = malloc((len + 1) * sizeof(char));
+	while ((*line)->cmds[i][++j])
+	{
+		if ((*line)->cmds[i][j] == '\"')
+			j++;
+		temp[k] = ((*line)->cmds[i][j]);
+		k++;
+	}
+	temp[k] = 0;
+	free(((*line)->cmds[i]));
+	((*line)->cmds[i]) = ft_strdup(temp);
+	free(temp);
+}
+
 void	check_quotes(t_line **line)
 {
 	int	i;
 	int	j;
-
-	i = 0;
-	while ((*line)->cmds[i])
+	int	len;
+	i = -1;
+	while ((*line)->cmds[++i])
 	{
-		j = 0;
-		while ((*line)->cmds[i][j])
+		len = 0;
+		j = -1;
+		while ((*line)->cmds[i][++j])
 		{
-			if (*line cmd)
+			if ((*line)->cmds[i][j] == '\"')
+			{
+				j++;
+				while ((*line)->cmds[i][j + len] && (*line)->cmds[i][j + len] != '\"')
+					len++;
+			}
+			if ((*line)->cmds[i][j + 1] == 0 && len > 0)
+				cut_quotes(line, i, len);
 		}
 	}
 }
-*/
+
 int	organize_line(t_line **line)
 {
+	int	i = -1;
 	char	**split_line;
 	void	*head;
 
@@ -42,7 +73,9 @@ int	organize_line(t_line **line)
 	split_line = ft_split((*line)->cmd, ' ');
 	init_files(line, split_line);
 	init_cmds(line, split_line);
-//	check_quotes(line);
+	check_quotes(line);
+	while ((*line)->cmds[++i])
+		printf("cmds[%d]--> %s\n", i, (*line)->cmds[i]);
 	check_for_pipes(line, (*line)->cmds);
 	(*line) = head;
 	free(split_line);
