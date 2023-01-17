@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/17 10:40:01 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/17 10:56:27 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ t_line	*ft_lst_last(t_line *lst);
 int		handle_pwd_and_env(char **cmds, t_env *env);
 int		handle_exports(char **cmds, t_env **env);
 int		handle_builtins(char **cmds, t_env **env);
-// builtins2.c
+// chdir.c
 void	relative_path(char *cmd, t_env **env, char *pwd, int j);
 void	chpwd(char *cmd, t_env **env, int j);
 char	*tilde_home(char *cmd, char *home);
