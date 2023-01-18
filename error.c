@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 14:52:21 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/13 12:36:21 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/18 10:33:42 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,11 @@ void	dir_error(char *path)
 	ft_putstr_fd("\n", 2);
 }
 
-void	export_error(char *str)
+int	export_error(char *str)
 {
 	ft_putstr_fd("minishell: export: `", 2);
 	ft_putstr_fd(str, 2);
 	ft_putstr_fd("': not a valid identifier\n", 2);
 	g_status = 1;
+	return (1);
 }
