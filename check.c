@@ -6,58 +6,58 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 14:42:32 by gussoare          #+#    #+#             */
-/*   Updated: 2023/01/17 14:16:11 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/18 14:21:03 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 
-void	cut_quotes(t_line **line, int i, int len)
-{
-	char *temp;
-	int		k;
-	int		j;
+// void	cut_quotes(t_line **line, int i, int len)
+// {
+// 	char *temp;
+// 	int		k;
+// 	int		j;
 	
-	k = 0;
-	j = -1;
-	temp = malloc((len + 1) * sizeof(char));
-	while ((*line)->cmds[i][++j])
-	{
-		if ((*line)->cmds[i][j] == '\"')
-			j++;
-		temp[k] = ((*line)->cmds[i][j]);
-		k++;
-	}
-	temp[k] = 0;
-	free(((*line)->cmds[i]));
-	((*line)->cmds[i]) = ft_strdup(temp);
-	free(temp);
-}
+// 	k = 0;
+// 	j = -1;
+// 	temp = malloc((len + 1) * sizeof(char));
+// 	while ((*line)->cmds[i][++j])
+// 	{
+// 		if ((*line)->cmds[i][j] == '\"')
+// 			j++;
+// 		temp[k] = ((*line)->cmds[i][j]);
+// 		k++;
+// 	}
+// 	temp[k] = 0;
+// 	free(((*line)->cmds[i]));
+// 	((*line)->cmds[i]) = ft_strdup(temp);
+// 	free(temp);
+// }
 
-void	check_quotes(t_line **line)
-{
-	int	i;
-	int	j;
-	int	len;
-	i = -1;
-	while ((*line)->cmds[++i])
-	{
-		len = 0;
-		j = -1;
-		while ((*line)->cmds[i][++j])
-		{
-			if ((*line)->cmds[i][j] == '\"')
-			{
-				j++;
-				while ((*line)->cmds[i][j + len] && (*line)->cmds[i][j + len] != '\"')
-					len++;
-			}
-			if ((*line)->cmds[i][j + 1] == 0 && len > 0)
-				cut_quotes(line, i, len);
-		}
-	}
-}
+// void	check_quotes(t_line **line)
+// {
+// 	int	i;
+// 	int	j;
+// 	int	len;
+// 	i = -1;
+// 	while ((*line)->cmds[++i])
+// 	{
+// 		len = 0;
+// 		j = -1;
+// 		while ((*line)->cmds[i][++j])
+// 		{
+// 			if ((*line)->cmds[i][j] == '\"')
+// 			{
+// 				j++;
+// 				while ((*line)->cmds[i][j + len] && (*line)->cmds[i][j + len] != '\"')
+// 					len++;
+// 			}
+// 			if ((*line)->cmds[i][j + 1] == 0 && len > 0)
+// 				cut_quotes(line, i, len);
+// 		}
+// 	}
+// }
 
 int	organize_line(t_line **line)
 {
@@ -69,11 +69,13 @@ int	organize_line(t_line **line)
 		return (0);
 	head = (*line);
 	check_line(*line);
+	if (!check_line(*line)) //|| !check_quotes((*line)->cmd))
+		return (0);
 	check_space(line);
 	split_line = ft_split((*line)->cmd, ' ');
 	init_files(line, split_line);
 	init_cmds(line, split_line);
-	check_quotes(line);
+	
 	while ((*line)->cmds[++i])
 		printf("cmds[%d]--> %s\n", i, (*line)->cmds[i]);
 	check_for_pipes(line, (*line)->cmds);
@@ -165,7 +167,7 @@ int	check_space(t_line **line)
 	return (1);
 }
 
-void	check_line(t_line *line)
+int	check_line(t_line *line)
 {
 	int	i;
 
@@ -175,12 +177,13 @@ void	check_line(t_line *line)
 		if (line->cmd[i] == '|' && line->cmd[i + 1] == '|')
 		{
 			ft_putstr_fd("Error: Can't use || or &&\n", 2);
-			exit(EXIT_FAILURE);
+			return (0);
 		}
 		if (line->cmd[i] == '&' && line->cmd[i + 1] == '&')
 		{
 			ft_putstr_fd("Error: Can't use || or &&\n", 2);
-			exit(EXIT_FAILURE);
+			return (0);
 		}
 	}
+	return (1);
 }

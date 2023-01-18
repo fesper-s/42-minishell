@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/17 13:25:23 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/18 10:46:24 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,14 @@ void	expand_var(t_line **line, t_env *env)
 	}
 }
 
-void	exec_cmds(t_line **line, pid_t pid, int fdd, int *fd)
+void	exec_cmds(t_line **line, pid_t pid, int *fdd, int *fd)
 {
 	char	*path;
 
 	path = find_path((*line)->cmds[0]);
 	if (pid == 0)
 	{
-		dup2(fdd, 0);
+		dup2(*fdd, 0);
 		if ((*line)->next != 0)
 			dup2(fd[1], 1);
 		close(fd[0]);
@@ -67,7 +67,7 @@ void	exec_cmds(t_line **line, pid_t pid, int fdd, int *fd)
 	else
 	{
 		close(fd[1]);
-		fdd = fd[0];
+		*fdd = fd[0];
 		(*line) = (*line)->next;
 	}
 	free(path);
@@ -91,9 +91,9 @@ void	pipeline(t_line **line, int size)
 		if (pid == -1 && print_error("Error: fork\n"))
 			break ;
 		else
-			exec_cmds(line, pid, fdd, fd);
+			exec_cmds(line, pid, &fdd, fd);
+		free(path);
 	}
-	free(path);
 	while (size--)
 		waitpid(-1, NULL, 0);
 }
@@ -137,12 +137,14 @@ void	minishell(char **envp)
 			add_history(line->cmd);
 		else
 			break ;
-		organize_line(&line);
-		if (ft_strncmp(line->cmd, "exit", 5) == 0)
-			break ;
-		cmd_process(&line, &env);
-		line = head;
-		lst_free(&line);
+		if (organize_line(&line))
+		{
+			if (ft_strncmp(line->cmd, "exit", 5) == 0)
+				break ;
+			cmd_process(&line, &env);
+			line = head;
+			lst_free(&line);
+		}
 	}
 	printf("exit\n");
 }
