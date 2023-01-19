@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/18 14:30:15 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/19 14:15:11 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,6 @@
 
 void	expand_var(t_line **line, t_env *env)
 {
-	int		i;
-	int		j;
-	char	*buffer;
-
 	if ((*line)->cmds[0][0] == '$')
 	{
 		if (!(*line)->cmds[0][1])
@@ -30,23 +26,7 @@ void	expand_var(t_line **line, t_env *env)
 			printf(": command not found\n");
 		}
 		else
-		{
-			i = -1;
-			while (env->env[++i])
-			{
-				if (!ft_strncmp(env->env[i], &(*line)->cmds[0][1], \
-					ft_strlen(&(*line)->cmds[0][1])))
-				{
-					j = 0;
-					while (env->env[i][j] != '=')
-						j++;
-					buffer = malloc(sizeof(char) * (ft_strlen(env->env[i]) - j + 1));
-					buffer = ft_strdup(env->env[i] + j + 1);
-					free((*line)->cmds[0]);
-					(*line)->cmds[0] = ft_strdup(buffer);
-				}
-			}
-		}
+			expanding(line, env);
 		g_status = 127;
 	}
 }
