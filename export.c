@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 08:00:46 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/19 10:41:20 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/19 11:59:44 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ int	handle_export(char **cmds, t_env **env)
 	int	changed;
 	int	i;
 	int	j;
-	int	len;
 
 	i = 0;
 	while (cmds[1] && cmds[++i])
@@ -92,9 +91,8 @@ int	handle_export(char **cmds, t_env **env)
 		j = -1;
 		while ((*env)->env[++j])
 		{
-			len = count_cmdlen(cmds[i]);
 			if (!ft_strncmp(cmds[i], (*env)->env[j], count_cmdlen(cmds[i])) \
-				&& (*env)->env[j][len] == '=')
+				&& (*env)->env[j][count_cmdlen(cmds[i])] == '=')
 			{
 				chenvvar(cmds[i], env, j);
 				changed = 1;

@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/18 14:25:51 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/19 13:46:36 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,8 @@ int		cmds_til_pipe(char **cmds);
 t_line	*ft_lst_last(t_line *lst);
 // builtins.c
 int		handle_pwd_and_env(char **cmds, t_env *env);
-void	handle_echo(char **cmds);
+void	check_expvar(char **cmds, t_env *env, int j);
+int		handle_echo(char **cmds, t_env *env);
 int		handle_builtins(char **cmds, t_env **env);
 // chdir.c
 void	relative_path(char *cmd, t_env **env, char *pwd, int j);
@@ -97,6 +98,8 @@ int		handle_cd(char **cmds, t_env **env);
 // export.c
 void	add_to_env(char *cmd, t_env **env);
 int		exporting(char *cmd, t_env **env);
+void	chenvvar(char *cmd, t_env **env, int i);
+int		count_cmdlen(char *cmd);
 int		handle_export(char **cmds, t_env **env);
 
 #endif
