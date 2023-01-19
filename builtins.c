@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 10:42:52 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/18 14:24:14 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/19 13:58:32 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,45 +37,82 @@ int	handle_pwd_and_env(char **cmds, t_env *env)
 	return (1);
 }
 
-void	handle_echo(char **cmds)
+void	check_expvar(char **cmds, t_env *env, int j)
 {
+	int		i;
+	char	*buffer;
+
+	if (cmds[j][0] == '$')
+	{
+		i = -1;
+		while (env->env[++i])
+		{
+			if (!ft_strncmp(&cmds[j][1], env->env[i], ft_strlen(&cmds[j][1])) \
+				&& env->env[i][ft_strlen(&cmds[j][1])] == '=')
+			{
+				buffer = ft_strdup(&env->env[i][count_cmdlen(env->env[i]) + 1]);
+				free(cmds[j]);
+				cmds[j] = ft_strdup(buffer);
+				free(buffer);
+				break ;
+			}
+			if (env->env[i + 1] == NULL)
+			{
+				free(cmds[j]);
+				cmds[j] = malloc(sizeof(char) * 1);
+				cmds[j] = 0;
+			}
+		}
+	}
+}
+
+int	handle_echo(char **cmds, t_env *env)
+{
+	int	isnull;
 	int	newline;
 	int	buffer;
 	int	i;
 
+	g_status = 0;
+	isnull = 0;
+	if (cmds[1] == NULL)
+		isnull = 1;
 	i = 0;
 	buffer = 0;
-	while (cmds[++i])
+	while (!isnull && cmds[++i])
 	{
+		check_expvar(cmds, env, i);
 		newline = 1;
 		check_newline(cmds, &newline, &buffer, i);
-		if (newline)
+		if (cmds[i] && newline)
 			printf("%s", cmds[i]);
-		if (cmds[i + 1] != NULL && newline)
+		if (cmds[i] && cmds[i + 1] != NULL && newline)
 			printf(" ");
 	}
-	if (!buffer)
+	if (!buffer || isnull)
 		printf("\n");
+	return (1);
+}
+
+int	handle_unset(char **cmds, t_env **env)
+{
+	(void) cmds;
+	(void) env;
+	printf("enter unset\n");
+	return (1);
 }
 
 int	handle_builtins(char **cmds, t_env **env)
 {
 	if (!ft_strncmp(cmds[0], "echo", 5))
-	{
-		g_status = 0;
-		if (cmds[1] == NULL)
-		{
-			printf("\n");
-			return (1);
-		}
-		handle_echo(cmds);
-		return (1);
-	}
+		return (handle_echo(cmds, *env));
 	if (!ft_strncmp(cmds[0], "cd", 3))
 		return (handle_cd(cmds, env));
 	if (!ft_strncmp(cmds[0], "pwd", 4) || !ft_strncmp(cmds[0], "env", 4))
 		return (handle_pwd_and_env(cmds, *env));
 	if (!ft_strncmp(cmds[0], "export", 7))
 		return (handle_export(cmds, env));
+	if (!ft_strncmp(cmds[0], "unset", 6))
+		return (handle_unset(cmds, env));
 	return (0);
 }

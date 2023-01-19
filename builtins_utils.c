@@ -35,7 +35,7 @@ void	check_newline(char **cmds, int *newline, int *buffer, int i)
 {
 	int	j;
 
-	if (!ft_strncmp(cmds[i], "-n", 2))
+	if (cmds[i] && !ft_strncmp(cmds[i], "-n", 2))
 	{
 		*newline = 1;
 		j = 1;
@@ -64,4 +64,26 @@ int	cmds_til_pipe(char **cmds)
 			break ;
 	}
 	return (i);
+}
+
+void	expanding(t_line **line, t_env *env)
+{
+	char	*buffer;
+	int		i;
+	int		j;
+
+	i = -1;
+	while (env->env[++i])
+	{
+		if (!ft_strncmp(env->env[i], &(*line)->cmds[0][1], \
+			ft_strlen(&(*line)->cmds[0][1])))
+		{
+			j = 0;
+			while (env->env[i][j] != '=')
+				j++;
+			buffer = ft_strdup(env->env[i] + j + 1);
+			free((*line)->cmds[0]);
+			(*line)->cmds[0] = ft_strdup(buffer);
+		}
+	}
 }

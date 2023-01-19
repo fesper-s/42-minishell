@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/19 10:08:58 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/19 14:16:30 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ void	lst_free(t_line **lst);
 int		is_flag(char **cmds, int i);
 void	check_newline(char **cmds, int *newline, int *buffer, int i);
 int		cmds_count(char **split);
+void	expanding(t_line **line, t_env *env);
 // list_utils.c
 void	ft_lst_add_back(t_line **lst, t_line *new);
 t_line	*ft_lst_new(char **cmds, char *infile, char *outfile);
@@ -87,7 +88,8 @@ int		cmds_til_pipe(char **cmds);
 t_line	*ft_lst_last(t_line *lst);
 // builtins.c
 int		handle_pwd_and_env(char **cmds, t_env *env);
-void	handle_echo(char **cmds);
+void	check_expvar(char **cmds, t_env *env, int j);
+int		handle_echo(char **cmds, t_env *env);
 int		handle_builtins(char **cmds, t_env **env);
 // chdir.c
 void	relative_path(char *cmd, t_env **env, char *pwd, int j);
@@ -97,6 +99,8 @@ int		handle_cd(char **cmds, t_env **env);
 // export.c
 void	add_to_env(char *cmd, t_env **env);
 int		exporting(char *cmd, t_env **env);
+void	chenvvar(char *cmd, t_env **env, int i);
+int		count_cmdlen(char *cmd);
 int		handle_export(char **cmds, t_env **env);
 
 #endif
