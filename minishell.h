@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/17 13:27:34 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/18 14:25:51 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct s_line
 	char			*outfile;
 	int				infile_id;
 	int				outfile_id;
+	struct s_env	*env;
 	struct s_line	*next;
 }					t_line;
 
@@ -64,12 +65,12 @@ int		print_error(char *str);
 void	cmd_error(char *cmd);
 void	error_display(char *cmd);
 void	dir_error(char *path);
-void	export_error(char *str);
+int		export_error(char *str);
 // signal.c
 void	signals(void);
 void	handle_sigint(int signum);
 // utils.c
-int		free_str_splited(char **str);
+int		free_charpp(char **str);
 char	*find_path(char *cmd);
 char	**ft_trim(char **cmds);
 char	**get_cmds(char *cmd);
@@ -86,7 +87,6 @@ int		cmds_til_pipe(char **cmds);
 t_line	*ft_lst_last(t_line *lst);
 // builtins.c
 int		handle_pwd_and_env(char **cmds, t_env *env);
-int		handle_exports(char **cmds, t_env **env);
 void	handle_echo(char **cmds);
 int		handle_builtins(char **cmds, t_env **env);
 // chdir.c
@@ -94,5 +94,9 @@ void	relative_path(char *cmd, t_env **env, char *pwd, int j);
 void	chpwd(char *cmd, t_env **env, int j);
 char	*tilde_home(char *cmd, char *home);
 int		handle_cd(char **cmds, t_env **env);
+// export.c
+void	add_to_env(char *cmd, t_env **env);
+int		exporting(char *cmd, t_env **env);
+int		handle_export(char **cmds, t_env **env);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/17 13:25:23 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/18 14:30:15 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	exec_cmds(t_line **line, pid_t pid, int fdd, int *fd)
 		if ((*line)->next != 0)
 			dup2(fd[1], 1);
 		close(fd[0]);
-		execve(path, (*line)->cmds, NULL);
+		execve(path, (*line)->cmds, (*line)->env->env);
 	}
 	else
 	{
@@ -110,13 +110,14 @@ void	cmd_process(t_line **line, t_env **env)
 		return ;
 	expand_var(line, *env);
 	isbuiltin = handle_builtins((*line)->cmds, env);
+	(*line)->env = *env;
 	if (!isbuiltin && find_path((*line)->cmds[0]))
 	{
 		g_status = 0;
 		pipeline(line, size);
 		(*line) = head;
 	}
-	free_str_splited((*line)->cmds);
+	free_charpp((*line)->cmds);
 }
 
 void	minishell(char **envp)

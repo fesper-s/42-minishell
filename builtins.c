@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 10:42:52 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/17 13:06:31 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/18 14:24:14 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,42 +34,6 @@ int	handle_pwd_and_env(char **cmds, t_env *env)
 			printf("%s\n", env->env[i]);
 	}
 	g_status = 0;
-	return (1);
-}
-
-int	handle_export(char **cmds, t_env **env)
-{
-	int		i;
-	char	**buffer;
-
-	if (ft_isalpha(cmds[1][0]) || cmds[1][0] == '_')
-	{
-		i = 0;
-		while (cmds[1][++i])
-		{
-			if (cmds[1][i] == '=')
-				break ;
-			if (!ft_isalnum(cmds[1][i]))
-			{
-				export_error(cmds[1]);
-				return (1);
-			}
-		}
-		i = cmds_count((*env)->env);
-		buffer = malloc(sizeof(char *) * (i + 2));
-		i = -1;
-		while ((*env)->env[++i])
-			buffer[i] = (*env)->env[i];
-		buffer[i] = ft_strdup(cmds[1]);
-		buffer[i + 1] = 0;
-		i = -1;
-		while (buffer[++i])
-			(*env)->env[i] = buffer[i];
-		(*env)->env[i] = 0;
-		g_status = 0;
-	}
-	else
-		export_error(cmds[1]);
 	return (1);
 }
 

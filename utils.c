@@ -6,13 +6,13 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 17:25:37 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/12 09:04:57 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/18 08:42:28 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	free_str_splited(char **str)
+int	free_charpp(char **str)
 {
 	int	i;
 
@@ -43,13 +43,13 @@ char	*find_path(char *cmd)
 		free(buffer);
 		if (access(cmd_path, F_OK | X_OK) == 0)
 		{
-			free_str_splited(path);
+			free_charpp(path);
 			return (cmd_path);
 		}
 		free(cmd_path);
 	}
 	error_display(cmd);
-	free_str_splited(path);
+	free_charpp(path);
 	return (0);
 }
 
