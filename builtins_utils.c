@@ -35,7 +35,7 @@ void	check_newline(char **cmds, int *newline, int *buffer, int i)
 {
 	int	j;
 
-	if (!ft_strncmp(cmds[i], "-n", 2))
+	if (cmds[i] && !ft_strncmp(cmds[i], "-n", 2))
 	{
 		*newline = 1;
 		j = 1;
