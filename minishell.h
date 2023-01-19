@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/19 13:46:36 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/19 14:15:36 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ void	lst_free(t_line **lst);
 int		is_flag(char **cmds, int i);
 void	check_newline(char **cmds, int *newline, int *buffer, int i);
 int		cmds_count(char **split);
+void	expanding(t_line **line, t_env *env);
 // list_utils.c
 void	ft_lst_add_back(t_line **lst, t_line *new);
 t_line	*ft_lst_new(char **cmds, char *infile, char *outfile);
