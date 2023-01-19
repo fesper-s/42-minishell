@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/19 14:15:36 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/19 14:16:30 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,13 @@ int	g_status;
 
 // minishell.c
 void	expand_var(t_line **line, t_env *env);
-void	exec_cmds(t_line **line, pid_t pid, int fdd, int *fd);
+void	exec_cmds(t_line **line, pid_t pid, int *fdd, int *fd);
 void	pipeline(t_line **line, int size);
 void	cmd_process(t_line **line, t_env **env);
 void	minishell(char **envp);
 //check.c
 int		organize_line(t_line **line);
-void	check_line(t_line *line);
+int		check_line(t_line *line);
 int		check_space(t_line **line);
 void	put_space(t_line **line, int x);
 void	check_for_pipes(t_line **line, char **cmds);

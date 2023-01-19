@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 17:25:37 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/18 08:42:28 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/19 11:15:01 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,19 +53,6 @@ char	*find_path(char *cmd)
 	return (0);
 }
 
-char	**ft_trim(char **cmds)
-{
-	int	i;
-
-	i = 0;
-	while (cmds[i])
-	{
-		cmds[i] = ft_strtrim(cmds[i], "'\"");
-		i++;
-	}
-	return (cmds);
-}
-
 char	**get_cmds(char *cmd)
 {
 	char	**cmds;
@@ -91,7 +78,6 @@ char	**get_cmds(char *cmd)
 	}
 	else
 		cmds = ft_split(cmd, ' ');
-	cmds = ft_trim(cmds);
 	return (cmds);
 }
 
