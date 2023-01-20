@@ -6,7 +6,7 @@
 #    By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/13 14:02:20 by fesper-s          #+#    #+#              #
-#    Updated: 2023/01/18 08:08:24 by fesper-s         ###   ########.fr        #
+#    Updated: 2023/01/20 11:27:38 by fesper-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ LIBFT	= ./libft/libft.a
 
 SRCS	= ./main.c ./error.c ./signal.c ./utils.c ./minishell.c ./check.c \
 		  ./init_struct.c ./list_utils.c ./builtins.c ./chdir.c ./export.c \
-		  ./builtins_utils.c
+		  ./unset.c ./builtins_utils.c
 
 OBJS	= $(SRCS:.c=.o)
 

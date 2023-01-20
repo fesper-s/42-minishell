@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 10:42:52 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/19 13:58:32 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/20 11:25:49 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,14 +91,6 @@ int	handle_echo(char **cmds, t_env *env)
 	}
 	if (!buffer || isnull)
 		printf("\n");
-	return (1);
-}
-
-int	handle_unset(char **cmds, t_env **env)
-{
-	(void) cmds;
-	(void) env;
-	printf("enter unset\n");
 	return (1);
 }
 
