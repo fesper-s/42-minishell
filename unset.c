@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 11:25:22 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/20 17:19:35 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/20 17:23:00 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,6 @@ int	handle_unset(char **cmds, t_env **env)
 		(*env)->env[j] = 0;
 		free_charpp(buffer);
 	}
+	g_status = 0;
 	return (1);
 }
