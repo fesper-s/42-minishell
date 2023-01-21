@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 10:42:52 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/20 11:25:49 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/20 22:15:41 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,6 @@ int	handle_builtins(char **cmds, t_env **env)
 	if (!ft_strncmp(cmds[0], "export", 7))
 		return (handle_export(cmds, env));
 	if (!ft_strncmp(cmds[0], "unset", 6))
-		return (handle_unset(cmds, env));
+		return (handle_unset(cmds, env, 0, 0));
 	return (0);
 }
