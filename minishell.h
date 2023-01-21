@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/20 22:23:46 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/20 22:33:37 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void	chenvvar(char *cmd, t_env **env, int i);
 int		count_cmdlen(char *cmd);
 int		handle_export(char **cmds, t_env **env);
 // unset.c
-void	attr_buffer(char ***buffer, char **cmds, t_env **env, int i);
-int		handle_unset(char **cmds, t_env **env, int i, int j);
+void	attr_buffer(char ***buffer, char *cmd, char **env);
+int		handle_unset(char **cmds, t_env **env);
 
 #endif
