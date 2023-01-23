@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 17:25:37 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/23 09:36:30 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/23 10:46:45 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ char	*find_path(t_line **line)
 			break ;
 		}
 	}
-	if (env_path == NULL)
+	printf("cmd--> %s\n", (*line)->cmds[0]);
+	if (access((*line)->cmds[0], F_OK | X_OK) == 0 && env_path == NULL)
 	{
 		cmd_path = ft_strdup((*line)->cmds[0]);
 		return (cmd_path);
