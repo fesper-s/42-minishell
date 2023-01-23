@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/20 22:33:37 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/23 10:35:47 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ typedef struct s_line
 	char			*outfile;
 	int				infile_id;
 	int				outfile_id;
-	struct s_env	*env;
+	char			**env;
 	struct s_line	*next;
 }					t_line;
 
@@ -71,7 +71,7 @@ void	signals(void);
 void	handle_sigint(int signum);
 // utils.c
 int		free_charpp(char **str);
-char	*find_path(char *cmd);
+char	*find_path(t_line **line);
 char	**ft_trim(char **cmds);
 char	**get_cmds(char *cmd);
 void	lst_free(t_line **lst);

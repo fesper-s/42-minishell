@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 14:42:32 by gussoare          #+#    #+#             */
-/*   Updated: 2023/01/19 14:18:16 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/23 10:35:40 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ int	organize_line(t_line **line)
 	if (!check_line(*line) || !check_quotes((*line)->cmd))
 		return (0);
 	check_space(line);
-	split_line = get_cmds((*line)->cmd);
+	split_line = ft_split((*line)->cmd, ' ');
 	init_files(line, split_line);
 	init_cmds(line, split_line);
 	//change_quotes(line);

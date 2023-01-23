@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 17:25:37 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/19 11:15:01 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/23 10:46:45 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	free_charpp(char **str)
 	return (0);
 }
 
-char	*find_path(char *cmd)
+char	*find_path(t_line **line)
 {
 	int		i;
 	char	*buffer;
@@ -33,13 +33,28 @@ char	*find_path(char *cmd)
 	char	*cmd_path;
 	char	**path;
 
-	env_path = getenv("PATH");
+	env_path = NULL;
+	i = -1;
+	while ((*line)->env[++i])
+	{
+		if (!ft_strncmp((*line)->env[i], "PATH=", 5))
+		{
+			env_path = ft_strdup((*line)->env[i] + 5);
+			break ;
+		}
+	}
+	printf("cmd--> %s\n", (*line)->cmds[0]);
+	if (access((*line)->cmds[0], F_OK | X_OK) == 0 && env_path == NULL)
+	{
+		cmd_path = ft_strdup((*line)->cmds[0]);
+		return (cmd_path);
+	}
 	path = ft_split(env_path, ':');
 	i = -1;
-	while (path[++i])
+	while (env_path && path[++i])
 	{
 		buffer = ft_strjoin(path[i], "/");
-		cmd_path = ft_strjoin(buffer, cmd);
+		cmd_path = ft_strjoin(buffer, (*line)->cmds[0]);
 		free(buffer);
 		if (access(cmd_path, F_OK | X_OK) == 0)
 		{
@@ -48,7 +63,7 @@ char	*find_path(char *cmd)
 		}
 		free(cmd_path);
 	}
-	error_display(cmd);
+	error_display((*line)->cmds[0]);
 	free_charpp(path);
 	return (0);
 }
