@@ -33,7 +33,7 @@ void	init_files(t_line **line, char **split)
 	int	i;
 
 	i = -1;
-	while (split[++i])
+	while (split[++i] && split[i][0] != '|')
 	{
 		if (ft_strlen(split[i]) == 1 && split[i][0] == '<')
 			(*line)->infile = split[i + 1];
@@ -51,18 +51,9 @@ void	init_cmds(t_line **line, char **split)
 	j = 0;
 	i = -1;
 	len = cmds_count(split);
-	if ((*line)->infile)
-	{
-		len -= 2;
-		i = 1;
-	}
-	else if ((*line)->outfile)
-		len -= 2;
 	(*line)->cmds = malloc((len + 1) * sizeof(char *));
 	while (split[++i])
 	{
-		if (split[i][0] == '>')
-			break ;
 		(*line)->cmds[j] = split[i];
 		j++;
 	}
@@ -71,10 +62,13 @@ void	init_cmds(t_line **line, char **split)
 
 void	init_linked_list(t_line **line, char **before_pipe, char **after_pipe)
 {
-	ft_lst_add_back(line, ft_lst_new(after_pipe, (*line)->infile, \
-		(*line)->outfile));
+	int i = -1;
+	ft_lst_add_back(line, ft_lst_new(after_pipe, NULL, \
+		NULL));
 	free((*line)->cmds);
 	(*line)->cmds = before_pipe;
+	while ((*line)->cmds[++i])
+		printf("cmds[%d]--> %s\n", i, (*line)->cmds[i]);
 	(*line) = (*line)->next;
 	check_for_pipes(line, (*line)->cmds);
 }

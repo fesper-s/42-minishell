@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 14:42:32 by gussoare          #+#    #+#             */
-/*   Updated: 2023/01/23 13:04:01 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/23 14:20:53 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,6 @@ int	check_quotes(char *cmd)
 
 int	organize_line(t_line **line)
 {
-	//int	i = -1;
 	char	**split_line;
 	void	*head;
 
@@ -107,13 +106,8 @@ int	organize_line(t_line **line)
 		return (0);
 	check_space(line);
 	split_line = ft_split((*line)->cmd, ' ');
-	init_files(line, split_line);
 	init_cmds(line, split_line);
-	//change_quotes(line);
-	/*
-	while ((*line)->cmds[++i])
-		printf("cmds[%d]--> %s\n", i, (*line)->cmds[i]);
-	*/
+	printf("raiva\n");
 	check_for_pipes(line, (*line)->cmds);
 	(*line) = head;
 	free(split_line);
@@ -135,6 +129,11 @@ void	check_for_pipes(t_line **line, char **cmds)
 	{
 		while (cmds[++i])
 		{
+			if ((cmds[i][0] == '>' || cmds[i][0] == '<') && cmds[i + 1])
+			{
+				(*line)->infile = cmds[++i];
+				i++;
+			}
 			if (cmds[i][0] == '|')
 			{
 				while (cmds[++i])
