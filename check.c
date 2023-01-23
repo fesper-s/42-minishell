@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 14:42:32 by gussoare          #+#    #+#             */
-/*   Updated: 2023/01/23 10:35:40 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/23 13:04:01 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,6 @@ int	organize_line(t_line **line)
 	if (!(*line)->cmd)
 		return (0);
 	head = (*line);
-	check_line(*line);
 	if (!check_line(*line) || !check_quotes((*line)->cmd))
 		return (0);
 	check_space(line);
