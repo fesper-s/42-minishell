@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 17:25:37 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/23 10:46:45 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/23 11:10:19 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,8 @@ char	*find_path(t_line **line)
 			break ;
 		}
 	}
-	printf("cmd--> %s\n", (*line)->cmds[0]);
 	if (access((*line)->cmds[0], F_OK | X_OK) == 0 && env_path == NULL)
-	{
-		cmd_path = ft_strdup((*line)->cmds[0]);
-		return (cmd_path);
-	}
+		return (ft_strdup((*line)->cmds[0]));
 	path = ft_split(env_path, ':');
 	i = -1;
 	while (env_path && path[++i])
@@ -63,7 +59,14 @@ char	*find_path(t_line **line)
 		}
 		free(cmd_path);
 	}
-	error_display((*line)->cmds[0]);
+	if (path)
+		error_display((*line)->cmds[0]);
+	else
+	{
+		print_error("minishell: ");
+        print_error((*line)->cmds[0]);
+        print_error(": No such file or directory\n");
+	}
 	free_charpp(path);
 	return (0);
 }
