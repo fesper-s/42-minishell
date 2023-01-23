@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/19 14:16:28 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/23 09:01:12 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,14 @@ void	exec_cmds(t_line **line, pid_t pid, int *fdd, int *fd)
 {
 	char	*path;
 
-	path = find_path((*line)->cmds[0]);
+	path = find_path(line);
 	if (pid == 0)
 	{
 		dup2(*fdd, 0);
 		if ((*line)->next != 0)
 			dup2(fd[1], 1);
 		close(fd[0]);
-		execve(path, (*line)->cmds, (*line)->env->env);
+		execve(path, (*line)->cmds, (*line)->env);
 	}
 	else
 	{
@@ -63,7 +63,7 @@ void	pipeline(t_line **line, int size)
 	fdd = 0;
 	while ((*line))
 	{
-		path = find_path((*line)->cmds[0]);
+		path = find_path(line);
 		if (!path)
 			break ;
 		pipe(fd);
@@ -83,6 +83,7 @@ void	cmd_process(t_line **line, t_env **env)
 	int		isbuiltin;
 	void	*head;
 	int		size;
+	int		i;
 
 	size = ft_lst_size((*line));
 	head = (*line);
@@ -90,8 +91,12 @@ void	cmd_process(t_line **line, t_env **env)
 		return ;
 	expand_var(line, *env);
 	isbuiltin = handle_builtins((*line)->cmds, env);
-	(*line)->env = *env;
-	if (!isbuiltin && find_path((*line)->cmds[0]))
+	(*line)->env = malloc(sizeof(char *) * (cmds_count((*env)->env) + 1));
+	i = -1;
+	while ((*env)->env[++i])
+		(*line)->env[i] = ft_strdup((*env)->env[i]);
+	(*line)->env[i] = 0;
+	if (!isbuiltin && find_path(line))
 	{
 		g_status = 0;
 		pipeline(line, size);
