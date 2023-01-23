@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/23 10:35:47 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/23 14:10:32 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,28 +66,31 @@ void	cmd_error(char *cmd);
 void	error_display(char *cmd);
 void	dir_error(char *path);
 int		export_error(char *str);
+// more_error.c
+void	path_error(char **path, char *cmd);
 // signal.c
 void	signals(void);
 void	handle_sigint(int signum);
 // utils.c
 int		free_charpp(char **str);
+char	*check_for_path(char **env, char *env_path);
+char	*check_cmdpath(char *env_path, char **path, char *cmd);
 char	*find_path(t_line **line);
-char	**ft_trim(char **cmds);
-char	**get_cmds(char *cmd);
-void	lst_free(t_line **lst);
+int		cmds_count(char **split);
 // builtins_utils.c
 int		is_flag(char **cmds, int i);
 void	check_newline(char **cmds, int *newline, int *buffer, int i);
-int		cmds_count(char **split);
 void	expanding(t_line **line, t_env *env);
+int		cmds_til_pipe(char **cmds);
 // list_utils.c
+void	lst_free(t_line **lst);
 void	ft_lst_add_back(t_line **lst, t_line *new);
 t_line	*ft_lst_new(char **cmds, char *infile, char *outfile);
 int		ft_lst_size(t_line *lst);
-int		cmds_til_pipe(char **cmds);
 t_line	*ft_lst_last(t_line *lst);
 // builtins.c
-int		handle_pwd_and_env(char **cmds, t_env *env);
+int		handle_pwd(t_env *env);
+int		handle_env(t_env *env);
 void	check_expvar(char **cmds, t_env *env, int j);
 int		handle_echo(char **cmds, t_env *env);
 int		handle_builtins(char **cmds, t_env **env);

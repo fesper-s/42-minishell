@@ -6,33 +6,43 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 10:42:52 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/20 22:30:15 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/23 13:21:38 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	handle_pwd_and_env(char **cmds, t_env *env)
+int	handle_pwd(t_env *env)
 {
 	int		i;
 	char	*buffer;
 
-	if (!ft_strncmp(cmds[0], "pwd", 4))
-	{
-		i = 0;
-		while (ft_strncmp(env->env[i], "PWD=", 4))
-			i++;
-		buffer = ft_strdup(env->env[i]);
-		buffer = ft_strtrim(buffer, "PWD=");
-		printf("%s\n", buffer);
-		free(buffer);
-	}
-	if (!ft_strncmp(cmds[0], "env", 4))
-	{
-		i = -1;
-		while (env->env[++i])
-			printf("%s\n", env->env[i]);
-	}
+	i = 0;
+	while (ft_strncmp(env->env[i], "PWD=", 4))
+		i++;
+	buffer = ft_strdup(env->env[i]);
+	buffer = ft_strtrim(buffer, "PWD=");
+	printf("%s\n", buffer);
+	free(buffer);
+	g_status = 0;
+	return (1);
+}
+
+int	handle_env(t_env *env)
+{
+	int		i;
+	int		path;
+
+	path = 0;
+	i = -1;
+	while (env->env[++i])
+		if (!ft_strncmp(env->env[i], "PATH=", 5))
+			path = 1;
+	i = -1;
+	while (path && env->env[++i])
+		printf("%s\n", env->env[i]);
+	if (!path)
+		path_error(NULL, "env");
 	g_status = 0;
 	return (1);
 }
@@ -100,8 +110,10 @@ int	handle_builtins(char **cmds, t_env **env)
 		return (handle_echo(cmds, *env));
 	if (!ft_strncmp(cmds[0], "cd", 3))
 		return (handle_cd(cmds, env));
-	if (!ft_strncmp(cmds[0], "pwd", 4) || !ft_strncmp(cmds[0], "env", 4))
-		return (handle_pwd_and_env(cmds, *env));
+	if (!ft_strncmp(cmds[0], "pwd", 4))
+		return (handle_pwd(*env));
+	if (!ft_strncmp(cmds[0], "env", 4))
+		return (handle_env(*env));
 	if (!ft_strncmp(cmds[0], "export", 7))
 		return (handle_export(cmds, env));
 	if (!ft_strncmp(cmds[0], "unset", 6))

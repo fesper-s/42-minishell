@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 17:25:37 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/23 11:10:19 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/23 13:41:50 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,32 +25,33 @@ int	free_charpp(char **str)
 	return (0);
 }
 
-char	*find_path(t_line **line)
+char	*check_for_path(char **env, char *env_path)
 {
-	int		i;
-	char	*buffer;
-	char	*env_path;
-	char	*cmd_path;
-	char	**path;
+	int	i;
 
-	env_path = NULL;
 	i = -1;
-	while ((*line)->env[++i])
+	while (env[++i])
 	{
-		if (!ft_strncmp((*line)->env[i], "PATH=", 5))
+		if (!ft_strncmp(env[i], "PATH=", 5))
 		{
-			env_path = ft_strdup((*line)->env[i] + 5);
-			break ;
+			env_path = ft_strdup(env[i] + 5);
+			return (env_path);
 		}
 	}
-	if (access((*line)->cmds[0], F_OK | X_OK) == 0 && env_path == NULL)
-		return (ft_strdup((*line)->cmds[0]));
-	path = ft_split(env_path, ':');
+	return (NULL);
+}
+
+char	*check_cmdpath(char *env_path, char **path, char *cmd)
+{
+	char	*buffer;
+	char	*cmd_path;
+	int		i;
+
 	i = -1;
 	while (env_path && path[++i])
 	{
 		buffer = ft_strjoin(path[i], "/");
-		cmd_path = ft_strjoin(buffer, (*line)->cmds[0]);
+		cmd_path = ft_strjoin(buffer, cmd);
 		free(buffer);
 		if (access(cmd_path, F_OK | X_OK) == 0)
 		{
@@ -59,44 +60,27 @@ char	*find_path(t_line **line)
 		}
 		free(cmd_path);
 	}
-	if (path)
-		error_display((*line)->cmds[0]);
-	else
-	{
-		print_error("minishell: ");
-        print_error((*line)->cmds[0]);
-        print_error(": No such file or directory\n");
-	}
-	free_charpp(path);
-	return (0);
+	return (NULL);
 }
 
-char	**get_cmds(char *cmd)
+char	*find_path(t_line **line)
 {
-	char	**cmds;
-	char	**temp;
-	char	**temp2;
 	int		i;
+	char	*cmd_path;
+	char	*env_path;
+	char	**path;
 
-	i = 0;
-	if (ft_memchr(cmd, '/', 1))
-	{
-		temp = ft_split(cmd, ' ');
-		if (access(temp[0], F_OK | X_OK) == 0)
-		{
-			temp2 = ft_split(cmd, '/');
-			while (temp2[++i])
-			cmds = ft_split(temp2[i], ' ');
-		}
-		else
-		{
-			perror(temp[0]);
-			exit(EXIT_FAILURE);
-		}
-	}
-	else
-		cmds = ft_split(cmd, ' ');
-	return (cmds);
+	env_path = check_for_path((*line)->env, NULL);
+	if (access((*line)->cmds[0], F_OK | X_OK) == 0)
+		return (ft_strdup((*line)->cmds[0]));
+	path = ft_split(env_path, ':');
+	i = -1;
+	cmd_path = check_cmdpath(env_path, path, (*line)->cmds[0]);
+	if (cmd_path)
+		return (cmd_path);
+	path_error(path, (*line)->cmds[0]);
+	free_charpp(path);
+	return (0);
 }
 
 int	cmds_count(char **split)
