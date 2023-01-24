@@ -87,3 +87,20 @@ void	expanding(t_line **line, t_env *env)
 		}
 	}
 }
+
+int	check_dir(char **cmds, char **env)
+{
+	int	i;
+
+	i = -1;
+	while (env[++i])
+		if (!ft_strncmp(env[i], "PWD=", 4))
+			break ;
+	if (!chdir(cmds[0]))
+	{
+		chdir(env[i]);
+		check_dir_error(cmds[0]);
+		return (1);
+	}
+	return (0);
+}

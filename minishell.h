@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/23 14:10:32 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/24 08:35:11 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void	dir_error(char *path);
 int		export_error(char *str);
 // more_error.c
 void	path_error(char **path, char *cmd);
+void	check_dir_error(char *str);
 // signal.c
 void	signals(void);
 void	handle_sigint(int signum);
@@ -82,6 +83,7 @@ int		is_flag(char **cmds, int i);
 void	check_newline(char **cmds, int *newline, int *buffer, int i);
 void	expanding(t_line **line, t_env *env);
 int		cmds_til_pipe(char **cmds);
+int		check_dir(char **cmds, char **env);
 // list_utils.c
 void	lst_free(t_line **lst);
 void	ft_lst_add_back(t_line **lst, t_line *new);
