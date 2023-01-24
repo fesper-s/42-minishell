@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/23 10:30:10 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/24 08:34:34 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void	cmd_process(t_line **line, t_env **env)
 	while ((*env)->env[++i])
 		(*line)->env[i] = ft_strdup((*env)->env[i]);
 	(*line)->env[i] = 0;
-	if (!isbuiltin && find_path(line))
+	if (!isbuiltin && !check_dir((*line)->cmds, (*env)->env) && find_path(line))
 	{
 		g_status = 0;
 		pipeline(line, size);
