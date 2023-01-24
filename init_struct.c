@@ -57,7 +57,6 @@ void	init_files(t_line **line)
 		i = -1;
 		j = 0;
 		buffer = malloc((file_len((*line)->cmds) + 1) * sizeof(char *));
-
 		while ((*line)->cmds[++i])
 		{
 			if ((*line)->cmds[i][0] == '<' && (*line)->cmds[i + 1])
@@ -65,7 +64,7 @@ void	init_files(t_line **line)
 			else if ((*line)->cmds[i][0] == '>' && (*line)->cmds[i + 1])
 				(*line)->outfile = ft_strdup((*line)->cmds[++i]);
 			else
-			{
+			{	
 				buffer[j] = ft_strdup((*line)->cmds[i]);
 				j++;
 			}
