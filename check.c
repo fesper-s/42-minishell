@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 14:42:32 by gussoare          #+#    #+#             */
-/*   Updated: 2023/01/23 10:35:40 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/24 13:54:01 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,27 +96,21 @@ int	check_quotes(char *cmd)
 
 int	organize_line(t_line **line)
 {
-	//int	i = -1;
 	char	**split_line;
 	void	*head;
 
 	if (!(*line)->cmd)
 		return (0);
-	head = (*line);
-	check_line(*line);
+	head = *line;
 	if (!check_line(*line) || !check_quotes((*line)->cmd))
 		return (0);
 	check_space(line);
 	split_line = ft_split((*line)->cmd, ' ');
-	init_files(line, split_line);
 	init_cmds(line, split_line);
-	//change_quotes(line);
-	/*
-	while ((*line)->cmds[++i])
-		printf("cmds[%d]--> %s\n", i, (*line)->cmds[i]);
-	*/
 	check_for_pipes(line, (*line)->cmds);
-	(*line) = head;
+	*line = head;
+	init_files(line);
+	*line = head;
 	free(split_line);
 	return (1);
 }
@@ -146,7 +140,10 @@ void	check_for_pipes(t_line **line, char **cmds)
 		}
 		b_p[cmds_til_pipe(cmds)] = 0;
 		a_p[j] = 0;
+		//if (cmds_count(a_p) >= 1)
 		init_linked_list(line, b_p, a_p);
+		//free_charpp(a_p);
+		//free_charpp(b_p);
 	}
 }
 
