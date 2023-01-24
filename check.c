@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 14:42:32 by gussoare          #+#    #+#             */
-/*   Updated: 2023/01/24 13:54:01 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/24 14:11:09 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,7 +184,7 @@ int	check_space(t_line **line)
 	while ((*line)->cmd[i])
 	{
 		if ((*line)->cmd[i] == '<' && ((*line)->cmd[i + 1] != ' ' \
-				&& (*line)->cmd[i + 1] != '<'))
+				&& (*line)->cmd[i + 1] != '<') && (*line)->cmd[i + 1])
 			put_space(line, i + 1);
 		else if (((*line)->cmd[i] != ' ' && (*line)->cmd[i] != '>' \
 				&& (*line)->cmd[i + 1] == '>'))
