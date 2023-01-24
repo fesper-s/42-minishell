@@ -28,18 +28,59 @@ char	**get_env(char **envp)
 	return (env);
 }
 
-void	init_files(t_line **line, char **split)
+int file_len(char **cmd)
 {
-	int	i;
+	int i;
+	int	j;
 
 	i = -1;
-	while (split[++i])
+	j = 0;
+	while (cmd[++i])
 	{
-		if (ft_strlen(split[i]) == 1 && split[i][0] == '<')
-			(*line)->infile = split[i + 1];
-		else if (ft_strlen(split[i]) == 1 && split[i][0] == '>')
-			(*line)->outfile = split[i + 1];
+		if ((cmd[i][0] == '>' || cmd[i][0] == '<') && (cmd[i + 1]))
+			j += 2;
 	}
+	return (i - j);
+}
+
+void	init_files(t_line **line)
+{
+	int		i;
+	int		j;
+	void	*head;
+	char	**buffer;
+
+
+	head = (*line);
+	while ((*line))
+	{
+		i = -1;
+		j = 0;
+		buffer = malloc((file_len((*line)->cmds) + 1) * sizeof(char *));
+
+		while ((*line)->cmds[++i])
+		{
+			if ((*line)->cmds[i][0] == '<' && (*line)->cmds[i + 1])
+				(*line)->infile = ft_strdup((*line)->cmds[++i]);
+			else if ((*line)->cmds[i][0] == '>' && (*line)->cmds[i + 1])
+				(*line)->outfile = ft_strdup((*line)->cmds[++i]);
+			else
+			{
+				buffer[j] = ft_strdup((*line)->cmds[i]);
+				j++;
+			}
+		}
+		buffer[j] = 0;
+		free_charpp((*line)->cmds);
+		i = -1;
+		(*line)->cmds = malloc((cmds_count(buffer) + 1) * sizeof(char *));
+		while (buffer[++i])
+			(*line)->cmds[i] = buffer[i];
+		(*line)->cmds[i] = 0;
+		free(buffer);
+		(*line) = (*line)->next;
+;	}
+	(*line) = head;
 }
 
 void	init_cmds(t_line **line, char **split)
@@ -51,18 +92,9 @@ void	init_cmds(t_line **line, char **split)
 	j = 0;
 	i = -1;
 	len = cmds_count(split);
-	if ((*line)->infile)
-	{
-		len -= 2;
-		i = 1;
-	}
-	else if ((*line)->outfile)
-		len -= 2;
 	(*line)->cmds = malloc((len + 1) * sizeof(char *));
 	while (split[++i])
 	{
-		if (split[i][0] == '>')
-			break ;
 		(*line)->cmds[j] = split[i];
 		j++;
 	}
@@ -71,10 +103,17 @@ void	init_cmds(t_line **line, char **split)
 
 void	init_linked_list(t_line **line, char **before_pipe, char **after_pipe)
 {
-	ft_lst_add_back(line, ft_lst_new(after_pipe, (*line)->infile, \
-		(*line)->outfile));
+	int i;
+
+
+	i = -1;
+	ft_lst_add_back(line, ft_lst_new(after_pipe, NULL, \
+		NULL));
 	free((*line)->cmds);
-	(*line)->cmds = before_pipe;
+	(*line)->cmds = malloc((cmds_count(before_pipe) + 1) * sizeof(char *));
+	while (before_pipe[++i])
+		(*line)->cmds[i] = ft_strdup(before_pipe[i]);
+	(*line)->cmds[i] = 0;
 	(*line) = (*line)->next;
 	check_for_pipes(line, (*line)->cmds);
 }
