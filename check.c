@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 14:42:32 by gussoare          #+#    #+#             */
-/*   Updated: 2023/01/23 14:20:53 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/24 10:57:42 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,25 @@ int	organize_line(t_line **line)
 	check_space(line);
 	split_line = ft_split((*line)->cmd, ' ');
 	init_cmds(line, split_line);
-	printf("raiva\n");
 	check_for_pipes(line, (*line)->cmds);
+	(*line) = head;
+	//init_files(line);
+	int j = 0;
+	int i;
+	while ((*line))
+	{
+		i = -1;
+		printf ("-----LISTA %d-----\n", ++j);
+		while ((*line)->cmds[++i])
+			printf("cmds[%d]--> %s\n", i, (*line)->cmds[i]);
+		printf("cmds[%d]--> %s\n", i, (*line)->cmds[i]);
+		
+		if ((*line)->infile)
+			printf("Infile--> %s\n", (*line)->infile);
+		if ((*line)->outfile)
+			printf("outfile--> %s\n", (*line)->outfile);
+		(*line) = (*line)->next;
+	}
 	(*line) = head;
 	free(split_line);
 	return (1);
@@ -129,11 +146,6 @@ void	check_for_pipes(t_line **line, char **cmds)
 	{
 		while (cmds[++i])
 		{
-			if ((cmds[i][0] == '>' || cmds[i][0] == '<') && cmds[i + 1])
-			{
-				(*line)->infile = cmds[++i];
-				i++;
-			}
 			if (cmds[i][0] == '|')
 			{
 				while (cmds[++i])
@@ -144,7 +156,10 @@ void	check_for_pipes(t_line **line, char **cmds)
 		}
 		b_p[cmds_til_pipe(cmds)] = 0;
 		a_p[j] = 0;
+		//if (cmds_count(a_p) >= 1)
 		init_linked_list(line, b_p, a_p);
+		//free_charpp(a_p);
+		//free_charpp(b_p);
 	}
 }
 

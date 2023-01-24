@@ -56,20 +56,14 @@ void	check_newline(char **cmds, int *newline, int *buffer, int i)
 int	cmds_til_pipe(char **cmds)
 {
 	int	i;
-	int j;
 
-	j = 0;
 	i = -1;
 	while (cmds[++i])
 	{
-		if (cmds[i][0 == '>' && cmds[i + 1]])
-			j += 2;
-		else if (cmds[i][0 == '>' && cmds[i + 1]])
-			j += 2;
-		else if (cmds[i][0] == '|')
+		if (cmds[i][0] == '|')
 			break ;
 	}
-	return (i - j);
+	return (i);
 }
 
 void	expanding(t_line **line, t_env *env)

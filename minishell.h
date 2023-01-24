@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/23 10:35:47 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/24 08:54:05 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	put_space(t_line **line, int x);
 void	check_for_pipes(t_line **line, char **cmds);
 //init_struct.c
 char	**get_env(char **envp);
-void	init_files(t_line **line, char **split);
+void	init_files(t_line **line);
 void	init_cmds(t_line **line, char **split);
 void	init_linked_list(t_line **line, char **before_pipe, char **after_pipe);
 // error.c

@@ -28,18 +28,59 @@ char	**get_env(char **envp)
 	return (env);
 }
 
-void	init_files(t_line **line, char **split)
+int file_len(char **cmd)
 {
-	int	i;
+	int i;
+	int	j;
 
 	i = -1;
-	while (split[++i] && split[i][0] != '|')
+	j = 0;
+	while (cmd[++i])
 	{
-		if (ft_strlen(split[i]) == 1 && split[i][0] == '<')
-			(*line)->infile = split[i + 1];
-		else if (ft_strlen(split[i]) == 1 && split[i][0] == '>')
-			(*line)->outfile = split[i + 1];
+		if ((cmd[i][0] == '>' || cmd[i][0] == '<') && cmd[i + 1])
+			j += 2;
 	}
+	return (i - j);
+}
+
+void	init_files(t_line **line)
+{
+	int		i;
+	int		j;
+	void	*head;
+	char	**buffer;
+
+
+	head = (*line);
+	while ((*line))
+	{
+		i = -1;
+		j = 0;
+		buffer = malloc((file_len((*line)->cmds) + 1) * sizeof(char *));
+
+		while ((*line)->cmds[++i])
+		{
+			if ((*line)->cmds[i][0] == '<' && (*line)->cmds[i + 1])
+				(*line)->infile = ft_strdup((*line)->cmds[++i]);
+			else if ((*line)->cmds[i][0] == '>' && (*line)->cmds[i + 1])
+				(*line)->outfile = ft_strdup((*line)->cmds[++i]);
+			else
+			{
+				buffer[j] = ft_strdup((*line)->cmds[i]);
+				j++;
+			}
+		}
+		buffer[j] = 0;
+		free_charpp((*line)->cmds);
+		i = -1;
+		(*line)->cmds = malloc((cmds_count(buffer) + 1) * sizeof(char *));
+		while (buffer[++i])
+			(*line)->cmds[i] = buffer[i];
+		(*line)->cmds[i] = 0;
+		free(buffer);
+		(*line) = (*line)->next;
+;	}
+	(*line) = head;
 }
 
 void	init_cmds(t_line **line, char **split)
@@ -62,13 +103,33 @@ void	init_cmds(t_line **line, char **split)
 
 void	init_linked_list(t_line **line, char **before_pipe, char **after_pipe)
 {
-	int i = -1;
+	int i;
+	int j = 0;
+	void *head;
+	head = (*line);
+
+	i = -1;
 	ft_lst_add_back(line, ft_lst_new(after_pipe, NULL, \
 		NULL));
 	free((*line)->cmds);
-	(*line)->cmds = before_pipe;
-	while ((*line)->cmds[++i])
+	(*line)->cmds = malloc((cmds_count(before_pipe) + 1) * sizeof(char *));
+	while (before_pipe[++i])
+		(*line)->cmds[i] = ft_strdup(before_pipe[i]);
+	(*line)->cmds[i] = 0;
+	while ((*line))
+	{
+		i = -1;
+		printf ("-----LISTA %d-----\n", ++j);
+		while ((*line)->cmds[++i])
+			printf("cmds[%d]--> %s\n", i, (*line)->cmds[i]);
 		printf("cmds[%d]--> %s\n", i, (*line)->cmds[i]);
+		if ((*line)->infile)
+			printf("Infile--> %s\n", (*line)->infile);
+		if ((*line)->outfile)
+			printf("outfile--> %s\n", (*line)->outfile);
+		(*line) = (*line)->next;
+	}
+	(*line) = head;
 	(*line) = (*line)->next;
 	check_for_pipes(line, (*line)->cmds);
 }

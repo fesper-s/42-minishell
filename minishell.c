@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/23 11:29:26 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/24 10:56:23 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,10 @@ void	exec_cmds(t_line **line, pid_t pid, int *fdd, int *fd)
 	{
 		dup2(*fdd, 0);
 		if ((*line)->next != 0)
+		{
 			dup2(fd[1], 1);
+			printf("caguei\n");
+		}
 		close(fd[0]);
 		execve(path, (*line)->cmds, (*line)->env);
 	}
@@ -128,6 +131,7 @@ void	minishell(char **envp)
 			if (ft_strncmp(line->cmd, "exit", 5) == 0)
 				break ;
 			cmd_process(&line, &env);
+			printf("SAIU\n");
 			line = head;
 			lst_free(&line);
 		}
