@@ -74,6 +74,12 @@ void	lst_free(t_line **lst)
 	buffer = *lst;
 	while (buffer)
 	{
+		free_charpp(buffer->env);
+		buffer = buffer->next;
+	}
+	buffer = *lst;
+	while (buffer)
+	{
 		del = buffer;
 		buffer = buffer->next;
 		free(del);

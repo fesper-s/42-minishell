@@ -6,15 +6,16 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 09:39:12 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/17 10:56:15 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/25 14:44:17 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	relative_path(char *cmd, t_env **env, char *pwd, int j)
+void	relative_path(char *cmd, t_env **env, int j)
 {
 	char	**buffer;
+	char	*pwd;
 	int		i;
 
 	if (!ft_strncmp(cmd, "..", 3))
@@ -41,7 +42,6 @@ void	chpwd(char *cmd, t_env **env, int j)
 	int		i;
 	char	*buffer;
 
-	buffer = NULL;
 	if (!ft_strncmp((*env)->env[j], "PWD=", 4))
 	{
 		i = 0;
@@ -51,13 +51,13 @@ void	chpwd(char *cmd, t_env **env, int j)
 			cmd[i - 1] = 0;
 		if (cmd[0] == '/')
 		{
-			buffer = "PWD=";
-			buffer = ft_strjoin(buffer, cmd);
+			buffer = ft_strjoin("PWD=", cmd);
+			free((*env)->env[j]);
 			(*env)->env[j] = ft_strdup(buffer);
+			free(buffer);
 		}
 		else
-			relative_path(cmd, env, buffer, j);
-		free(buffer);
+			relative_path(cmd, env, j);
 	}
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 14:42:32 by gussoare          #+#    #+#             */
-/*   Updated: 2023/01/25 10:33:47 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/25 12:38:02 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,18 +92,18 @@ void	check_for_pipes(t_line **line, char **cmds)
 			if (cmds[i][0] == '|')
 			{
 				while (cmds[++i])
-					a_p[j++] = cmds[i];
+					a_p[j++] = ft_strdup(cmds[i]);
 				break ;
 			}
-			b_p[i] = cmds[i];
+			b_p[i] = ft_strdup(cmds[i]);
 		}
 		b_p[cmds_til_pipe(cmds)] = 0;
 		a_p[j] = 0;
 		//if (cmds_count(a_p) >= 1)
 		init_linked_list(line, b_p, a_p);
-		//free_charpp(a_p);
-		//free_charpp(b_p);
 	}
+	//free_charpp(a_p);
+	//free_charpp(b_p);
 }
 
 char	*put_space(char *cmd, int x)

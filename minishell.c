@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/25 10:17:48 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/25 14:53:58 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	g_status;
 
 void	expand_var(t_line **line, t_env *env)
 {
@@ -136,6 +138,13 @@ void	minishell(char **envp)
 			line = head;
 			lst_free(&line);
 		}
+		free(line);
 	}
+	free(line);
+	int	i = -1;
+	while (env->env[++i])
+		free(env->env[i]);
+	free(env->env);
+	free(env);
 	printf("exit\n");
 }

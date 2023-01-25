@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/25 10:19:33 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/25 14:44:49 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ typedef struct s_env
 	char	**env;
 }			t_env;
 
-int	g_status;
+extern int	g_status;
 
 // minishell.c
 void	expand_var(t_line **line, t_env *env);
@@ -97,7 +97,7 @@ void	check_expvar(char **cmds, t_env *env, int j);
 int		handle_echo(char **cmds, t_env *env);
 int		handle_builtins(char **cmds, t_env **env);
 // chdir.c
-void	relative_path(char *cmd, t_env **env, char *pwd, int j);
+void	relative_path(char *cmd, t_env **env, int j);
 void	chpwd(char *cmd, t_env **env, int j);
 char	*tilde_home(char *cmd, char *home);
 int		handle_cd(char **cmds, t_env **env);
