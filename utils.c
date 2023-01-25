@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 17:25:37 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/24 12:51:09 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/25 09:05:59 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ char	*check_cmdpath(char *env_path, char **path, char *cmd)
 
 char	*find_path(t_line **line)
 {
-	int		i;
 	char	*cmd_path;
 	char	*env_path;
 	char	**path;
@@ -74,7 +73,6 @@ char	*find_path(t_line **line)
 	if (access((*line)->cmds[0], F_OK | X_OK) == 0)
 		return (ft_strdup((*line)->cmds[0]));
 	path = ft_split(env_path, ':');
-	i = -1;
 	cmd_path = check_cmdpath(env_path, path, (*line)->cmds[0]);
 	if (cmd_path)
 		return (cmd_path);

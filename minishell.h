@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/24 13:49:17 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/25 10:19:33 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,13 @@ void	minishell(char **envp);
 //check.c
 int		organize_line(t_line **line);
 int		check_line(t_line *line);
-int		check_space(t_line **line);
-void	put_space(t_line **line, int x);
+char	*check_space(char *cmd);
+char	*put_space(char *cmd, int x);
 void	check_for_pipes(t_line **line, char **cmds);
 //init_struct.c
 char	**get_env(char **envp);
-void	init_files(t_line **line);
-void	init_cmds(t_line **line, char **split);
+int		init_files(t_line **line);
+int		init_cmds(t_line **line, char **split);
 void	init_linked_list(t_line **line, char **before_pipe, char **after_pipe);
 // error.c
 int		print_error(char *str);

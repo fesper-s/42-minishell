@@ -28,9 +28,9 @@ char	**get_env(char **envp)
 	return (env);
 }
 
-int file_len(char **cmd)
+int	file_len(char **cmd)
 {
-	int i;
+	int	i;
 	int	j;
 
 	i = -1;
@@ -43,13 +43,12 @@ int file_len(char **cmd)
 	return (i - j);
 }
 
-void	init_files(t_line **line)
+int	init_files(t_line **line)
 {
 	int		i;
 	int		j;
 	void	*head;
 	char	**buffer;
-
 
 	head = (*line);
 	while ((*line))
@@ -60,9 +59,23 @@ void	init_files(t_line **line)
 		while ((*line)->cmds[++i])
 		{
 			if ((*line)->cmds[i][0] == '<' && (*line)->cmds[i + 1])
+			{
+				if ((*line)->infile)
+				{
+					print_error("Multiples infiles at once\n");
+					return (0);
+				}
 				(*line)->infile = ft_strdup((*line)->cmds[++i]);
+			}
 			else if ((*line)->cmds[i][0] == '>' && (*line)->cmds[i + 1])
+			{
+				if ((*line)->outfile)
+				{
+					print_error("Multiples infiles at once\n");
+					return (0);
+				}
 				(*line)->outfile = ft_strdup((*line)->cmds[++i]);
+			}
 			else
 			{	
 				buffer[j] = ft_strdup((*line)->cmds[i]);
@@ -78,11 +91,12 @@ void	init_files(t_line **line)
 		(*line)->cmds[i] = 0;
 		free(buffer);
 		(*line) = (*line)->next;
-;	}
+	}
 	(*line) = head;
+	return (1);
 }
 
-void	init_cmds(t_line **line, char **split)
+int	init_cmds(t_line **line, char **split)
 {
 	int	i;
 	int	j;
@@ -91,6 +105,11 @@ void	init_cmds(t_line **line, char **split)
 	j = 0;
 	i = -1;
 	len = cmds_count(split);
+	if (split[0][0] == '|' || split[len - 1][0] == '|')
+	{
+		print_error("parse error near '|'\n");
+		return (0);
+	}
 	(*line)->cmds = malloc((len + 1) * sizeof(char *));
 	while (split[++i])
 	{
@@ -98,12 +117,12 @@ void	init_cmds(t_line **line, char **split)
 		j++;
 	}
 	(*line)->cmds[j] = 0;
+	return (1);
 }
 
 void	init_linked_list(t_line **line, char **before_pipe, char **after_pipe)
 {
-	int i;
-
+	int	i;
 
 	i = -1;
 	ft_lst_add_back(line, ft_lst_new(after_pipe, NULL, \
