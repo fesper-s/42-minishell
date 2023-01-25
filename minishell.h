@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/25 09:53:48 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/25 14:44:49 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	check_expvar(char **cmds, t_env *env, int j);
 int		handle_echo(char **cmds, t_env *env);
 int		handle_builtins(char **cmds, t_env **env);
 // chdir.c
-void	relative_path(char *cmd, t_env **env, char *pwd, int j);
+void	relative_path(char *cmd, t_env **env, int j);
 void	chpwd(char *cmd, t_env **env, int j);
 char	*tilde_home(char *cmd, char *home);
 int		handle_cd(char **cmds, t_env **env);

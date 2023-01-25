@@ -23,7 +23,7 @@ char	**get_env(char **envp)
 	env = malloc(sizeof(char *) * (i + 1));
 	i = -1;
 	while (envp[++i])
-		env[i] = envp[i];
+		env[i] = ft_strdup(envp[i]);
 	env[i] = 0;
 	return (env);
 }
@@ -106,8 +106,7 @@ void	init_linked_list(t_line **line, char **before_pipe, char **after_pipe)
 
 
 	i = -1;
-	ft_lst_add_back(line, ft_lst_new(after_pipe, NULL, \
-		NULL));
+	ft_lst_add_back(line, ft_lst_new(after_pipe, NULL, NULL));
 	free((*line)->cmds);
 	(*line)->cmds = malloc((cmds_count(before_pipe) + 1) * sizeof(char *));
 	while (before_pipe[++i])
