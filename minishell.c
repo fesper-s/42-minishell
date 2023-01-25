@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/25 11:16:19 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/25 14:53:58 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,9 @@ void	minishell(char **envp)
 		free(line);
 	}
 	free(line);
+	int	i = -1;
+	while (env->env[++i])
+		free(env->env[i]);
 	free(env->env);
 	free(env);
 	printf("exit\n");
