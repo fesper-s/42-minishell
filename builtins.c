@@ -3,14 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 10:42:52 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/23 13:21:38 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/26 10:39:14 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+//colocar no .h se for util
+char	*smart_trim(char *cmd)
+{
+	char	*temp;
+
+	temp = NULL;
+	if (cmd[0] == '\'' || cmd[ft_strlen(cmd) - 1] == '\'')
+		temp = ft_strtrim(cmd, "\'");
+	else if (cmd[0] == '\"' || cmd[ft_strlen(cmd) - 1] == '\"')
+		temp = ft_strtrim(cmd, "\"");
+	else
+		temp = ft_strdup(cmd);
+	if (temp)
+	{
+		free(cmd);
+		cmd = temp;
+	}
+	return (cmd);
+}
 
 int	handle_pwd(t_env *env)
 {
@@ -91,6 +111,7 @@ int	handle_echo(char **cmds, t_env *env)
 	buffer = 0;
 	while (!isnull && cmds[++i])
 	{
+		cmds[i] = smart_trim(cmds[i]);
 		check_expvar(cmds, env, i);
 		newline = 1;
 		check_newline(cmds, &newline, &buffer, i);

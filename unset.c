@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 11:25:22 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/26 08:56:07 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/26 09:24:18 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	handle_unset(char **cmds, t_env **env)
 	{
 		buffer = malloc(sizeof(char *) * cmds_count((*env)->env));
 		attr_buffer(&buffer, cmds[i], (*env)->env);
-		free((*env)->env);
+		free_charpp((*env)->env);
 		(*env)->env = malloc(sizeof(char *) * (cmds_count(buffer) + 1));
 		j = -1;
 		while (buffer[++j])

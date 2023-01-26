@@ -6,32 +6,11 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 14:42:32 by gussoare          #+#    #+#             */
-/*   Updated: 2023/01/26 09:22:11 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/26 09:45:39 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*
-char	*ft_new_trim(char *cmd)
-{
-	char	*temp;
-
-	temp = NULL;
-	if (cmd[0] == '\'' || cmd[ft_strlen(cmd) - 1] == '\'')
-		temp = ft_strtrim(cmd, "\'");
-	else if (cmd[0] == '\"' || cmd[ft_strlen(cmd) - 1] == '\"')
-		temp = ft_strtrim(cmd, "\"");
-	else
-		temp = ft_strdup(cmd);
-	if (temp)
-	{
-		free(cmd);
-		cmd = temp;
-	}
-	return (cmd);
-}
-*/
 
 int	check_quote_on(char *cmd)
 {
@@ -44,17 +23,20 @@ int	check_quote_on(char *cmd)
 	i = -1;
 	while (cmd[++i])
 	{
-		if (cmd == '\'' && !s_quote && !d_quote)
+		if (cmd[i] == '\'' && !s_quote && !d_quote)
 			s_quote++;
-		else if (cmd == '\'' && !d_quote)
+		else if (cmd[i] == '\'' && !d_quote)
 			s_quote--;
-		else if (cmd == '"' && !s_quote && !d_quote)
+		else if (cmd[i] == '"' && !s_quote && !d_quote)
 			d_quote++;
-		else if (cmd == '"' && !s_quote)
+		else if (cmd[i] == '"' && !s_quote)
 			d_quote--;
 	}
 	if (s_quote || d_quote)
+	{
+		print_error("Error: unclosed quotes\n");
 		return (1);
+	}
 	return (0);
 }
 
@@ -66,7 +48,7 @@ int	organize_line(t_line **line)
 	if (!(*line)->cmd[0])
 		return (0);
 	head = *line;
-	if (!check_line(*line))
+	if (!check_line(*line) || check_quote_on((*line)->cmd))
 		return (0);
 	(*line)->cmd = check_space((*line)->cmd);
 	split_line = ft_split((*line)->cmd, ' ');
