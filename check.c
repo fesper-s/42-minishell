@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 14:42:32 by gussoare          #+#    #+#             */
-/*   Updated: 2023/01/25 12:38:02 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/26 09:16:24 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int	organize_line(t_line **line)
 	char	**split_line;
 	void	*head;
 
-	if (!(*line)->cmd)
+	if (!(*line)->cmd[0])
 		return (0);
 	head = *line;
 	if (!check_line(*line) || !check_quotes((*line)->cmd))
