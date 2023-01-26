@@ -3,14 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 17:25:37 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/25 09:37:24 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/26 13:59:30 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char **ft_strdupp(char **str)
+{
+	char	**temp;
+	int		i;
+
+	i = - 1;
+	temp = malloc ((cmds_count(str) + 1) * sizeof(char *));
+	while (str[++i])
+		temp[i] = ft_strdup(str[i]);
+	temp[i] = 0;
+	return (temp);
+}
 
 int	free_charpp(char **str)
 {

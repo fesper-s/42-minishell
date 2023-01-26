@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/26 13:03:41 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/26 14:05:20 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ void	check_dir_error(char *str);
 void	signals(void);
 void	handle_sigint(int signum);
 // utils.c
+char	**ft_strdupp(char **str);
 int		free_charpp(char **str);
 char	*check_for_path(char **env, char *env_path);
 char	*check_cmdpath(char *env_path, char **path, char *cmd);

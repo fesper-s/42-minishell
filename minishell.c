@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/25 14:53:58 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/26 13:03:44 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,10 +136,13 @@ void	minishell(char **envp)
 				break ;
 			cmd_process(&line, &env);
 			line = head;
+			free(line->cmd);
 			lst_free(&line);
 		}
 		free(line);
 	}
+	free(line->cmd);
+	free_charpp(line->cmds);
 	free(line);
 	int	i = -1;
 	while (env->env[++i])
