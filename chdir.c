@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 09:39:12 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/26 13:17:17 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/26 13:57:34 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,11 +90,28 @@ int	handle_cd(char **cmds, t_env **env)
 	char	*home;
 	int		i;
 
-	home = getenv("HOME");
 	if (cmds[1] && cmds[1][0] == '~')
-		cmds[1] = tilde_home(cmds[1], home);
+		cmds[1] = tilde_home(cmds[1], getenv("HOME"));
+	home = NULL;
 	if (!cmds[1])
+	{
+		i = -1;
+		while ((*env)->env[++i])
+		{
+			if (!ft_strncmp((*env)->env[i], "HOME=", 5))
+			{
+				home = ft_strdup((*env)->env[i] + 5);
+				break ;
+			}
+		}
+		if (!home)
+		{
+			print_error("minishell: cd: HOME not set\n");
+			g_status = 1;
+			return (1);
+		}
 		chdir(home);
+	}
 	else if (chdir(cmds[1]) < 0)
 	{
 		dir_error(cmds[1]);
