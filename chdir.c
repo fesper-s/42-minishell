@@ -6,49 +6,59 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 09:39:12 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/25 14:44:17 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/26 13:57:34 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+void	return_dir(t_env **env, int j)
+{
+	char	**bufferpp;
+	char	*buffer;
+	char	*pwd;
+
+	bufferpp = ft_split((*env)->env[j], '/');
+	buffer = ft_strtrim((*env)->env[j], \
+		bufferpp[cmds_count(bufferpp) - 1]);
+	free_charpp(bufferpp);
+	pwd = ft_strtrim(buffer, "/");
+	free(buffer);
+	free((*env)->env[j]);
+	(*env)->env[j] = ft_strdup(pwd);
+	free(pwd);
+}
+
 void	relative_path(char *cmd, t_env **env, int j)
 {
-	char	**buffer;
+	char	*buffer;
 	char	*pwd;
-	int		i;
 
 	if (!ft_strncmp(cmd, "..", 3))
-	{
-		buffer = ft_split((*env)->env[j], '/');
-		i = 0;
-		while (buffer[i])
-			i++;
-		pwd = ft_strtrim((*env)->env[j], buffer[i - 1]);
-		pwd = ft_strtrim(pwd, "/");
-		(*env)->env[j] = ft_strdup(pwd);
-	}
+		return_dir(env, j);
 	else if (ft_strncmp(cmd, ".", 2))
 	{
-		pwd = ft_strdup((*env)->env[j]);
-		pwd = ft_strjoin(pwd, "/");
-		pwd = ft_strjoin(pwd, cmd);
+		buffer = ft_strdup((*env)->env[j]);
+		pwd = ft_strjoin(buffer, "/");
+		free(buffer);
+		buffer = ft_strdup(pwd);
+		free(pwd);
+		pwd = ft_strjoin(buffer, cmd);
+		free(buffer);
+		free((*env)->env[j]);
 		(*env)->env[j] = ft_strdup(pwd);
+		free(pwd);
 	}
 }
 
 void	chpwd(char *cmd, t_env **env, int j)
 {
-	int		i;
 	char	*buffer;
 
 	if (!ft_strncmp((*env)->env[j], "PWD=", 4))
 	{
-		i = 0;
-		while (cmd[i])
-			i++;
-		if (cmd[i - 1] == '/')
-			cmd[i - 1] = 0;
+		if (ft_strncmp(cmd, "/", 2) && cmd[ft_strlen(cmd) - 1] == '/')
+			cmd[ft_strlen(cmd) - 1] = 0;
 		if (cmd[0] == '/')
 		{
 			buffer = ft_strjoin("PWD=", cmd);
@@ -64,10 +74,11 @@ void	chpwd(char *cmd, t_env **env, int j)
 char	*tilde_home(char *cmd, char *home)
 {
 	char	*buffer;
+	char	*buffer_aux;
 
-	buffer = malloc(sizeof(char) * (ft_strlen(home) + ft_strlen(cmd)));
-	buffer = home;
-	buffer = ft_strjoin(buffer, &cmd[1]);
+	buffer_aux = ft_strdup(home);
+	buffer = ft_strjoin(buffer_aux, &cmd[1]);
+	free(buffer_aux);
 	free(cmd);
 	cmd = ft_strdup(buffer);
 	free(buffer);
@@ -79,11 +90,28 @@ int	handle_cd(char **cmds, t_env **env)
 	char	*home;
 	int		i;
 
-	home = getenv("HOME");
 	if (cmds[1] && cmds[1][0] == '~')
-		cmds[1] = tilde_home(cmds[1], home);
+		cmds[1] = tilde_home(cmds[1], getenv("HOME"));
+	home = NULL;
 	if (!cmds[1])
+	{
+		i = -1;
+		while ((*env)->env[++i])
+		{
+			if (!ft_strncmp((*env)->env[i], "HOME=", 5))
+			{
+				home = ft_strdup((*env)->env[i] + 5);
+				break ;
+			}
+		}
+		if (!home)
+		{
+			print_error("minishell: cd: HOME not set\n");
+			g_status = 1;
+			return (1);
+		}
 		chdir(home);
+	}
 	else if (chdir(cmds[1]) < 0)
 	{
 		dir_error(cmds[1]);
