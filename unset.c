@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 11:25:22 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/20 22:36:21 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/26 08:56:07 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	attr_buffer(char ***buffer, char *cmd, char **env)
 			i++;
 		}
 	}
-	buffer[j + 1] = 0;
+	buffer[0][j + 1] = 0;
 }
 
 int	handle_unset(char **cmds, t_env **env)

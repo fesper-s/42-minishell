@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 14:42:32 by gussoare          #+#    #+#             */
-/*   Updated: 2023/01/25 12:38:02 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/26 09:22:11 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,19 +33,26 @@ char	*ft_new_trim(char *cmd)
 }
 */
 
-int	check_quote_on(char input)
+int	check_quote_on(char *cmd)
 {
-	static int	d_quote;
-	static int	s_quote;
+	int	d_quote;
+	int	s_quote;
+	int	i;
 
-	if (input == 39 && !s_quote && !d_quote)
-		s_quote++;
-	else if (input == 39 && !d_quote)
-		s_quote--;
-	else if (input == '"' && !s_quote && !d_quote)
-		d_quote++;
-	else if (input == '"' && !s_quote)
-		d_quote--;
+	d_quote = 0;
+	s_quote = 0;
+	i = -1;
+	while (cmd[++i])
+	{
+		if (cmd == '\'' && !s_quote && !d_quote)
+			s_quote++;
+		else if (cmd == '\'' && !d_quote)
+			s_quote--;
+		else if (cmd == '"' && !s_quote && !d_quote)
+			d_quote++;
+		else if (cmd == '"' && !s_quote)
+			d_quote--;
+	}
 	if (s_quote || d_quote)
 		return (1);
 	return (0);
@@ -143,7 +150,6 @@ char	*check_space(char *cmd)
 	i = 0;
 	while (cmd[i])
 	{
-		check_quote_on(cmd[i]);
 		if (cmd[i] == '<' && (cmd[i + 1] != '<' && cmd[i + 1] != ' ' && cmd[i + 1])) 
 			cmd = put_space(cmd, i + 1);
 		else if (cmd[i] != ' ' && cmd[i] != '<' && cmd[i + 1] == '<')
