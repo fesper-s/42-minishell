@@ -13,85 +13,42 @@
 #include "minishell.h"
 
 /*
-void	cut_quotes(t_line **line, int i, int len)
+char	*ft_new_trim(char *cmd)
 {
-	char *temp;
- 	int		k;
- 	int		j;
+	char	*temp;
 
-	k = 0;
-	j = -1;
-	temp = malloc((len + 1) * sizeof(char));
-	while ((*line)->cmds[i][++j])
+	temp = NULL;
+	if (cmd[0] == '\'' || cmd[ft_strlen(cmd) - 1] == '\'')
+		temp = ft_strtrim(cmd, "\'");
+	else if (cmd[0] == '\"' || cmd[ft_strlen(cmd) - 1] == '\"')
+		temp = ft_strtrim(cmd, "\"");
+	else
+		temp = ft_strdup(cmd);
+	if (temp)
 	{
-			if ((*line)->cmds[i][j] == '\"')
-					j++;
-			temp[k] = ((*line)->cmds[i][j]);
-			k++;
+		free(cmd);
+		cmd = temp;
 	}
- 	temp[k] = 0;
-	free(((*line)->cmds[i]));
-	((*line)->cmds[i]) = ft_strdup(temp);
- 	free(temp);
-}
-
-void	change_quotes(t_line **line)
-{
-	int	i;
-	int	j;
- 	int	len;
- 	i = -1;
- 	while ((*line)->cmds[++i])
-	{
- 		len = 0;
- 		j = -1;
- 		while ((*line)->cmds[i][++j])
- 		{
- 			if ((*line)->cmds[i][j] == '\"')
- 			{
- 				j++;
- 				while ((*line)->cmds[i][j + len] && (*line)->cmds[i][j + len] != '\"')
- 					len++;
- 			}
- 			if ((*line)->cmds[i][j + 1] == 0 && len > 0)
- 				cut_quotes(line, i, len);
- 		}
- 	}
+	return (cmd);
 }
 */
-int	check_quotes(char *cmd)
+
+int	check_quote_on(char input)
 {
+	static int	d_quote;
+	static int	s_quote;
 
-	int		i;
-	int		len;
-	char	q;
-
-	i = -1;
-	len = ft_strlen(cmd);
-	while (cmd[++i])
-	{
-		
-		if (cmd[i] == '"' || cmd[i] == '\'')
-		{
-			q = cmd[i];
-			while (--len > i)
-			{
-				if (cmd[len] == q)
-					break ;
-				else if (len - 1 == i)
-				{
-					print_error("ERROR: unclosed quotes\n");
-					return (0);
-				}
-			}
-			if (ft_strlen(cmd) == 1)
-			{
-				print_error("ERROR: unclosed quotes\n");
-				return (0);
-			}
-		}
-	}
-	return (1);
+	if (input == 39 && !s_quote && !d_quote)
+		s_quote++;
+	else if (input == 39 && !d_quote)
+		s_quote--;
+	else if (input == '"' && !s_quote && !d_quote)
+		d_quote++;
+	else if (input == '"' && !s_quote)
+		d_quote--;
+	if (s_quote || d_quote)
+		return (1);
+	return (0);
 }
 
 int	organize_line(t_line **line)
@@ -102,14 +59,16 @@ int	organize_line(t_line **line)
 	if (!(*line)->cmd[0])
 		return (0);
 	head = *line;
-	if (!check_line(*line) || !check_quotes((*line)->cmd))
+	if (!check_line(*line))
 		return (0);
-	check_space(line);
+	(*line)->cmd = check_space((*line)->cmd);
 	split_line = ft_split((*line)->cmd, ' ');
-	init_cmds(line, split_line);
+	if (!init_cmds(line, split_line))
+		return (0);
 	check_for_pipes(line, (*line)->cmds);
 	*line = head;
-	init_files(line);
+	if (!init_files(line))
+		return (0);
 	*line = head;
 	free(split_line);
 	return (1);
@@ -147,7 +106,7 @@ void	check_for_pipes(t_line **line, char **cmds)
 	//free_charpp(b_p);
 }
 
-void	put_space(t_line **line, int x)
+char	*put_space(char *cmd, int x)
 {
 	int		i;
 	int		j;
@@ -156,9 +115,9 @@ void	put_space(t_line **line, int x)
 
 	i = 0;
 	j = 0;
-	len = ft_strlen((*line)->cmd);
+	len = ft_strlen(cmd);
 	new_cmd = malloc((len + 2) * sizeof(char));
-	while ((*line)->cmd[i])
+	while (cmd[i])
 	{
 		if (x == j)
 		{
@@ -166,39 +125,41 @@ void	put_space(t_line **line, int x)
 		}
 		else
 		{
-			new_cmd[j] = (*line)->cmd[i++];
+			new_cmd[j] = cmd[i++];
 			j++;
 		}
 	}
 	new_cmd[j] = 0;
-	free((*line)->cmd);
-	(*line)->cmd = ft_strdup(new_cmd);
+	free(cmd);
+	cmd = ft_strdup(new_cmd);
 	free(new_cmd);
+	return (cmd);
 }
 
-int	check_space(t_line **line)
+char	*check_space(char *cmd)
 {
 	int	i;
 
 	i = 0;
-	while ((*line)->cmd[i])
+	while (cmd[i])
 	{
-		if ((*line)->cmd[i] == '<' && ((*line)->cmd[i + 1] != ' ' \
-				&& (*line)->cmd[i + 1] != '<') && (*line)->cmd[i + 1])
-			put_space(line, i + 1);
-		else if (((*line)->cmd[i] != ' ' && (*line)->cmd[i] != '>' \
-				&& (*line)->cmd[i + 1] == '>'))
-			put_space(line, i + 1);
-		else if ((*line)->cmd[i] == '>' && ((*line)->cmd[i + 1] != ' ' \
-				&& (*line)->cmd[i + 1] != '>' && (*line)->cmd[i + 1] != 0))
-			put_space(line, i + 1);
-		else if (((*line)->cmd[i] == '|' && (*line)->cmd[i + 1] != ' ') \
-				|| ((*line)->cmd[i] != ' ' && (*line)->cmd[i + 1] == '|'))
-			put_space(line, i + 1);
+		check_quote_on(cmd[i]);
+		if (cmd[i] == '<' && (cmd[i + 1] != '<' && cmd[i + 1] != ' ' && cmd[i + 1])) 
+			cmd = put_space(cmd, i + 1);
+		else if (cmd[i] != ' ' && cmd[i] != '<' && cmd[i + 1] == '<')
+			cmd = put_space(cmd, i + 1);
+		else if (cmd[i] == '>' && (cmd[i + 1] != '>' && cmd[i + 1] != ' ' && cmd[i + 1]))
+			cmd = put_space(cmd, i + 1);
+		else if (cmd[i] != ' ' && cmd[i] != '>' && cmd[i + 1] == '>')
+			cmd = put_space(cmd, i + 1);
+		else if (cmd[i] == '|' && cmd[i + 1] != ' ' && cmd[i + 1])
+			cmd = put_space(cmd, i + 1);
+		else if (cmd[i] != ' ' && cmd[i + 1] == '|')
+			cmd = put_space(cmd, i + 1);
 		else
 			i++;
 	}
-	return (1);
+	return (cmd);
 }
 
 int	check_line(t_line *line)
