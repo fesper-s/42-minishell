@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 14:42:32 by gussoare          #+#    #+#             */
-/*   Updated: 2023/01/26 09:45:39 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/26 14:00:23 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,14 +72,16 @@ void	check_for_pipes(t_line **line, char **cmds)
 
 	i = -1;
 	j = 0;
-	b_p = malloc((cmds_til_pipe(cmds) + 1) * sizeof(char *));
-	a_p = malloc((cmds_count(cmds) - cmds_til_pipe(cmds) + 1) * sizeof(char *));
+	a_p = NULL;
+	b_p = NULL;
 	if (cmds_count(cmds) != cmds_til_pipe(cmds))
 	{
+		b_p = malloc((cmds_til_pipe(cmds) + 1) * sizeof(char *));
 		while (cmds[++i])
 		{
 			if (cmds[i][0] == '|')
 			{
+				a_p = malloc((cmds_count(cmds) - cmds_til_pipe(cmds)) * sizeof(char *));
 				while (cmds[++i])
 					a_p[j++] = ft_strdup(cmds[i]);
 				break ;
@@ -88,11 +90,8 @@ void	check_for_pipes(t_line **line, char **cmds)
 		}
 		b_p[cmds_til_pipe(cmds)] = 0;
 		a_p[j] = 0;
-		//if (cmds_count(a_p) >= 1)
 		init_linked_list(line, b_p, a_p);
 	}
-	//free_charpp(a_p);
-	//free_charpp(b_p);
 }
 
 char	*put_space(char *cmd, int x)

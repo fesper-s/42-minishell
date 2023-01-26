@@ -77,7 +77,7 @@ int	init_files(t_line **line)
 				(*line)->outfile = ft_strdup((*line)->cmds[++i]);
 			}
 			else
-			{	
+			{
 				buffer[j] = ft_strdup((*line)->cmds[i]);
 				j++;
 			}
@@ -85,11 +85,11 @@ int	init_files(t_line **line)
 		buffer[j] = 0;
 		free_charpp((*line)->cmds);
 		i = -1;
-		(*line)->cmds = malloc((cmds_count(buffer) + 1) * sizeof(char *));
+		(*line)->cmds = malloc(sizeof(char *) * (cmds_count(buffer) + 1));
 		while (buffer[++i])
-			(*line)->cmds[i] = buffer[i];
+			(*line)->cmds[i] = ft_strdup(buffer[i]);
 		(*line)->cmds[i] = 0;
-		free(buffer);
+		free_charpp(buffer);
 		(*line) = (*line)->next;
 	}
 	(*line) = head;
@@ -125,12 +125,14 @@ void	init_linked_list(t_line **line, char **before_pipe, char **after_pipe)
 	int	i;
 
 	i = -1;
-	ft_lst_add_back(line, ft_lst_new(after_pipe, NULL, NULL));
-	free((*line)->cmds);
+	ft_lst_add_back(line, ft_lst_new(ft_strdupp(after_pipe), NULL, NULL));
+	free_charpp((*line)->cmds);
 	(*line)->cmds = malloc((cmds_count(before_pipe) + 1) * sizeof(char *));
 	while (before_pipe[++i])
 		(*line)->cmds[i] = ft_strdup(before_pipe[i]);
 	(*line)->cmds[i] = 0;
+	free_charpp(before_pipe);
+	free_charpp(after_pipe);
 	(*line) = (*line)->next;
 	check_for_pipes(line, (*line)->cmds);
 }
