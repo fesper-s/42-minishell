@@ -59,22 +59,11 @@ int	init_files(t_line **line)
 		while ((*line)->cmds[++i])
 		{
 			if ((*line)->cmds[i][0] == '<' && (*line)->cmds[i + 1])
-			{
-				if ((*line)->infile)
-				{
-					print_error("Multiples infiles at once\n");
-					return (0);
-				}
 				(*line)->infile = ft_strdup((*line)->cmds[++i]);
-			}
 			else if ((*line)->cmds[i][0] == '>' && (*line)->cmds[i + 1])
 			{
 				if ((*line)->outfile)
-				{
-					print_error("Multiples infiles at once\n");
-					return (0);
-				}
-				(*line)->outfile = ft_strdup((*line)->cmds[++i]);
+					(*line)->outfile = ft_strdup((*line)->cmds[++i]);
 			}
 			else
 			{
@@ -99,10 +88,8 @@ int	init_files(t_line **line)
 int	init_cmds(t_line **line, char **split)
 {
 	int	i;
-	int	j;
 	int	len;
 
-	j = 0;
 	i = -1;
 	len = cmds_count(split);
 	if (split[0][0] == '|' || split[len - 1][0] == '|')
@@ -112,11 +99,8 @@ int	init_cmds(t_line **line, char **split)
 	}
 	(*line)->cmds = malloc((len + 1) * sizeof(char *));
 	while (split[++i])
-	{
-		(*line)->cmds[j] = split[i];
-		j++;
-	}
-	(*line)->cmds[j] = 0;
+		(*line)->cmds[i] = ft_strdup(split[i]);
+	(*line)->cmds[i] = 0;
 	return (1);
 }
 

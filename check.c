@@ -40,6 +40,36 @@ int	check_quote_on(char *cmd)
 	return (0);
 }
 
+int check_files(char **cmds)
+{
+	int	infile;
+	int outfile;
+	int i;
+
+	i = -1;
+	infile = 0;
+	outfile = 0;
+	while (cmds[++i])
+	{
+		if (cmds[i][0] == '<')
+			infile++;
+		if (cmds[i][0] == '>')
+			outfile++;
+	 	if (infile > 1 || outfile > 1)
+		{
+			print_error("Error: Multiples files\n");
+			return (0); 
+		}
+		if (cmds[i][0] == '|')
+		{
+			infile = 0;
+			outfile = 0;
+		}
+	}
+	return (1);
+}
+
+
 int	organize_line(t_line **line)
 {
 	char	**split_line;
@@ -48,18 +78,23 @@ int	organize_line(t_line **line)
 	if (!(*line)->cmd[0])
 		return (0);
 	head = *line;
-	if (!check_line(*line) || check_quote_on((*line)->cmd))
+	if (!check_double_pipes(*line) || check_quote_on((*line)->cmd))
 		return (0);
 	(*line)->cmd = check_space((*line)->cmd);
 	split_line = ft_split((*line)->cmd, ' ');
-	if (!init_cmds(line, split_line))
+	if (!init_cmds(line, split_line) || !check_files((*line)->cmds))
+	{
+		free_charpp((*line)->cmds);
+		free((*line)->cmd);
+		free_charpp(split_line);
 		return (0);
+	}
 	check_for_pipes(line, (*line)->cmds);
 	*line = head;
 	if (!init_files(line))
 		return (0);
 	*line = head;
-	free(split_line);
+	free_charpp(split_line);
 	return (1);
 }
 
@@ -149,7 +184,7 @@ char	*check_space(char *cmd)
 	return (cmd);
 }
 
-int	check_line(t_line *line)
+int check_double_pipes(t_line *line)
 {
 	int	i;
 

@@ -84,9 +84,13 @@ char	*find_path(t_line **line)
 
 	env_path = check_for_path((*line)->env, NULL);
 	if (access((*line)->cmds[0], F_OK | X_OK) == 0)
+	{
+		free(env_path);
 		return (ft_strdup((*line)->cmds[0]));
+	}
 	path = ft_split(env_path, ':');
 	cmd_path = check_cmdpath(env_path, path, (*line)->cmds[0]);
+	free(env_path);
 	if (cmd_path)
 		return (cmd_path);
 	path_error(path, (*line)->cmds[0]);

@@ -83,13 +83,19 @@ int	check_dollar_sign(char *cmd)
 int	check_cmdinenv(char *cmd, char **env)
 {
 	int		i;
+	int		len;
 
+	if (check_dollar_sign(cmd) != -1)
+		len = check_dollar_sign(cmd);
+	else
+		len = ft_strlen(cmd);
 	i = -1;
+
 	while (env[++i])
 	{
-		if (!ft_strncmp(env[i], cmd, ft_strlen(cmd)) && env[i][ft_strlen(cmd)] == '=')
+		if (!ft_strncmp(env[i], cmd, len) && env[i][len] == '=')
 		{
-			printf("%s", &env[i][ft_strlen(cmd) + 1]);
+			printf("%s", &env[i][len + 1]);
 			return (count_cmdlen(env[i]));
 		}
 	}
@@ -114,7 +120,7 @@ int	check_expvar(char **cmds, t_env *env, int i)
 			int	checking;
 			checking = check_cmdinenv(&cmds[i][j + 1], env->env);
 			if (checking)
-				j += checking + 1;
+				j += checking;
 			else
 			{
 				j++;
