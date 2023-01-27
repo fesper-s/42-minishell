@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 10:42:52 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/27 12:15:39 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/27 14:08:47 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,35 +102,40 @@ int	check_cmdinenv(char *cmd, char **env)
 	return (0);
 }
 
-int	check_expvar(char **cmds, t_env *env, int i)
+int	check_expvar(char *cmd, t_env *env)
 {
-	int		j;
+	int		i;
+	int		checking;
 
-	if (check_dollar_sign(cmds[i]) == -1)
+	if (check_dollar_sign(cmd) == -1)
 		return (0);
-	j = -1;
-	while (cmds[i][++j])
+	i = -1;
+	while (cmd[++i])
 	{
-		if (cmds[i][j] != '$')
-			printf("%c", cmds[i][j]);
-		if (cmds[i][j] == '$' && !cmds[i][j + 1])
+		if (cmd[i] != '$')
+			printf("%c", cmd[i]);
+		if (cmd[i] == '$' && !cmd[i + 1])
 			printf("$");
-		else if (cmds[i][j] == '$')
+		else if(cmd[i] == '$' && cmd[i + 1] == '?')
 		{
-			int	checking;
-			checking = check_cmdinenv(&cmds[i][j + 1], env->env);
+			printf("%d", g_status);
+			i++;
+		}
+		else if (cmd[i] == '$')
+		{
+			checking = check_cmdinenv(&cmd[i + 1], env->env);
 			if (checking)
-				j += checking;
+				i += checking;
 			else
 			{
-				j++;
-				while (cmds[i][j])
+				i++;
+				while (cmd[i])
 				{
-					if (cmds[i][j] != '$')
-						j++;
+					if (cmd[i] != '$')
+						i++;
 					else
 					{
-						j--;
+						i--;
 						break ;
 					}
 				}
@@ -148,7 +153,6 @@ int	handle_echo(char **cmds, t_env *env)
 	int	dollar_sign;
 	int	i;
 
-	g_status = 0;
 	isnull = 0;
 	if (cmds[1] == NULL)
 		isnull = 1;
@@ -157,16 +161,17 @@ int	handle_echo(char **cmds, t_env *env)
 	while (!isnull && cmds[++i])
 	{
 		cmds[i] = smart_trim(cmds[i]);
-		dollar_sign = check_expvar(cmds, env, i);
+		dollar_sign = check_expvar(cmds[i], env);
 		newline = 1;
 		check_newline(cmds, &newline, &buffer, i);
 		if (!dollar_sign && cmds[i] && newline)
 			printf("%s", cmds[i]);
-		if (!dollar_sign && cmds[i] && cmds[i + 1] != NULL && newline)
+		if (cmds[i] && cmds[i + 1] != NULL && newline)
 			printf(" ");
 	}
 	if (!buffer || isnull)
 		printf("\n");
+	g_status = 0;
 	return (1);
 }
 

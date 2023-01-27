@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/27 10:18:53 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/27 13:57:06 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ typedef struct s_env
 extern int	g_status;
 
 // minishell.c
-void	expand_var(t_line **line, t_env *env);
+int		expand_var(t_line **line, t_env *env);
 void	exec_cmds(t_line **line, pid_t pid, int *fdd, int *fd);
 void	pipeline(t_line **line, int size);
 void	cmd_process(t_line **line, t_env **env);
@@ -96,7 +96,7 @@ t_line	*ft_lst_last(t_line *lst);
 // builtins.c
 int		handle_pwd(t_env *env);
 int		handle_env(t_env *env);
-int		check_expvar(char **cmds, t_env *env, int j);
+int		check_expvar(char *cmds, t_env *env);
 int		handle_echo(char **cmds, t_env *env);
 int		handle_builtins(char **cmds, t_env **env);
 // chdir.c
