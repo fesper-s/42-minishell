@@ -58,7 +58,6 @@ char	*put_space(char *cmd, int x);
 void	check_for_pipes(t_line **line, char **cmds);
 //init_struct.c
 int		file_len(char **cmd);
-char	**get_env(char **envp);
 int		init_files(t_line **line);
 int		init_cmds(t_line **line, char **split);
 void	init_linked_list(t_line **line, char **before_pipe, char **after_pipe);

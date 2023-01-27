@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/27 14:06:37 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/27 15:05:42 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ void	cmd_process(t_line **line, t_env **env)
 	int		isbuiltin;
 	void	*head;
 	int		size;
-	int		i;
 	int		expand;
 
 	size = ft_lst_size((*line));
@@ -99,21 +98,16 @@ void	cmd_process(t_line **line, t_env **env)
 	isbuiltin = handle_builtins((*line)->cmds, env);
 	while (*line)
 	{
-		(*line)->env = malloc(sizeof(char *) * (cmds_count((*env)->env) + 1));
-		i = -1;
-		while ((*env)->env[++i])
-			(*line)->env[i] = ft_strdup((*env)->env[i]);
+		(*line)->env = ft_strdupp((*env)->env);
 		*line = (*line)->next;
 	}
 	*line = head;
-	(*line)->env[i] = 0;
 	if (!expand && !isbuiltin && !check_dir((*line)->cmds, (*env)->env))
 	{
 		g_status = 0;
 		pipeline(line, size);
 		(*line) = head;
 	}
-	free_charpp((*line)->cmds);
 }
 
 void	minishell(char **envp)
@@ -123,7 +117,7 @@ void	minishell(char **envp)
 	void	*head;
 
 	env = malloc(sizeof(t_env));
-	env->env = get_env(envp);
+	env->env = ft_strdupp(envp);
 	while (1)
 	{
 		line = ft_lst_new(NULL, NULL, NULL);
@@ -140,7 +134,6 @@ void	minishell(char **envp)
 				break ;
 			cmd_process(&line, &env);
 			line = head;
-			free(line->cmd);
 			lst_free(&line);
 		}
 		free(line);

@@ -143,9 +143,7 @@ char	*put_space(char *cmd, int x)
 	while (cmd[i])
 	{
 		if (x == j)
-		{
 			new_cmd[j++] = ' ';
-		}
 		else
 		{
 			new_cmd[j] = cmd[i++];
