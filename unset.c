@@ -50,7 +50,6 @@ int	check_cmd_env(char **env, char *cmd)
 int	handle_unset(char **cmds, t_env **env)
 {
 	int		i;
-	int		j;
 	char	**buffer;
 
 	i = 0;
@@ -61,11 +60,7 @@ int	handle_unset(char **cmds, t_env **env)
 			buffer = malloc(sizeof(char *) * cmds_count((*env)->env));
 			attr_buffer(&buffer, cmds[i], (*env)->env);
 			free_charpp((*env)->env);
-			(*env)->env = malloc(sizeof(char *) * (cmds_count(buffer) + 1));
-			j = -1;
-			while (buffer[++j])
-				(*env)->env[j] = ft_strdup(buffer[j]);
-			(*env)->env[j] = 0;
+			(*env)->env = ft_strdupp(buffer);
 			free_charpp(buffer);
 		}
 	}

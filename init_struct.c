@@ -12,22 +12,6 @@
 
 #include "minishell.h"
 
-char	**get_env(char **envp)
-{
-	char	**env;
-	int		i;
-
-	i = 0;
-	while (envp[i])
-		i++;
-	env = malloc(sizeof(char *) * (i + 1));
-	i = -1;
-	while (envp[++i])
-		env[i] = ft_strdup(envp[i]);
-	env[i] = 0;
-	return (env);
-}
-
 int	file_len(char **cmd)
 {
 	int	i;

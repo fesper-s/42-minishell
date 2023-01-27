@@ -113,7 +113,7 @@ void	minishell(char **envp)
 	void	*head;
 
 	env = malloc(sizeof(t_env));
-	env->env = get_env(envp);
+	env->env = ft_strdupp(envp);
 	while (1)
 	{
 		line = ft_lst_new(NULL, NULL, NULL);
