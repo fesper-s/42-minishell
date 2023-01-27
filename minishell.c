@@ -85,7 +85,6 @@ void	cmd_process(t_line **line, t_env **env)
 	int		isbuiltin;
 	void	*head;
 	int		size;
-	int		i;
 
 	size = ft_lst_size((*line));
 	head = (*line);
@@ -95,21 +94,16 @@ void	cmd_process(t_line **line, t_env **env)
 	isbuiltin = handle_builtins((*line)->cmds, env);
 	while (*line)
 	{
-		(*line)->env = malloc(sizeof(char *) * (cmds_count((*env)->env) + 1));
-		i = -1;
-		while ((*env)->env[++i])
-			(*line)->env[i] = ft_strdup((*env)->env[i]);
+		(*line)->env = ft_strdupp((*env)->env);
 		*line = (*line)->next;
 	}
 	*line = head;
-	(*line)->env[i] = 0;
 	if (!isbuiltin && !check_dir((*line)->cmds, (*env)->env))
 	{
 		g_status = 0;
 		pipeline(line, size);
 		(*line) = head;
 	}
-	free_charpp((*line)->cmds);
 }
 
 void	minishell(char **envp)
@@ -136,7 +130,6 @@ void	minishell(char **envp)
 				break ;
 			cmd_process(&line, &env);
 			line = head;
-			free(line->cmd);
 			lst_free(&line);
 		}
 		free(line);

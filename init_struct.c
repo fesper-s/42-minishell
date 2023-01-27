@@ -61,10 +61,7 @@ int	init_files(t_line **line)
 			if ((*line)->cmds[i][0] == '<' && (*line)->cmds[i + 1])
 				(*line)->infile = ft_strdup((*line)->cmds[++i]);
 			else if ((*line)->cmds[i][0] == '>' && (*line)->cmds[i + 1])
-			{
-				if ((*line)->outfile)
 					(*line)->outfile = ft_strdup((*line)->cmds[++i]);
-			}
 			else
 			{
 				buffer[j] = ft_strdup((*line)->cmds[i]);
@@ -73,11 +70,7 @@ int	init_files(t_line **line)
 		}
 		buffer[j] = 0;
 		free_charpp((*line)->cmds);
-		i = -1;
-		(*line)->cmds = malloc(sizeof(char *) * (cmds_count(buffer) + 1));
-		while (buffer[++i])
-			(*line)->cmds[i] = ft_strdup(buffer[i]);
-		(*line)->cmds[i] = 0;
+		(*line)->cmds = ft_strdupp(buffer);
 		free_charpp(buffer);
 		(*line) = (*line)->next;
 	}
@@ -87,34 +80,23 @@ int	init_files(t_line **line)
 
 int	init_cmds(t_line **line, char **split)
 {
-	int	i;
 	int	len;
 
-	i = -1;
 	len = cmds_count(split);
 	if (split[0][0] == '|' || split[len - 1][0] == '|')
 	{
 		print_error("parse error near '|'\n");
 		return (0);
 	}
-	(*line)->cmds = malloc((len + 1) * sizeof(char *));
-	while (split[++i])
-		(*line)->cmds[i] = ft_strdup(split[i]);
-	(*line)->cmds[i] = 0;
+	(*line)->cmds = ft_strdupp(split);
 	return (1);
 }
 
 void	init_linked_list(t_line **line, char **before_pipe, char **after_pipe)
 {
-	int	i;
-
-	i = -1;
 	ft_lst_add_back(line, ft_lst_new(ft_strdupp(after_pipe), NULL, NULL));
 	free_charpp((*line)->cmds);
-	(*line)->cmds = malloc((cmds_count(before_pipe) + 1) * sizeof(char *));
-	while (before_pipe[++i])
-		(*line)->cmds[i] = ft_strdup(before_pipe[i]);
-	(*line)->cmds[i] = 0;
+	(*line)->cmds = ft_strdupp(before_pipe);
 	free_charpp(before_pipe);
 	free_charpp(after_pipe);
 	(*line) = (*line)->next;
