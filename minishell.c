@@ -103,7 +103,7 @@ void	cmd_process(t_line **line, t_env **env)
 	}
 	*line = head;
 	(*line)->env[i] = 0;
-	if (!isbuiltin && !check_dir((*line)->cmds, (*env)->env) && find_path(line))
+	if (!isbuiltin && !check_dir((*line)->cmds, (*env)->env))
 	{
 		g_status = 0;
 		pipeline(line, size);
