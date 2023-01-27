@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 10:42:52 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/26 10:41:37 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/27 12:15:39 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,33 +67,71 @@ int	handle_env(t_env *env)
 	return (1);
 }
 
-void	check_expvar(char **cmds, t_env *env, int j)
+int	check_dollar_sign(char *cmd)
+{
+	int	i;
+
+	i = -1;
+	while (cmd[++i])
+	{
+		if (cmd[i] == '$')
+			return (i);
+	}
+	return (-1);
+}
+
+int	check_cmdinenv(char *cmd, char **env)
 {
 	int		i;
-	char	*buffer;
 
-	if (cmds[j][0] == '$')
+	i = -1;
+	while (env[++i])
 	{
-		i = -1;
-		while (env->env[++i])
+		if (!ft_strncmp(env[i], cmd, ft_strlen(cmd)) && env[i][ft_strlen(cmd)] == '=')
 		{
-			if (!ft_strncmp(&cmds[j][1], env->env[i], ft_strlen(&cmds[j][1])) \
-				&& env->env[i][ft_strlen(&cmds[j][1])] == '=')
+			printf("%s", &env[i][ft_strlen(cmd) + 1]);
+			return (count_cmdlen(env[i]));
+		}
+	}
+	return (0);
+}
+
+int	check_expvar(char **cmds, t_env *env, int i)
+{
+	int		j;
+
+	if (check_dollar_sign(cmds[i]) == -1)
+		return (0);
+	j = -1;
+	while (cmds[i][++j])
+	{
+		if (cmds[i][j] != '$')
+			printf("%c", cmds[i][j]);
+		if (cmds[i][j] == '$' && !cmds[i][j + 1])
+			printf("$");
+		else if (cmds[i][j] == '$')
+		{
+			int	checking;
+			checking = check_cmdinenv(&cmds[i][j + 1], env->env);
+			if (checking)
+				j += checking + 1;
+			else
 			{
-				buffer = ft_strdup(&env->env[i][count_cmdlen(env->env[i]) + 1]);
-				free(cmds[j]);
-				cmds[j] = ft_strdup(buffer);
-				free(buffer);
-				break ;
-			}
-			if (env->env[i + 1] == NULL)
-			{
-				free(cmds[j]);
-				cmds[j] = malloc(sizeof(char) * 1);
-				cmds[j] = 0;
+				j++;
+				while (cmds[i][j])
+				{
+					if (cmds[i][j] != '$')
+						j++;
+					else
+					{
+						j--;
+						break ;
+					}
+				}
 			}
 		}
 	}
+	return (1);
 }
 
 int	handle_echo(char **cmds, t_env *env)
@@ -101,6 +139,7 @@ int	handle_echo(char **cmds, t_env *env)
 	int	isnull;
 	int	newline;
 	int	buffer;
+	int	dollar_sign;
 	int	i;
 
 	g_status = 0;
@@ -112,12 +151,12 @@ int	handle_echo(char **cmds, t_env *env)
 	while (!isnull && cmds[++i])
 	{
 		cmds[i] = smart_trim(cmds[i]);
-		check_expvar(cmds, env, i);
+		dollar_sign = check_expvar(cmds, env, i);
 		newline = 1;
 		check_newline(cmds, &newline, &buffer, i);
-		if (cmds[i] && newline)
+		if (!dollar_sign && cmds[i] && newline)
 			printf("%s", cmds[i]);
-		if (cmds[i] && cmds[i + 1] != NULL && newline)
+		if (!dollar_sign && cmds[i] && cmds[i + 1] != NULL && newline)
 			printf(" ");
 	}
 	if (!buffer || isnull)
