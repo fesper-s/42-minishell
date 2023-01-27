@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/26 14:05:20 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/27 10:18:53 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ t_line	*ft_lst_last(t_line *lst);
 // builtins.c
 int		handle_pwd(t_env *env);
 int		handle_env(t_env *env);
-void	check_expvar(char **cmds, t_env *env, int j);
+int		check_expvar(char **cmds, t_env *env, int j);
 int		handle_echo(char **cmds, t_env *env);
 int		handle_builtins(char **cmds, t_env **env);
 // chdir.c
