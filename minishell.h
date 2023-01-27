@@ -44,6 +44,7 @@ typedef struct s_env
 extern int	g_status;
 
 // minishell.c
+void	open_files(t_line **line, int *fd);
 void	expand_var(t_line **line, t_env *env);
 void	exec_cmds(t_line **line, pid_t pid, int *fdd, int *fd);
 void	pipeline(t_line **line, int size);

@@ -55,6 +55,18 @@ void	exec_cmds(t_line **line, pid_t pid, int *fdd, int *fd)
 	free(path);
 }
 
+void open_files(t_line **line, int *fd)
+{
+	if ((*line)->infile)
+		fd[0] = open((*line)->infile, O_RDONLY);
+	else if (fd[0] == -1)
+		printf("Error: no such file or directory: %s", (*line)->infile);
+	if ((*line)->outfile)
+		fd[1] = open((*line)->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	else if (fd[1] == -1)
+		printf("Error: no such file or directory: %s", (*line)->outfile);
+}
+
 void	pipeline(t_line **line, int size)
 {
 	int		fd[2];
@@ -65,6 +77,9 @@ void	pipeline(t_line **line, int size)
 	fdd = 0;
 	while ((*line))
 	{
+		fd[0] = 0;
+		fd[1] = 0;
+		open_files(line, fd);
 		path = find_path(line);
 		if (!path)
 			break ;
@@ -76,6 +91,8 @@ void	pipeline(t_line **line, int size)
 			exec_cmds(line, pid, &fdd, fd);
 		free(path);
 	}
+	close(fd[0]);
+	close(fd[1]);
 	while (size--)
 		waitpid(-1, NULL, 0);
 }
