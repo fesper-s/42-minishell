@@ -75,6 +75,13 @@ void	lst_free(t_line **lst)
 	while (buffer)
 	{
 		free_charpp(buffer->env);
+		free_charpp(buffer->cmds);
+		if (buffer->cmd)
+			free(buffer->cmd);
+		if (buffer->infile)
+			free(buffer->infile);
+		if (buffer->outfile)
+			free(buffer->outfile);
 		buffer = buffer->next;
 	}
 	buffer = *lst;
