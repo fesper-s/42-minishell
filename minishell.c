@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/26 18:38:48 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/27 15:05:42 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	g_status;
 
-void	expand_var(t_line **line, t_env *env)
+int	expand_var(t_line **line, t_env *env)
 {
 	if ((*line)->cmds[0][0] == '$')
 	{
@@ -26,11 +26,14 @@ void	expand_var(t_line **line, t_env *env)
 			if ((*line)->cmds[0][2] != 0)
 				printf("%s", &(*line)->cmds[0][2]);
 			printf(": command not found\n");
+			g_status = 127;
 		}
 		else
 			expanding(line, env);
 		g_status = 127;
+		return (1);
 	}
+	return (0);
 }
 
 void	exec_cmds(t_line **line, pid_t pid, int *fdd, int *fd)
@@ -85,12 +88,13 @@ void	cmd_process(t_line **line, t_env **env)
 	int		isbuiltin;
 	void	*head;
 	int		size;
+	int		expand;
 
 	size = ft_lst_size((*line));
 	head = (*line);
 	if (!(*line)->cmds[0])
 		return ;
-	expand_var(line, *env);
+	expand = expand_var(line, *env);
 	isbuiltin = handle_builtins((*line)->cmds, env);
 	while (*line)
 	{
@@ -98,7 +102,7 @@ void	cmd_process(t_line **line, t_env **env)
 		*line = (*line)->next;
 	}
 	*line = head;
-	if (!isbuiltin && !check_dir((*line)->cmds, (*env)->env))
+	if (!expand && !isbuiltin && !check_dir((*line)->cmds, (*env)->env))
 	{
 		g_status = 0;
 		pipeline(line, size);
