@@ -143,7 +143,8 @@ void	minishell(char **envp)
 	}
 	free(line->cmd);
 	free_charpp(line->cmds);
-	free(line);
+	if (line)
+		free(line);
 	int	i = -1;
 	while (env->env[++i])
 		free(env->env[i]);

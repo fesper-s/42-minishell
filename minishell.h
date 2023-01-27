@@ -50,12 +50,14 @@ void	pipeline(t_line **line, int size);
 void	cmd_process(t_line **line, t_env **env);
 void	minishell(char **envp);
 //check.c
+int		check_quote_on(char *cmd);
 int		organize_line(t_line **line);
-int		check_line(t_line *line);
+int		check_double_pipes(t_line *line);
 char	*check_space(char *cmd);
 char	*put_space(char *cmd, int x);
 void	check_for_pipes(t_line **line, char **cmds);
 //init_struct.c
+int		file_len(char **cmd);
 char	**get_env(char **envp);
 int		init_files(t_line **line);
 int		init_cmds(t_line **line, char **split);
