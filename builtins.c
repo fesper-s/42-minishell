@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 10:42:52 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/27 14:08:47 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/30 08:34:00 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	check_dollar_sign(char *cmd)
 	i = -1;
 	while (cmd[++i])
 	{
-		if (cmd[i] == '$')
+		if (!ft_isalnum(cmd[i]) && cmd[i] != '_')
 			return (i);
 	}
 	return (-1);
