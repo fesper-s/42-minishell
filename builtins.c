@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 10:42:52 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/30 08:34:00 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/30 09:06:15 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,22 @@ int	check_cmdinenv(char *cmd, char **env)
 	return (0);
 }
 
+// não ta no .h ainda
+void	no_cmdinenv(char *cmd, int *i)
+{
+	*i += 1;
+	while (cmd[*i])
+	{
+		if (ft_isalnum(cmd[*i]) || cmd[*i] == '_')
+			*i += 1;
+		else
+		{
+			*i -= 1;
+			break ;
+		}
+	}
+}
+
 int	check_expvar(char *cmd, t_env *env)
 {
 	int		i;
@@ -127,19 +143,7 @@ int	check_expvar(char *cmd, t_env *env)
 			if (checking)
 				i += checking;
 			else
-			{
-				i++;
-				while (cmd[i])
-				{
-					if (cmd[i] != '$')
-						i++;
-					else
-					{
-						i--;
-						break ;
-					}
-				}
-			}
+				no_cmdinenv(cmd, &i);
 		}
 	}
 	return (1);
