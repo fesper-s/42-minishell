@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/30 10:49:16 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/30 11:45:53 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ int		ft_lst_size(t_line *lst);
 t_line	*ft_lst_last(t_line *lst);
 // builtins.c
 char	*smart_trim(char *cmd);
+int		handle_cd(char **cmds, t_env **env);
 int		handle_pwd(t_env *env);
 int		handle_env(t_env *env);
 int		handle_builtins(char **cmds, t_env **env);
@@ -111,7 +112,7 @@ void	return_dir(t_env **env, int j);
 void	relative_path(char *cmd, t_env **env, int j);
 void	chpwd(char *cmd, t_env **env, int j);
 char	*tilde_home(char *cmd, char *home);
-int		handle_cd(char **cmds, t_env **env);
+char	*no_argincd(char **env);
 // export.c
 void	add_to_env(char *cmd, t_env **env);
 int		exporting(char *cmd, t_env **env);
