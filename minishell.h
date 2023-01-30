@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/30 12:31:39 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/30 13:35:08 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ char	*put_space(char *cmd, int x);
 void	check_for_pipes(t_line **line, char **cmds);
 //init_struct.c
 int		file_len(char **cmd);
+void	ch_cmd_data(t_line **line, char ***buffer, int j);
 int		init_files(t_line **line);
 int		init_cmds(t_line **line, char **split);
 void	init_linked_list(t_line **line, char **before_pipe, char **after_pipe);
