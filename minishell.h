@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/27 13:57:06 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/30 10:49:16 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,11 +93,19 @@ t_line	*ft_lst_new(char **cmds, char *infile, char *outfile);
 int		ft_lst_size(t_line *lst);
 t_line	*ft_lst_last(t_line *lst);
 // builtins.c
+char	*smart_trim(char *cmd);
 int		handle_pwd(t_env *env);
 int		handle_env(t_env *env);
-int		check_expvar(char *cmds, t_env *env);
-int		handle_echo(char **cmds, t_env *env);
 int		handle_builtins(char **cmds, t_env **env);
+// echo.c
+void	isexpand(char *cmd, int *i, char **env);
+int		check_expvar(char *cmds, t_env *env);
+void	print_echo(t_env *env, char ***cmds, int i, int *buffer);
+int		handle_echo(char **cmds, t_env *env);
+// echo-utils.c
+int		check_dollar_sign(char *cmd);
+int		check_cmdinenv(char *cmd, char **env);
+void	no_cmdinenv(char *cmd, int *i);
 // chdir.c
 void	return_dir(t_env **env, int j);
 void	relative_path(char *cmd, t_env **env, int j);
