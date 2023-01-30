@@ -6,37 +6,11 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 17:25:37 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/30 09:48:13 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/30 12:28:34 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char **ft_strdupp(char **str)
-{
-	char	**buffer;
-	int		i;
-
-	i = - 1;
-	buffer = malloc((cmds_count(str) + 1) * sizeof(char *));
-	while (str[++i])
-		buffer[i] = ft_strdup(str[i]);
-	buffer[i] = 0;
-	return (buffer);
-}
-
-int	free_charpp(char **str)
-{
-	int	i;
-
-	i = -1;
-	if (!str)
-		return (0);
-	while (str[++i])
-		free(str[i]);
-	free(str);
-	return (0);
-}
 
 char	*check_for_path(char **env, char *env_path)
 {
