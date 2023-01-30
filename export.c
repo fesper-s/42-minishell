@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 08:00:46 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/26 10:09:29 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/30 10:12:53 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	add_to_env(char *cmd, t_env **env)
 		buffer[i] = ft_strdup((*env)->env[i]);
 	buffer[i] = ft_strdup(cmd);
 	buffer[i + 1] = 0;
-	free((*env)->env);
+	free_charpp((*env)->env);
 	(*env)->env = malloc(sizeof(char *) * (i + 2));
 	i = -1;
 	while (buffer[++i])
@@ -71,13 +71,6 @@ int	count_cmdlen(char *cmd)
 	return (len);
 }
 
-void	chenvvar(char *cmd, t_env **env, int i)
-{
-	free((*env)->env[i]);
-	(*env)->env[i] = malloc(sizeof(char) * ft_strlen(cmd) + 1);
-	(*env)->env[i] = ft_strdup(cmd);
-}
-
 int	handle_export(char **cmds, t_env **env)
 {
 	int	changed;
@@ -94,7 +87,8 @@ int	handle_export(char **cmds, t_env **env)
 			if (!ft_strncmp(cmds[i], (*env)->env[j], count_cmdlen(cmds[i])) \
 				&& (*env)->env[j][count_cmdlen(cmds[i])] == '=')
 			{
-				chenvvar(cmds[i], env, j);
+				free((*env)->env[i]);
+				(*env)->env[i] = ft_strdup(cmds[i]);
 				changed = 1;
 			}
 		}

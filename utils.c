@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 17:25:37 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/26 13:59:30 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/01/30 09:48:13 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 char **ft_strdupp(char **str)
 {
-	char	**temp;
+	char	**buffer;
 	int		i;
 
 	i = - 1;
-	temp = malloc ((cmds_count(str) + 1) * sizeof(char *));
+	buffer = malloc((cmds_count(str) + 1) * sizeof(char *));
 	while (str[++i])
-		temp[i] = ft_strdup(str[i]);
-	temp[i] = 0;
-	return (temp);
+		buffer[i] = ft_strdup(str[i]);
+	buffer[i] = 0;
+	return (buffer);
 }
 
 int	free_charpp(char **str)
