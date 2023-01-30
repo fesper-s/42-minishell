@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 10:42:52 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/30 10:21:40 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/30 11:44:57 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,35 @@ char	*smart_trim(char *cmd)
 		cmd = temp;
 	}
 	return (cmd);
+}
+
+int	handle_cd(char **cmds, t_env **env)
+{
+	char	*home;
+	int		i;
+
+	if (cmds[1] && cmds[1][0] == '~')
+		cmds[1] = tilde_home(cmds[1], getenv("HOME"));
+	if (!cmds[1])
+		home = no_argincd((*env)->env);
+	else if (chdir(cmds[1]) < 0)
+	{
+		dir_error(cmds[1]);
+		g_status = 1;
+		return (2);
+	}
+	i = -1;
+	while ((*env)->env[++i])
+	{
+		if (!cmds[1] && home)
+			chpwd(home, env, i);
+		else if (cmds[1])
+			chpwd(cmds[1], env, i);
+	}
+	if (!cmds[1] && home)
+		free(home);
+	g_status = 0;
+	return (1);
 }
 
 int	handle_pwd(t_env *env)
