@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/30 11:45:53 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/30 12:31:39 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,6 @@ void	check_dir_error(char *str);
 void	signals(void);
 void	handle_sigint(int signum);
 // utils.c
-char	**ft_strdupp(char **str);
-int		free_charpp(char **str);
 char	*check_for_path(char **env, char *env_path);
 char	*check_cmdpath(char *env_path, char **path, char *cmd);
 char	*find_path(t_line **line);
@@ -123,5 +121,9 @@ int		handle_export(char **cmds, t_env **env);
 void	attr_buffer(char ***buffer, char *cmd, char **env);
 int		check_cmd_env(char **env, char *cmd);
 int		handle_unset(char **cmds, t_env **env);
+// memory.c
+char	**ft_strdupp(char **str);
+int		free_charpp(char **str);
+void	exiting(t_line **line, t_env **env);
 
 #endif
