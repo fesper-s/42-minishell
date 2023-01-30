@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/27 10:18:53 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/30 11:45:53 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ typedef struct s_env
 extern int	g_status;
 
 // minishell.c
-void	open_files(t_line **line, int *fd);
-void	expand_var(t_line **line, t_env *env);
+void	open_files(t_line **line);
+int		expand_var(t_line **line, t_env *env);
 void	exec_cmds(t_line **line, pid_t pid, int *fdd, int *fd);
 void	pipeline(t_line **line, int size);
 void	cmd_process(t_line **line, t_env **env);
@@ -94,17 +94,26 @@ t_line	*ft_lst_new(char **cmds, char *infile, char *outfile);
 int		ft_lst_size(t_line *lst);
 t_line	*ft_lst_last(t_line *lst);
 // builtins.c
+char	*smart_trim(char *cmd);
+int		handle_cd(char **cmds, t_env **env);
 int		handle_pwd(t_env *env);
 int		handle_env(t_env *env);
-int		check_expvar(char **cmds, t_env *env, int j);
-int		handle_echo(char **cmds, t_env *env);
 int		handle_builtins(char **cmds, t_env **env);
+// echo.c
+void	isexpand(char *cmd, int *i, char **env);
+int		check_expvar(char *cmds, t_env *env);
+void	print_echo(t_env *env, char ***cmds, int i, int *buffer);
+int		handle_echo(char **cmds, t_env *env);
+// echo-utils.c
+int		check_dollar_sign(char *cmd);
+int		check_cmdinenv(char *cmd, char **env);
+void	no_cmdinenv(char *cmd, int *i);
 // chdir.c
 void	return_dir(t_env **env, int j);
 void	relative_path(char *cmd, t_env **env, int j);
 void	chpwd(char *cmd, t_env **env, int j);
 char	*tilde_home(char *cmd, char *home);
-int		handle_cd(char **cmds, t_env **env);
+char	*no_argincd(char **env);
 // export.c
 void	add_to_env(char *cmd, t_env **env);
 int		exporting(char *cmd, t_env **env);

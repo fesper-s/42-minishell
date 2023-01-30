@@ -6,13 +6,12 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 10:42:52 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/27 12:15:39 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/30 11:44:57 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//colocar no .h se for util
 char	*smart_trim(char *cmd)
 {
 	char	*temp;
@@ -32,18 +31,49 @@ char	*smart_trim(char *cmd)
 	return (cmd);
 }
 
+int	handle_cd(char **cmds, t_env **env)
+{
+	char	*home;
+	int		i;
+
+	if (cmds[1] && cmds[1][0] == '~')
+		cmds[1] = tilde_home(cmds[1], getenv("HOME"));
+	if (!cmds[1])
+		home = no_argincd((*env)->env);
+	else if (chdir(cmds[1]) < 0)
+	{
+		dir_error(cmds[1]);
+		g_status = 1;
+		return (2);
+	}
+	i = -1;
+	while ((*env)->env[++i])
+	{
+		if (!cmds[1] && home)
+			chpwd(home, env, i);
+		else if (cmds[1])
+			chpwd(cmds[1], env, i);
+	}
+	if (!cmds[1] && home)
+		free(home);
+	g_status = 0;
+	return (1);
+}
+
 int	handle_pwd(t_env *env)
 {
 	int		i;
 	char	*buffer;
+	char	*buffer_aux;
 
 	i = 0;
 	while (ft_strncmp(env->env[i], "PWD=", 4))
 		i++;
-	buffer = ft_strdup(env->env[i]);
-	buffer = ft_strtrim(buffer, "PWD=");
+	buffer_aux = ft_strdup(env->env[i]);
+	buffer = ft_strtrim(buffer_aux, "PWD=");
 	printf("%s\n", buffer);
 	free(buffer);
+	free(buffer_aux);
 	g_status = 0;
 	return (1);
 }
@@ -64,109 +94,6 @@ int	handle_env(t_env *env)
 	if (!path)
 		path_error(NULL, "env");
 	g_status = 0;
-	return (1);
-}
-
-int	check_dollar_sign(char *cmd)
-{
-	int	i;
-
-	i = -1;
-	while (cmd[++i])
-	{
-		if (cmd[i] == '$')
-			return (i);
-	}
-	return (-1);
-}
-
-int	check_cmdinenv(char *cmd, char **env)
-{
-	int		i;
-	int		len;
-
-	if (check_dollar_sign(cmd) != -1)
-		len = check_dollar_sign(cmd);
-	else
-		len = ft_strlen(cmd);
-	i = -1;
-
-	while (env[++i])
-	{
-		if (!ft_strncmp(env[i], cmd, len) && env[i][len] == '=')
-		{
-			printf("%s", &env[i][len + 1]);
-			return (count_cmdlen(env[i]));
-		}
-	}
-	return (0);
-}
-
-int	check_expvar(char **cmds, t_env *env, int i)
-{
-	int		j;
-
-	if (check_dollar_sign(cmds[i]) == -1)
-		return (0);
-	j = -1;
-	while (cmds[i][++j])
-	{
-		if (cmds[i][j] != '$')
-			printf("%c", cmds[i][j]);
-		if (cmds[i][j] == '$' && !cmds[i][j + 1])
-			printf("$");
-		else if (cmds[i][j] == '$')
-		{
-			int	checking;
-			checking = check_cmdinenv(&cmds[i][j + 1], env->env);
-			if (checking)
-				j += checking;
-			else
-			{
-				j++;
-				while (cmds[i][j])
-				{
-					if (cmds[i][j] != '$')
-						j++;
-					else
-					{
-						j--;
-						break ;
-					}
-				}
-			}
-		}
-	}
-	return (1);
-}
-
-int	handle_echo(char **cmds, t_env *env)
-{
-	int	isnull;
-	int	newline;
-	int	buffer;
-	int	dollar_sign;
-	int	i;
-
-	g_status = 0;
-	isnull = 0;
-	if (cmds[1] == NULL)
-		isnull = 1;
-	i = 0;
-	buffer = 0;
-	while (!isnull && cmds[++i])
-	{
-		cmds[i] = smart_trim(cmds[i]);
-		dollar_sign = check_expvar(cmds, env, i);
-		newline = 1;
-		check_newline(cmds, &newline, &buffer, i);
-		if (!dollar_sign && cmds[i] && newline)
-			printf("%s", cmds[i]);
-		if (!dollar_sign && cmds[i] && cmds[i + 1] != NULL && newline)
-			printf(" ");
-	}
-	if (!buffer || isnull)
-		printf("\n");
 	return (1);
 }
 
