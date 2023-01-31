@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/30 09:50:05 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/30 12:32:12 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,11 +158,5 @@ void	minishell(char **envp)
 		}
 		free(line);
 	}
-	free(line->cmd);
-	free_charpp(line->cmds);
-	if (line)
-		free(line);
-	free_charpp(env->env);
-	free(env);
-	printf("exit\n");
+	exiting(&line, &env);
 }

@@ -27,6 +27,15 @@ int	file_len(char **cmd)
 	return (i - j);
 }
 
+void	ch_cmd_data(t_line **line, char ***buffer, int j)
+{
+	buffer[0][j + 1] = 0;
+	free_charpp((*line)->cmds);
+	(*line)->cmds = ft_strdupp(buffer[0]);
+	free_charpp(buffer[0]);
+	(*line) = (*line)->next;
+}
+
 int	init_files(t_line **line)
 {
 	int		i;
@@ -38,7 +47,7 @@ int	init_files(t_line **line)
 	while ((*line))
 	{
 		i = -1;
-		j = 0;
+		j = -1;
 		buffer = malloc((file_len((*line)->cmds) + 1) * sizeof(char *));
 		while ((*line)->cmds[++i])
 		{
@@ -47,16 +56,9 @@ int	init_files(t_line **line)
 			else if ((*line)->cmds[i][0] == '>' && (*line)->cmds[i + 1])
 					(*line)->outfile = ft_strdup((*line)->cmds[++i]);
 			else
-			{
-				buffer[j] = ft_strdup((*line)->cmds[i]);
-				j++;
-			}
+				buffer[++j] = ft_strdup((*line)->cmds[i]);
 		}
-		buffer[j] = 0;
-		free_charpp((*line)->cmds);
-		(*line)->cmds = ft_strdupp(buffer);
-		free_charpp(buffer);
-		(*line) = (*line)->next;
+		ch_cmd_data(line, &buffer, j);
 	}
 	(*line) = head;
 	return (1);
