@@ -56,7 +56,7 @@ char	*find_path(t_line **line)
 	char	*env_path;
 	char	**path;
 
-	if (!(*line)->cmds[0] && (*line)->infile)
+	if (!(*line)->cmds[0] && (*line)->infile && (*line)->infile_id > 0)
 	{
 		free((*line)->cmds[0]);
 		(*line)->cmds[0] = ft_strdup("cat");

@@ -31,6 +31,7 @@ typedef struct s_line
 	char			*infile;
 	char			*outfile;
 	int				infile_id;
+	int				extract_op;
 	int				outfile_id;
 	char			**env;
 	struct s_line	*next;
@@ -51,6 +52,7 @@ void	pipeline(t_line **line, int size);
 void	cmd_process(t_line **line, t_env **env);
 void	minishell(char **envp);
 //check.c
+int		check_operator(char **split);
 int		check_quote_on(char *cmd);
 int		organize_line(t_line **line);
 int		check_double_pipes(t_line *line);

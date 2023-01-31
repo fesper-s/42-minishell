@@ -69,6 +69,20 @@ int check_files(char **cmds)
 	return (1);
 }
 
+int	check_operator(char **split)
+{
+	int	i;
+
+	i = -1;
+	while (split[++i])
+	{
+		if (!strncmp(split[i], "<<<", 3))
+			return (0);
+		if (!strncmp(split[i], ">>>", 3))
+			return (0);
+	}
+	return (1);
+}
 
 int	organize_line(t_line **line)
 {
@@ -82,12 +96,6 @@ int	organize_line(t_line **line)
 		return (0);
 	(*line)->cmd = check_space((*line)->cmd);
 	split_line = ft_split((*line)->cmd, ' ');
-	if (split_line[0] == NULL)
-	{
-		free((*line)->cmd);
-		free_charpp(split_line);
-		return (0);
-	}
 	if (!init_cmds(line, split_line) || !check_files((*line)->cmds))
 	{
 		free_charpp((*line)->cmds);

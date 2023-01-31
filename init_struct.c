@@ -21,7 +21,11 @@ int	file_len(char **cmd)
 	j = 0;
 	while (cmd[++i])
 	{
-		if ((cmd[i][0] == '>' || cmd[i][0] == '<') && (cmd[i + 1]))
+		if (!ft_strncmp(cmd[i], "<<", 2) && cmd[i + 1])
+			j += 2;
+		else if (!ft_strncmp(cmd[i], ">>", 2) && cmd[i + 1])
+			j += 2;
+		else if ((cmd[i][0] == '>' || cmd[i][0] == '<') && (cmd[i + 1]))
 			j += 2;
 	}
 	return (i - j);
@@ -68,6 +72,9 @@ int	init_cmds(t_line **line, char **split)
 {
 	int	len;
 
+	if (!split[0] )//|| !check_operator(split))
+		return(0);
+	
 	len = cmds_count(split);
 	if (split[0][0] == '|' || split[len - 1][0] == '|')
 	{
