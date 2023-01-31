@@ -48,7 +48,7 @@ void	exec_cmds(t_line **line, pid_t pid, int *fdd, int *fd)
 		dup2(*fdd, 0);
 		if ((*line)->next != 0)
 			dup2(fd[1], 1);
-		else if ((*line)->outfile_id > 0)
+		else if ((*line)->outfile_id)
 			dup2((*line)->outfile_id, 1);
 		close(fd[0]);
 		execve(path, (*line)->cmds, (*line)->env);
@@ -70,7 +70,12 @@ void open_files(t_line **line)
 	if ((*line)->infile_id  == -1)
 		printf("Error: no such file or directory: %s\n", (*line)->infile);
 	if ((*line)->outfile)
+	{
+		//if ((*line)->extract_op)
 		(*line)->outfile_id  = open((*line)->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		//else
+		//(*line)->outfile_id  = open((*line)->outfile, O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0644);
+	}
 	if ((*line)->outfile_id  == -1)
 		printf("Error: no such file or directory: %s\n", (*line)->outfile);
 }

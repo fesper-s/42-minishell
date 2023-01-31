@@ -52,7 +52,7 @@ void	pipeline(t_line **line, int size);
 void	cmd_process(t_line **line, t_env **env);
 void	minishell(char **envp);
 //check.c
-int		check_operator(char **split);
+int		check_operator(t_line **line, char **cmds);
 int		check_quote_on(char *cmd);
 int		organize_line(t_line **line);
 int		check_double_pipes(t_line *line);

@@ -69,17 +69,25 @@ int check_files(char **cmds)
 	return (1);
 }
 
-int	check_operator(char **split)
+int	check_operator(t_line **line, char **cmds)
 {
 	int	i;
 
 	i = -1;
-	while (split[++i])
+	while (cmds[++i])
 	{
-		if (!strncmp(split[i], "<<<", 3))
+		if ((cmds[i][0] == '<' || cmds[i][0] == '>') && !cmds[i + 1])
+		{
+			print_error("zsh: parse error near '\\n'\n");
 			return (0);
-		if (!strncmp(split[i], ">>>", 3))
+		}
+		else if (!strncmp(cmds[i], "<<<", 3) || !strncmp(cmds[i], ">>>", 3))
+		{
+			print_error("Error: multiples '<' or '>' operator\n");
 			return (0);
+		}
+		else if (!strncmp(cmds[i], ">>", 2) && cmds[i + 1])
+			(*line)->extract_op = 1;
 	}
 	return (1);
 }
@@ -103,12 +111,12 @@ int	organize_line(t_line **line)
 		free_charpp(split_line);
 		return (0);
 	}
+	free_charpp(split_line);
 	check_for_pipes(line, (*line)->cmds);
 	*line = head;
 	if (!init_files(line))
 		return (0);
 	*line = head;
-	free_charpp(split_line);
 	return (1);
 }
 
