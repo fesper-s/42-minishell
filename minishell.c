@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/30 12:32:12 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/31 11:13:21 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,62 @@
 
 int	g_status;
 
-int	expand_var(t_line **line, t_env *env)
+void	question_mark(t_line **line)
 {
-	if ((*line)->cmds[0][0] == '$')
+	int		i;
+	int		j;
+	int		k;
+	char	*buffer;
+	char	*aux;
+
+	aux = ft_itoa(g_status);
+	buffer = ft_strdup((*line)->cmds[0]);
+	free((*line)->cmds[0]);
+	(*line)->cmds[0] = malloc(sizeof(char) * (ft_strlen(buffer) \
+		- 2 + ft_strlen(aux) + 1));
+	j = -1;
+	i = -1;
+	while (buffer[++i])
 	{
-		if (!(*line)->cmds[0][1])
-			cmd_error((*line)->cmds[0]);
-		else if ((*line)->cmds[0][1] == '?')
+		if (!ft_strncmp(&buffer[i], "$?", 2))
 		{
-			printf("minishell: %d", g_status);
-			if ((*line)->cmds[0][2] != 0)
-				printf("%s", &(*line)->cmds[0][2]);
-			printf(": command not found\n");
-			g_status = 127;
+			i += 2;
+			k = -1;
+			while (aux[++k])
+				(*line)->cmds[0][++j] = aux[k];
 		}
 		else
-			expanding(line, env);
-		g_status = 127;
-		return (1);
+		{
+			printf("e aqui será que entra?\n");
+			(*line)->cmds[0][++j] = buffer[i];
+		}
 	}
-	return (0);
+	(*line)->cmds[0][j + 1] = 0;
+	free(aux);
+	free(buffer);
+}
+
+void	expand_var(t_line **line, t_env *env)
+{
+	int		single_quote;
+	int		i;
+
+	single_quote = 0;
+	if ((*line)->cmds[0][0] == '\'')
+		single_quote = 1;
+	(*line)->cmds[0] = smart_trim((*line)->cmds[0]);
+	i = -1;
+	while ((*line)->cmds[0][++i])
+	{
+		if (!single_quote && (*line)->cmds[0][i] == '$')
+		{
+			if ((*line)->cmds[0][i + 1] == '?')
+				question_mark(line);
+			else if ((*line)->cmds[0][i + 1])
+				expanding(line, env);
+			g_status = 127;
+		} 
+	}
 }
 
 void	exec_cmds(t_line **line, pid_t pid, int *fdd, int *fd)
@@ -76,7 +112,10 @@ void	pipeline(t_line **line, int size)
 		if (pid == -1 && print_error("Error: fork\n"))
 			break ;
 		else
+		{
 			exec_cmds(line, pid, &fdd, fd);
+			g_status = 0;
+		}
 		free(path);
 	}
 	while (size--)
@@ -88,13 +127,12 @@ void	cmd_process(t_line **line, t_env **env)
 	int		isbuiltin;
 	void	*head;
 	int		size;
-	int		expand;
 
 	size = ft_lst_size((*line));
 	head = (*line);
 	if (!(*line)->cmds[0])
 		return ;
-	expand = expand_var(line, *env);
+	expand_var(line, *env);
 	isbuiltin = handle_builtins((*line)->cmds, env);
 	while (*line)
 	{
@@ -102,9 +140,8 @@ void	cmd_process(t_line **line, t_env **env)
 		*line = (*line)->next;
 	}
 	*line = head;
-	if (!expand && !isbuiltin && !check_dir((*line)->cmds, (*env)->env))
+	if (!isbuiltin && !check_dir((*line)->cmds, (*env)->env))
 	{
-		g_status = 0;
 		pipeline(line, size);
 		(*line) = head;
 	}
