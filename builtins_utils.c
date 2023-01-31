@@ -84,6 +84,7 @@ void	expanding(t_line **line, t_env *env)
 			buffer = ft_strdup(env->env[i] + j + 1);
 			free((*line)->cmds[0]);
 			(*line)->cmds[0] = ft_strdup(buffer);
+			break ;
 		}
 	}
 }
