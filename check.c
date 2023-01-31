@@ -82,6 +82,12 @@ int	organize_line(t_line **line)
 		return (0);
 	(*line)->cmd = check_space((*line)->cmd);
 	split_line = ft_split((*line)->cmd, ' ');
+	if (split_line[0] == NULL)
+	{
+		free((*line)->cmd);
+		free_charpp(split_line);
+		return (0);
+	}
 	if (!init_cmds(line, split_line) || !check_files((*line)->cmds))
 	{
 		free_charpp((*line)->cmds);

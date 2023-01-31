@@ -96,8 +96,6 @@ void	pipeline(t_line **line, int size)
 		else
 			exec_cmds(line, pid, &fdd, fd);
 	}
-	//close(fd[0]);
-	//close(fd[1]);
 	while (size--)
 		waitpid(-1, NULL, 0);
 }
@@ -113,6 +111,7 @@ void	cmd_process(t_line **line, t_env **env)
 	head = (*line);
 	if (!(*line)->cmds[0])
 		return ;
+	printf("AAAA\n");
 	expand = expand_var(line, *env);
 	isbuiltin = handle_builtins((*line)->cmds, env);
 	while (*line)
@@ -150,6 +149,7 @@ void	minishell(char **envp)
 			break ;
 		if (organize_line(&line))
 		{
+			printf("entrou\n");
 			if (ft_strncmp(line->cmd, "exit", 5) == 0)
 				break ;
 			cmd_process(&line, &env);
