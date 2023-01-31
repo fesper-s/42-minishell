@@ -66,26 +66,67 @@ int	cmds_til_pipe(char **cmds)
 	return (i);
 }
 
-void	expanding(t_line **line, t_env *env)
+void	expanding(t_line **line, t_env *env, int index)
 {
 	char	*buffer;
+	char	*aux;
 	int		i;
 	int		j;
+	int		k;
+	int		teste;
 
+	buffer = ft_strdup(&(*line)->cmds[0][index + 1]);
 	i = -1;
 	while (env->env[++i])
 	{
-		if (!ft_strncmp(env->env[i], &(*line)->cmds[0][1], \
-			ft_strlen(&(*line)->cmds[0][1])))
+		j = -1;
+		while (buffer[++j])
 		{
-			j = 0;
-			while (env->env[i][j] != '=')
-				j++;
-			buffer = ft_strdup(env->env[i] + j + 1);
-			free((*line)->cmds[0]);
-			(*line)->cmds[0] = ft_strdup(buffer);
-			break ;
+			if (buffer[j] == '$')
+				break ;
 		}
+		if (buffer[j] == '$')
+		{
+			if (!ft_strncmp(env->env[i], buffer, \
+				ft_strlen(buffer) - ft_strlen(&buffer[j])))
+				break ;
+		}
+		else
+		{
+			if (!ft_strncmp(env->env[i], buffer, ft_strlen(buffer)))
+				break ;
+		}
+	}
+	free(buffer);
+	if (env->env[i])
+	{
+		j = 0;
+		while (env->env[i][j] != '=')
+			j++;
+		aux = ft_strdup(env->env[i] + j + 1);
+		buffer = ft_strdup((*line)->cmds[0]);
+		free((*line)->cmds[0]);
+		teste = 0;
+		while (buffer[teste] != '$')
+			teste++;
+		(*line)->cmds[0] = malloc(sizeof(char) * (teste + ft_strlen(aux) + 1));
+		teste = -1;
+		k = -1;
+		while (buffer[++teste])
+		{
+			if (buffer[teste] != '$')
+				(*line)->cmds[0][++k] = buffer[teste];
+			else
+			{
+				free(buffer);
+				buffer = ft_strdup((*line)->cmds[0]);
+				free((*line)->cmds[0]);
+				(*line)->cmds[0] = ft_strjoin(buffer, aux);
+				break ;
+			}
+		}
+		free(aux);
+		free(buffer);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/30 14:48:09 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/31 11:37:10 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int		cmds_count(char **split);
 // builtins_utils.c
 int		is_flag(char **cmds, int i);
 void	check_newline(char **cmds, int *newline, int *buffer, int i);
-void	expanding(t_line **line, t_env *env);
+void	expanding(t_line **line, t_env *env, int index);
 int		cmds_til_pipe(char **cmds);
 int		check_dir(char **cmds, char **env);
 // list_utils.c

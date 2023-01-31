@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/31 11:13:21 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/01/31 19:43:31 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,7 @@ void	expand_var(t_line **line, t_env *env)
 			if ((*line)->cmds[0][i + 1] == '?')
 				question_mark(line);
 			else if ((*line)->cmds[0][i + 1])
-				expanding(line, env);
-			g_status = 127;
+				expanding(line, env, i);
 		} 
 	}
 }
