@@ -99,6 +99,8 @@ int	handle_env(t_env *env)
 
 int	handle_builtins(char **cmds, t_env **env)
 {
+	if (!cmds[0])
+		return (0);
 	if (!ft_strncmp(cmds[0], "echo", 5))
 		return (handle_echo(cmds, *env));
 	if (!ft_strncmp(cmds[0], "cd", 3))

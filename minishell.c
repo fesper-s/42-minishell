@@ -16,6 +16,8 @@ int	g_status;
 
 int	expand_var(t_line **line, t_env *env)
 {
+	if (!(*line)->cmds[0])
+		return (0);
 	if ((*line)->cmds[0][0] == '$')
 	{
 		if (!(*line)->cmds[0][1])
@@ -82,9 +84,6 @@ void	pipeline(t_line **line, int size)
 	fdd = 0;
 	while ((*line))
 	{
-		if (!(*line)->cmds)
-			(*line)->cmds = NULL;
-		//fdd = 0;
 		if ((*line)->infile_id)
 			fdd = (*line)->infile_id;
 		if (!find_path(line))
@@ -109,9 +108,6 @@ void	cmd_process(t_line **line, t_env **env)
 
 	size = ft_lst_size((*line));
 	head = (*line);
-	if (!(*line)->cmds[0])
-		return ;
-	printf("AAAA\n");
 	expand = expand_var(line, *env);
 	isbuiltin = handle_builtins((*line)->cmds, env);
 	while (*line)
@@ -149,7 +145,6 @@ void	minishell(char **envp)
 			break ;
 		if (organize_line(&line))
 		{
-			printf("entrou\n");
 			if (ft_strncmp(line->cmd, "exit", 5) == 0)
 				break ;
 			cmd_process(&line, &env);
