@@ -51,6 +51,7 @@ t_line	*ft_lst_new(char **cmds, char *infile, char *outfile)
 	new->outfile_id = 0;
 	new->extract_op = 0;
 	new->insert_op = 0;
+	new->env = NULL;
 	new->next = 0;
 	return (new);
 }

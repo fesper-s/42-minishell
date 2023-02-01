@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/01 11:38:51 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/01 12:48:03 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,32 +38,35 @@ int	expand_var(t_line **line, t_env *env)
 	return (0);
 }
 
-void	exec_cmds(t_line **line, pid_t pid, int *fdd, int *fd)
+void	exec_cmds(t_line **line, pid_t pid, char *path, int *fd)
 {
-	char	*path;
+	static int	fdd;
 
-	path = find_path(line);
-	printf("oi\n");
 	if (pid == 0)
 	{
 		if ((*line)->infile_id > 0)
 			dup2((*line)->infile_id, 0);
 		else
-			dup2(*fdd, 0);
+			dup2(fdd, 0);
 		if ((*line)->next != 0)
 			dup2(fd[1], 1);
 		else if ((*line)->outfile_id > 0)
 			dup2((*line)->outfile_id, 1);
 		close(fd[0]);
 		if (!path)
-			printf(0);
+		{
+			if (!path)
+				printf("%s", path);
+			else
+				handle_builtins((*line)->cmds, line);
+		}
 		else
 			execve(path, (*line)->cmds, (*line)->env);
 	}
 	else
 	{	
 		close(fd[1]);
-		*fdd = fd[0];
+		fdd = fd[0];
 		(*line) = (*line)->next;
 	}
 	free(path);
@@ -90,17 +93,17 @@ void	pipeline(t_line **line, int size)
 {
 	int		fd[2];
 	pid_t	pid;
-	int		fdd;
+	char 	*path;
 
-	fdd = 0;
 	while ((*line))
 	{
+		path = find_path(line);
 		pipe(fd);
 		pid = fork();
 		if (pid == -1 && print_error("Error: fork\n"))
 			break ;
 		else
-			exec_cmds(line, pid, &fdd, fd);
+			exec_cmds(line, pid, path, fd);
 	}
 	while (size--)
 		waitpid(-1, NULL, 0);
@@ -108,7 +111,6 @@ void	pipeline(t_line **line, int size)
 
 void	cmd_process(t_line **line, t_env **env)
 {
-	int		isbuiltin;
 	void	*head;
 	int		size;
 	int		expand;
@@ -116,7 +118,6 @@ void	cmd_process(t_line **line, t_env **env)
 	size = ft_lst_size((*line));
 	head = (*line);
 	expand = expand_var(line, *env);
-	isbuiltin = handle_builtins((*line)->cmds, env);
 	while (*line)
 	{
 		open_files(line);
@@ -124,7 +125,7 @@ void	cmd_process(t_line **line, t_env **env)
 		*line = (*line)->next;
 	}
 	*line = head;
-	if (!expand && !isbuiltin && !check_dir((*line)->cmds, (*env)->env))
+	if (!expand && !check_dir((*line)->cmds, (*line)->env))
 	{
 		g_status = 0;
 		pipeline(line, size);

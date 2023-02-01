@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/01 08:39:37 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/01 12:44:44 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ extern int	g_status;
 // minishell.c
 void	open_files(t_line **line);
 int		expand_var(t_line **line, t_env *env);
-void	exec_cmds(t_line **line, pid_t pid, int *fdd, int *fd);
+void	exec_cmds(t_line **line, pid_t pid, char *path, int *fd);
 void	pipeline(t_line **line, int size);
 void	cmd_process(t_line **line, t_env **env);
 void	minishell(char **envp);
