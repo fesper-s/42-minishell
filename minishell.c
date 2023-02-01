@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/01 12:48:03 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/01 13:37:53 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,10 @@ void	exec_cmds(t_line **line, pid_t pid, char *path, int *fd)
 		else if ((*line)->outfile_id > 0)
 			dup2((*line)->outfile_id, 1);
 		close(fd[0]);
-		if (!path)
+		if (!path || (path && !ft_strncmp(path, "/usr/bin/cd", 12)))
 		{
 			if (!path)
-				printf("%s", path);
+				printf(0);
 			else
 				handle_builtins((*line)->cmds, line);
 		}

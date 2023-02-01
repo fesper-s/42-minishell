@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 10:19:33 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/30 10:48:01 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/01 12:54:54 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	isexpand(char *cmd, int *i, char **env)
 		no_cmdinenv(cmd, i);
 }
 
-int	check_expvar(char *cmd, t_env *env)
+int	check_expvar(char *cmd, t_line *env)
 {
 	int		i;
 
@@ -47,7 +47,7 @@ int	check_expvar(char *cmd, t_env *env)
 	return (1);
 }
 
-void	print_echo(t_env *env, char ***cmds, int i, int *buffer)
+void	print_echo(t_line *env, char ***cmds, int i, int *buffer)
 {
 	int	newline;
 	int	dollar_sign;
@@ -62,7 +62,7 @@ void	print_echo(t_env *env, char ***cmds, int i, int *buffer)
 		printf(" ");
 }
 
-int	handle_echo(char **cmds, t_env *env)
+int	handle_echo(char **cmds, t_line *env)
 {
 	int	isnull;
 	int	buffer;

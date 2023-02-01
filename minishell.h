@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/01 12:44:44 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/01 13:02:30 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,35 +97,35 @@ int		ft_lst_size(t_line *lst);
 t_line	*ft_lst_last(t_line *lst);
 // builtins.c
 char	*smart_trim(char *cmd);
-int		handle_cd(char **cmds, t_env **env);
-int		handle_pwd(t_env *env);
-int		handle_env(t_env *env);
-int		handle_builtins(char **cmds, t_env **env);
+int		handle_cd(char **cmds, t_line **env);
+int		handle_pwd(t_line *env);
+int		handle_env(t_line *env);
+int		handle_builtins(char **cmds, t_line **env);
 // echo.c
 void	isexpand(char *cmd, int *i, char **env);
-int		check_expvar(char *cmds, t_env *env);
-void	print_echo(t_env *env, char ***cmds, int i, int *buffer);
-int		handle_echo(char **cmds, t_env *env);
+int		check_expvar(char *cmds, t_line *env);
+void	print_echo(t_line *env, char ***cmds, int i, int *buffer);
+int		handle_echo(char **cmds, t_line *env);
 // echo-utils.c
 int		check_dollar_sign(char *cmd);
 int		check_cmdinenv(char *cmd, char **env);
 void	no_cmdinenv(char *cmd, int *i);
 // chdir.c
-void	return_dir(t_env **env, int j);
-void	relative_path(char *cmd, t_env **env, int j);
-void	chpwd(char *cmd, t_env **env, int j);
+void	return_dir(t_line **env, int j);
+void	relative_path(char *cmd, t_line **env, int j);
+void	chpwd(char *cmd, t_line **env, int j);
 char	*tilde_home(char *cmd, char *home);
 char	*no_argincd(char **env);
 // export.c
-void	add_to_env(char *cmd, t_env **env);
-int		exporting(char *cmd, t_env **env);
-void	chenvvar(char *cmd, t_env **env, int i);
+void	add_to_env(char *cmd, t_line **env);
+int		exporting(char *cmd, t_line **env);
+void	chenvvar(char *cmd, t_line **env, int i);
 int		count_cmdlen(char *cmd);
-int		handle_export(char **cmds, t_env **env);
+int		handle_export(char **cmds, t_line **env);
 // unset.c
 void	attr_buffer(char ***buffer, char *cmd, char **env);
 int		check_cmd_env(char **env, char *cmd);
-int		handle_unset(char **cmds, t_env **env);
+int		handle_unset(char **cmds, t_line **env);
 // memory.c
 char	**ft_strdupp(char **str);
 int		free_charpp(char **str);

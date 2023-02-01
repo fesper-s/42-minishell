@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   chdir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 09:39:12 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/30 11:44:41 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/01 13:02:15 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	return_dir(t_env **env, int j)
+void	return_dir(t_line **env, int j)
 {
 	char	**bufferpp;
 	char	*buffer;
@@ -29,7 +29,7 @@ void	return_dir(t_env **env, int j)
 	free(pwd);
 }
 
-void	relative_path(char *cmd, t_env **env, int j)
+void	relative_path(char *cmd, t_line **env, int j)
 {
 	char	*buffer;
 	char	*pwd;
@@ -51,7 +51,7 @@ void	relative_path(char *cmd, t_env **env, int j)
 	}
 }
 
-void	chpwd(char *cmd, t_env **env, int j)
+void	chpwd(char *cmd, t_line **env, int j)
 {
 	char	*buffer;
 

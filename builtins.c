@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 10:42:52 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/30 11:44:57 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/01 12:58:37 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	*smart_trim(char *cmd)
 	return (cmd);
 }
 
-int	handle_cd(char **cmds, t_env **env)
+int	handle_cd(char **cmds, t_line **env)
 {
 	char	*home;
 	int		i;
@@ -60,7 +60,7 @@ int	handle_cd(char **cmds, t_env **env)
 	return (1);
 }
 
-int	handle_pwd(t_env *env)
+int	handle_pwd(t_line *env)
 {
 	int		i;
 	char	*buffer;
@@ -78,7 +78,7 @@ int	handle_pwd(t_env *env)
 	return (1);
 }
 
-int	handle_env(t_env *env)
+int	handle_env(t_line *env)
 {
 	int		i;
 	int		path;
@@ -97,7 +97,7 @@ int	handle_env(t_env *env)
 	return (1);
 }
 
-int	handle_builtins(char **cmds, t_env **env)
+int	handle_builtins(char **cmds, t_line **env)
 {
 	if (!cmds[0])
 		return (0);
