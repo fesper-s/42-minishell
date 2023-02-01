@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 14:42:32 by gussoare          #+#    #+#             */
-/*   Updated: 2023/01/26 14:00:23 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/01 09:13:18 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,14 +71,16 @@ int check_files(char **cmds)
 
 int	check_operator(t_line **line, char **cmds)
 {
-	int	i;
+	int		i;
+	int 	j;
+	char	**buffer;
 
 	i = -1;
 	while (cmds[++i])
 	{
 		if ((cmds[i][0] == '<' || cmds[i][0] == '>') && !cmds[i + 1])
 		{
-			print_error("zsh: parse error near '\\n'\n");
+			print_error("zsh: parse error\n");
 			return (0);
 		}
 		else if (!strncmp(cmds[i], "<<<", 3) || !strncmp(cmds[i], ">>>", 3))
@@ -88,6 +90,21 @@ int	check_operator(t_line **line, char **cmds)
 		}
 		else if (!strncmp(cmds[i], ">>", 2) && cmds[i + 1])
 			(*line)->extract_op = 1;
+		else if (!strncmp(cmds[i], "<<", 2) && cmds[i + 1])
+		{
+			(*line)->insert_op = 1;
+			buffer = malloc((cmds_count(cmds) * sizeof(char *)));
+			j = -1;
+			i = 0;
+			while (cmds[i])
+			{
+				if (!ft_strncmp(cmds[i], "<<", 2))
+					i++;
+				else
+				buffer[++j] = cmds[i++];
+			}
+			//buffer;
+		}
 	}
 	return (1);
 }

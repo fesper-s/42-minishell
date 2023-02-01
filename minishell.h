@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/30 13:35:08 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/01 08:39:37 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,9 @@ typedef struct s_line
 	char			*infile;
 	char			*outfile;
 	int				infile_id;
-	int				extract_op;
 	int				outfile_id;
+	int				extract_op;
+	int				insert_op;
 	char			**env;
 	struct s_line	*next;
 }					t_line;
