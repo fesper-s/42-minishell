@@ -78,36 +78,27 @@ int	count_export_len(char *str)
 
 int	til_dollar_sign(char *str)
 {
-	int	i;
 	int	len;
 
 	len = 0;
-	i = -1;
-	while (str[++i])
-	{
+	while (str[len] && str[len] != '$')
 		len++;
-		if (str[i] == '$')
-		{
-			i += count_export_len(&str[i]);
-			len -= count_export_len(&str[i]);
-		}
-	}
 	return (len);
 }
 
-void	chexpand(t_line **line, char *env, int index, int j)
+void	chexpand(t_line **line, char *env, int index, char *buffer)
 {
 	char	*buffer;
 	char	*aux;
 	char	*joiner;
 	int		i;
 
+	printf("cmds -> %s\nenv -> %s\n", (*line)->cmds[index], env);
 	aux = ft_strdup(env + count_cmdlen(env) + 1);
-	printf("%s\n", env);
 	buffer = ft_strdup((*line)->cmds[index]);
+	printf("aux -> %s\nbuffer -> %s\n", aux, buffer);
 	free((*line)->cmds[index]);
-	// malloc está certo?
-	(*line)->cmds[index] = malloc(sizeof(char) * (ft_strlen(aux) + 1));
+	(*line)->cmds[index] = malloc(sizeof(char) * (ft_strlen(buffer) - (count_cmdlen(env) + 1) + ft_strlen(aux) + 1));
 	i = -1;
 	while (buffer[++i])
 	{
@@ -116,7 +107,8 @@ void	chexpand(t_line **line, char *env, int index, int j)
 			joiner = ft_strdup((*line)->cmds[index]);
 			free((*line)->cmds[index]);
 			(*line)->cmds[index] = ft_strjoin(joiner, aux);
-			i += count_cmdlen(env) - 1;
+			i += count_cmdlen(env);
+			j += ft_strlen(aux);
 		}
 		else
 			(*line)->cmds[index][++j] = buffer[i];
@@ -129,26 +121,26 @@ void	expanding(t_line **line, t_env *env, int j, int index)
 {
 	int		i;
 	char	*buffer;
+	char	*aux;
 
 	buffer = ft_strdup(&(*line)->cmds[index][j + 1]);
 	i = -1;
 	while (env->env[++i])
 	{
-		if (buffer[til_dollar_sign(buffer)] == '$')
+		if (buffer[til_dollar_sign(buffer)] == '$' && \
+			!ft_strncmp(env->env[i], buffer, ft_strlen(buffer) - \
+			ft_strlen(&buffer[til_dollar_sign(buffer)])))
 		{
-			if (!ft_strncmp(env->env[i], buffer, ft_strlen(buffer) - \
-				ft_strlen(&buffer[til_dollar_sign(buffer)])))
-				break ;
+			chexpand(line, env->env[i], index, buffer);
+			aux = ft_strdup(buffer);
+			free(buffer);
+			buffer = ft_strdup(&aux[til_dollar_sign(aux) + 1]);
+			i = -1;
 		}
-		else
-		{
-			if (!ft_strncmp(env->env[i], buffer, count_export_len(buffer)))
-				break ;
-		}
+		else if (!ft_strncmp(env->env[i], buffer, count_export_len(buffer)))
+			chexpand(line, env->env[i], index, buffer);
 	}
 	free(buffer);
-	if (env->env[i])
-		chexpand(line, env->env[i], index, -1);
 }
 
 int	check_dir(char **cmds, char **env)
