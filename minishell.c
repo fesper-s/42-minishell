@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/03 14:34:04 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/06 10:14:46 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,17 +133,20 @@ void	cmd_process(t_line **line, t_env **env)
 	head = (*line);
 	if (!(*line)->cmds[0])
 		return ;
-	expand_var(line, *env);
-	isbuiltin = handle_builtins((*line)->cmds, env);
 	while (*line)
 	{
 		(*line)->env = ft_strdupp((*env)->env);
 		*line = (*line)->next;
 	}
 	*line = head;
+	expand_var(line, *env);
+	isbuiltin = handle_builtins((*line)->cmds, env);
+	(void) size;
+	printf("CMDS --> %s\n", (*line)->cmds[0]);
 	if (!isbuiltin && !check_dir((*line)->cmds, (*env)->env))
 	{
-		pipeline(line, size);
+		printf("entrando no pipeline?\n");
+		//pipeline(line, size);
 		(*line) = head;
 	}
 }

@@ -86,6 +86,20 @@ int	til_dollar_sign(char *str)
 	return (len);
 }
 
+int	check_varenv(t_line *line, char *str)
+{
+	int	i;
+
+	i = -1;
+	while (line->env[++i])
+	{
+		if (!ft_strncmp(line->env[i], str, ft_strlen(str)) && \
+			line->env[i][ft_strlen(str)] == '=')
+			return (1);
+	}
+	return (0);
+}
+
 void chexpand(t_line **line, char *env, int index)
 {
 	char	*buffer;
@@ -96,39 +110,32 @@ void chexpand(t_line **line, char *env, int index)
 
 	if (!env)
 	{
-		//printf("cmds -> %s\n", (*line)->cmds[index]);
 		buffer = ft_strdup((*line)->cmds[index]);
-		aux = NULL;
-		//printf("buffer -> %s\n", buffer);
-		free((*line)->cmds[index]);
-		//printf("aux -> %s\n", aux);
-		aux = malloc(sizeof(char) * ((int) ft_strlen(buffer) - til_dollar_sign(buffer + 1) + 1 + 1));
-		//printf("aux -> %s\n", aux);
+		printf("buffer -> %s\n", &buffer[til_dollar_sign(buffer + 1) + 1]);
+		if (buffer[0] == '$')
+			aux = ft_calloc(sizeof(char), ft_strlen(&buffer[til_dollar_sign(buffer + 1) + 1]));
+		else
+			aux = ft_calloc(sizeof(char), til_dollar_sign(buffer));
 		i = -1;
 		j = -1;
+		printf("buffer -> %s\n", &buffer[1]);
+		printf("checking -> %d\n", check_varenv(*line, &buffer[1]));
 		while (buffer[++i])
 		{
-			if (buffer[i] == '$')
+			if (buffer[i] == '$' && check_varenv(*line, &buffer[i + 1]))
+				aux[++j] = buffer[i];
+			else if (buffer[i] == '$')
 			{
-				i += til_dollar_sign(buffer + 1) + 1;
-				aux[j] = 27;
-				j++;
-				printf("i -> %d\n", i);
+				i += til_dollar_sign(buffer + 1);
 			}
 			else
 			{
-				printf("entra aqui????\n");
+				printf("buffer do else -> %s\n", &buffer[i]);
 				aux[++j] = buffer[i];
-				break ;
 			}
 		}
-		aux[j] = 0;
-		//printf("aux -> %s\n", aux);
-		if (!aux)
-			(*line)->cmds[index] = ft_strdup(aux);
-		else
-			(*line)->cmds[index] = ft_strdup(aux);
-		//printf("cmds -> %s\n", (*line)->cmds[index]);
+		printf("aux -> %s\n", aux);
+		(*line)->cmds[index] = ft_strdup(aux);
 		free(aux);
 		free(buffer);
 		return ;
@@ -168,7 +175,6 @@ int	search_varenv(t_line **line, t_env *env, int index, int j)
 	char	*buffer;
 	int		i;
 
-	printf("teste\n");
 	buffer = ft_strdup(&(*line)->cmds[index][j + 1]);
 	i = -1;
 	while (env->env[++i])
@@ -192,9 +198,6 @@ void	expanding(t_line **line, t_env *env, int j, int index)
 		chexpand(line, NULL, index);
 	else
 		chexpand(line, env->env[env_posi], index);
-	int i = -1;
-	while ((*line)->cmds[++i])
-		printf("cmds after expand -> %s\n", (*line)->cmds[i]);
 }
 
 int	check_dir(char **cmds, char **env)
