@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 10:42:52 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/30 11:44:57 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/06 13:31:16 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int	handle_env(t_env *env)
 int	handle_builtins(char **cmds, t_env **env)
 {
 	if (!ft_strncmp(cmds[0], "echo", 5))
-		return (handle_echo(cmds, *env));
+		return (handle_echo(cmds));
 	if (!ft_strncmp(cmds[0], "cd", 3))
 		return (handle_cd(cmds, env));
 	if (!ft_strncmp(cmds[0], "pwd", 4))

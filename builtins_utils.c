@@ -31,28 +31,6 @@ int	is_flag(char **cmds, int i)
 	return (1);
 }
 
-void	check_newline(char **cmds, int *newline, int *buffer, int i)
-{
-	int	j;
-
-	if (cmds[i] && !ft_strncmp(cmds[i], "-n", 2))
-	{
-		*newline = 1;
-		j = 1;
-		while (cmds[i][j])
-		{
-			if (cmds[i][j] != 'n')
-				break ;
-			j++;
-			if (!cmds[i][j] && is_flag(cmds, i))
-			{
-				*newline = 0;
-				*buffer = 1;
-			}
-		}
-	}
-}
-
 int	cmds_til_pipe(char **cmds)
 {
 	int	i;
@@ -93,8 +71,7 @@ int	check_varenv(t_line *line, char *str)
 	i = -1;
 	while (line->env[++i])
 	{
-		if (!ft_strncmp(line->env[i], str, ft_strlen(str)) && \
-			line->env[i][ft_strlen(str)] == '=')
+		if (!ft_strncmp(line->env[i], str, count_cmdlen(line->env[i])))
 			return (1);
 	}
 	return (0);
@@ -111,30 +88,22 @@ void chexpand(t_line **line, char *env, int index)
 	if (!env)
 	{
 		buffer = ft_strdup((*line)->cmds[index]);
-		printf("buffer -> %s\n", &buffer[til_dollar_sign(buffer + 1) + 1]);
 		if (buffer[0] == '$')
 			aux = ft_calloc(sizeof(char), ft_strlen(&buffer[til_dollar_sign(buffer + 1) + 1]));
 		else
 			aux = ft_calloc(sizeof(char), til_dollar_sign(buffer));
 		i = -1;
 		j = -1;
-		printf("buffer -> %s\n", &buffer[1]);
-		printf("checking -> %d\n", check_varenv(*line, &buffer[1]));
 		while (buffer[++i])
 		{
 			if (buffer[i] == '$' && check_varenv(*line, &buffer[i + 1]))
 				aux[++j] = buffer[i];
 			else if (buffer[i] == '$')
-			{
-				i += til_dollar_sign(buffer + 1);
-			}
+				i += til_dollar_sign(&buffer[i + 1]);
 			else
-			{
-				printf("buffer do else -> %s\n", &buffer[i]);
 				aux[++j] = buffer[i];
-			}
 		}
-		printf("aux -> %s\n", aux);
+		aux[++j] = 0;
 		(*line)->cmds[index] = ft_strdup(aux);
 		free(aux);
 		free(buffer);

@@ -6,77 +6,52 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 10:19:33 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/30 10:48:01 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/06 15:45:54 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	isexpand(char *cmd, int *i, char **env)
+void	check_newline(char **cmds, int *newline, int *buffer, int i)
 {
-	int	checking;
+	int	j;
 
-	checking = check_cmdinenv(&cmd[*i + 1], env);
-	if (checking)
-		*i += checking;
-	else
-		no_cmdinenv(cmd, i);
-}
-
-int	check_expvar(char *cmd, t_env *env)
-{
-	int		i;
-
-	if (check_dollar_sign(cmd) == -1)
-		return (0);
-	i = -1;
-	while (cmd[++i])
+	if (cmds[i] && !ft_strncmp(cmds[i], "-n", 2))
 	{
-		if (cmd[i] != '$')
-			printf("%c", cmd[i]);
-		if (cmd[i] == '$' && !cmd[i + 1])
-			printf("$");
-		else if (cmd[i] == '$' && cmd[i + 1] == '?')
+		*newline = 1;
+		j = 1;
+		while (cmds[i][j])
 		{
-			printf("%d", g_status);
-			i++;
+			if (cmds[i][j] != 'n')
+				break ;
+			j++;
+			if (!cmds[i][j] && is_flag(cmds, i))
+			{
+				*buffer = 1;
+				*newline = 0;
+			}
 		}
-		else if (cmd[i] == '$')
-			isexpand(cmd, &i, env->env);
 	}
-	return (1);
 }
 
-void	print_echo(t_env *env, char ***cmds, int i, int *buffer)
+int	handle_echo(char **cmds)
 {
 	int	newline;
-	int	dollar_sign;
-
-	cmds[0][i] = smart_trim(cmds[0][i]);
-	dollar_sign = check_expvar(cmds[0][i], env);
-	newline = 1;
-	check_newline(cmds[0], &newline, buffer, i);
-	if (!dollar_sign && cmds[0][i] && newline)
-		printf("%s", cmds[0][i]);
-	if (cmds[0][i] && cmds[0][i + 1] != NULL && newline)
-		printf(" ");
-}
-
-int	handle_echo(char **cmds, t_env *env)
-{
-	int	isnull;
 	int	buffer;
 	int	i;
 
-	isnull = 0;
-	if (cmds[1] == NULL)
-		isnull = 1;
 	i = 0;
 	buffer = 0;
-	while (!isnull && cmds[++i])
-		print_echo(env, &cmds, i, &buffer);
-	if (!buffer || isnull)
+	while (cmds[++i])
+	{
+		newline = 1;
+		check_newline(cmds, &newline, &buffer, i);
+		if (cmds[i] && newline)
+			printf("%s", cmds[i]);
+		if (cmds[i + 1] && newline)
+			printf(" ");
+	}
+	if (!buffer)
 		printf("\n");
-	g_status = 0;
 	return (1);
 }
