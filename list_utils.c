@@ -50,7 +50,7 @@ t_line	*ft_lst_new(char **cmds, char *infile, char *outfile)
 	new->infile_id = 0;
 	new->outfile_id = 0;
 	new->extract_op = 0;
-	new->insert_op = 0;
+	new->insert_op = NULL;
 	new->env = NULL;
 	new->next = 0;
 	return (new);
@@ -79,6 +79,8 @@ void	lst_free(t_line **lst)
 	{
 		free_charpp(buffer->env);
 		free_charpp(buffer->cmds);
+		if (buffer->insert_op)
+			free(buffer->insert_op);
 		if (buffer->cmd)
 			free(buffer->cmd);
 		if (buffer->infile)

@@ -75,6 +75,7 @@ int	check_operator(t_line **line, char **cmds)
 	int 	j;
 	char	**buffer;
 
+	buffer = NULL;
 	i = -1;
 	while (cmds[++i])
 	{
@@ -92,18 +93,21 @@ int	check_operator(t_line **line, char **cmds)
 			(*line)->extract_op = 1;
 		else if (!strncmp(cmds[i], "<<", 2) && cmds[i + 1])
 		{
-			(*line)->insert_op = 1;
-			buffer = malloc((cmds_count(cmds) * sizeof(char *)));
-			j = -1;
-			i = 0;
-			while (cmds[i])
+			(*line)->insert_op = ft_strdup(cmds[i + 1]);
+			buffer = malloc((cmds_count(cmds) + 1) * sizeof(char *));
+			j = 0;
+			i = -1;
+			while (cmds[++i])
 			{
 				if (!ft_strncmp(cmds[i], "<<", 2))
-					i++;
-				else
-				buffer[++j] = cmds[i++];
+					break ;
+				buffer[j] = ft_strdup(cmds[i]);
+				j++;
 			}
-			//buffer;
+			buffer[j] = 0;
+			free_charpp((*line)->cmds);
+			(*line)->cmds = ft_strdupp(buffer);
+			free_charpp(buffer);
 		}
 	}
 	return (1);

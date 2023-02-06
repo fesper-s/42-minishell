@@ -38,6 +38,31 @@ int	expand_var(t_line **line, t_env *env)
 	return (0);
 }
 
+void insert_exec(t_line **line)
+{
+	char	*eof;
+
+	if ((*line)->insert_op)
+	{
+		eof = ft_strdup((*line)->insert_op);
+		while (1)
+		{
+			eof = readline("> ");
+			if (!eof)
+			{
+				printf("\n");
+				break ;
+			}
+			if (!ft_strncmp((*line)->insert_op, eof, ft_strlen((*line)->insert_op)))
+				break ;
+			if ((*line)->outfile)
+				printf("%s", eof);
+			free(eof);
+		}
+		free(eof);
+	}
+}
+
 void	exec_cmds(t_line **line, pid_t pid, char *path, int *fd)
 {
 	static int	fdd;
@@ -50,15 +75,14 @@ void	exec_cmds(t_line **line, pid_t pid, char *path, int *fd)
 			dup2(fdd, 0);
 		if ((*line)->next != 0)
 			dup2(fd[1], 1);
-		else if ((*line)->outfile_id > 0)
+		if ((*line)->outfile_id > 0)
 			dup2((*line)->outfile_id, 1);
 		close(fd[0]);
-		if (!path || (path && !ft_strncmp(path, "/usr/bin/cd", 12)))
+		if (!path || handle_builtins((*line)->cmds, line))
 		{
 			if (!path)
-				printf(0);
-			else
-				handle_builtins((*line)->cmds, line);
+				ft_putchar_fd('0', 1);
+			exit(EXIT_SUCCESS);
 		}
 		else
 			execve(path, (*line)->cmds, (*line)->env);
@@ -98,6 +122,7 @@ void	pipeline(t_line **line, int size)
 	while ((*line))
 	{
 		path = find_path(line);
+		insert_exec(line);
 		pipe(fd);
 		pid = fork();
 		if (pid == -1 && print_error("Error: fork\n"))
@@ -152,8 +177,7 @@ void	minishell(char **envp)
 		else
 			break ;
 		if (organize_line(&line))
-		{
-			if (ft_strncmp(line->cmd, "exit", 5) == 0)
+		{			if (ft_strncmp(line->cmd, "exit", 5) == 0)
 				break ;
 			cmd_process(&line, &env);
 			line = head;

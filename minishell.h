@@ -33,7 +33,7 @@ typedef struct s_line
 	int				infile_id;
 	int				outfile_id;
 	int				extract_op;
-	int				insert_op;
+	char			*insert_op;
 	char			**env;
 	struct s_line	*next;
 }					t_line;
@@ -48,6 +48,7 @@ extern int	g_status;
 // minishell.c
 void	open_files(t_line **line);
 int		expand_var(t_line **line, t_env *env);
+void	insert_exec(t_line **line);
 void	exec_cmds(t_line **line, pid_t pid, char *path, int *fd);
 void	pipeline(t_line **line, int size);
 void	cmd_process(t_line **line, t_env **env);
