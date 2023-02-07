@@ -64,20 +64,20 @@ int	til_dollar_sign(char *str)
 	return (len);
 }
 
-int	check_varenv(t_line *line, char *str)
+int	check_varenv(char **env, char *str)
 {
 	int	i;
 
 	i = -1;
-	while (line->env[++i])
+	while (env[++i])
 	{
-		if (!ft_strncmp(line->env[i], str, count_cmdlen(line->env[i])))
+		if (!ft_strncmp(env[i], str, count_cmdlen(env[i])))
 			return (1);
 	}
 	return (0);
 }
 
-void chexpand(t_line **line, char *env, int index)
+void chexpand(t_line **line, t_env *l_env, char *env, int index)
 {
 	char	*buffer;
 	char	*aux;
@@ -96,7 +96,7 @@ void chexpand(t_line **line, char *env, int index)
 		j = -1;
 		while (buffer[++i])
 		{
-			if (buffer[i] == '$' && check_varenv(*line, &buffer[i + 1]))
+			if (buffer[i] == '$' && check_varenv(l_env->env, &buffer[i + 1]))
 				aux[++j] = buffer[i];
 			else if (buffer[i] == '$')
 				i += til_dollar_sign(&buffer[i + 1]);
@@ -175,9 +175,9 @@ void	expanding(t_line **line, t_env *env, int j, int index)
 
 	env_posi = search_varenv(line, env, index, j);
 	if (env_posi == -1)
-		chexpand(line, NULL, index);
+		chexpand(line, env, NULL, index);
 	else
-		chexpand(line, env->env[env_posi], index);
+		chexpand(line, env, env->env[env_posi], index);
 }
 
 int	check_dir(char **cmds, char **env)
