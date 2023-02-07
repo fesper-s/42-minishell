@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 08:00:46 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/01 12:57:51 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/07 10:58:31 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	count_cmdlen(char *cmd)
 
 	len = 0;
 	while (cmd[len] && cmd[len] != '=')
-		++len;
+		len++;
 	return (len);
 }
 
@@ -87,8 +87,8 @@ int	handle_export(char **cmds, t_line **env)
 			if (!ft_strncmp(cmds[i], (*env)->env[j], count_cmdlen(cmds[i])) \
 				&& (*env)->env[j][count_cmdlen(cmds[i])] == '=')
 			{
-				free((*env)->env[i]);
-				(*env)->env[i] = ft_strdup(cmds[i]);
+				free((*env)->env[j]);
+				(*env)->env[j] = ft_strdup(cmds[i]);
 				changed = 1;
 			}
 		}

@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/07 10:38:59 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/07 11:13:54 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,73 @@
 
 int	g_status;
 
-int	expand_var(t_line **line, t_env *env)
+void	question_mark(t_line **line, int index)
 {
-	if (!(*line)->cmds[0])
-		return (0);
-	if ((*line)->cmds[0][0] == '$')
+	int		i;
+	int		j;
+	int		k;
+	char	*buffer;
+	char	*aux;
+
+	aux = ft_itoa(g_status);
+	buffer = ft_strdup((*line)->cmds[0]);
+	free((*line)->cmds[index]);
+	(*line)->cmds[index] = malloc(sizeof(char) * (ft_strlen(buffer) \
+		- 2 + ft_strlen(aux) + 1));
+	j = -1;
+	i = -1;
+	while (buffer[++i])
 	{
-		if (!(*line)->cmds[0][1])
-			cmd_error((*line)->cmds[0]);
-		else if ((*line)->cmds[0][1] == '?')
+		if (!ft_strncmp(&buffer[i], "$?", 2))
 		{
-			printf("minishell: %d", g_status);
-			if ((*line)->cmds[0][2] != 0)
-				printf("%s", &(*line)->cmds[0][2]);
-			printf(": command not found\n");
-			g_status = 127;
+			i += 2;
+			k = -1;
+			while (aux[++k])
+				(*line)->cmds[index][++j] = aux[k];
 		}
 		else
-			expanding(line, env);
-		g_status = 127;
-		return (1);
+			(*line)->cmds[index][++j] = buffer[i];
 	}
-	return (0);
+	(*line)->cmds[index][j + 1] = 0;
+	free(aux);
+	free(buffer);
+}
+
+void	expand_var(t_line **line, t_env *env)
+{
+	int		single_quote;
+	void	*head;
+	int		i;
+	int		j;
+
+	head = *line;
+	while (*line)
+	{
+		single_quote = 0;
+		j = -1;
+		while ((*line)->cmds[++j])
+		{
+			if ((*line)->cmds[j][0] == '\'')
+				single_quote = 1;
+			smart_trim(line, j);
+			i = -1;
+			while ((*line)->cmds[j][++i])
+			{
+				if (!single_quote && (*line)->cmds[j][i] == '$')
+				{
+					if ((*line)->cmds[j][i + 1] == '?')
+						question_mark(line, j);
+					else if ((*line)->cmds[j][i + 1])
+					{
+						expanding(line, env, i, j);
+						i = -1;
+					}
+				}
+			}
+		}
+		*line = (*line)->next;
+	}
+	*line = head;
 }
 
 void insert_exec(t_line **line)
@@ -82,9 +127,7 @@ void	exec_cmds(t_line **line, char *path, int *fd, int *fdd)
 			exit(EXIT_SUCCESS);
 		}
 		else
-		{
 			execve(path, (*line)->cmds, (*line)->env);
-		}
 	}
 	else
 	{	
@@ -128,7 +171,10 @@ void	pipeline(t_line **line, int size)
 		if ((*line)->child == -1 && print_error("Error: fork\n"))
 			break ;
 		else
+		{
 			exec_cmds(line, path, fd, &fdd);
+			g_status = 0;
+		}
 	}
 	while (size--)
 		waitpid(-1, NULL, 0);
@@ -138,11 +184,11 @@ void	cmd_process(t_line **line, t_env **env)
 {
 	void	*head;
 	int		size;
-	int		expand;
 
 	size = ft_lst_size((*line));
 	head = (*line);
-	expand = expand_var(line, *env);
+	if (!(*line)->cmds[0])
+		return ;
 	while (*line)
 	{
 		open_files(line);
@@ -150,9 +196,9 @@ void	cmd_process(t_line **line, t_env **env)
 		*line = (*line)->next;
 	}
 	*line = head;
-	if (!expand && !check_dir((*line)->cmds, (*line)->env))
+	expand_var(line, *env);
+	if (!check_dir((*line)->cmds, (*env)->env))
 	{
-		g_status = 0;
 		pipeline(line, size);
 		(*line) = head;
 	}

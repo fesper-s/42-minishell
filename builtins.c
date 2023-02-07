@@ -6,29 +6,29 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 10:42:52 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/01 12:58:37 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/07 11:00:47 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*smart_trim(char *cmd)
+void	smart_trim(t_line **line, int index)
 {
 	char	*temp;
 
 	temp = NULL;
-	if (cmd[0] == '\'' || cmd[ft_strlen(cmd) - 1] == '\'')
-		temp = ft_strtrim(cmd, "\'");
-	else if (cmd[0] == '\"' || cmd[ft_strlen(cmd) - 1] == '\"')
-		temp = ft_strtrim(cmd, "\"");
+	if ((*line)->cmds[index][0] == '\'' || (*line)->cmds[index][ft_strlen((*line)->cmds[index]) - 1] == '\'')
+		temp = ft_strtrim((*line)->cmds[index], "\'");
+	else if ((*line)->cmds[index][0] == '\"' || (*line)->cmds[index][ft_strlen((*line)->cmds[index]) - 1] == '\"')
+		temp = ft_strtrim((*line)->cmds[index], "\"");
 	else
-		temp = ft_strdup(cmd);
+		temp = ft_strdup((*line)->cmds[index]);
 	if (temp)
 	{
-		free(cmd);
-		cmd = temp;
+		free((*line)->cmds[index]);
+		(*line)->cmds[index] = ft_strdup(temp);
+		free(temp);
 	}
-	return (cmd);
 }
 
 int	handle_cd(char **cmds, t_line **env)
@@ -102,7 +102,7 @@ int	handle_builtins(char **cmds, t_line **env)
 	if (!cmds[0])
 		return (0);
 	if (!ft_strncmp(cmds[0], "echo", 5))
-		return (handle_echo(cmds, *env));
+		return (handle_echo(cmds));
 	if (!ft_strncmp(cmds[0], "cd", 3))
 		return (handle_cd(cmds, env));
 	if (!ft_strncmp(cmds[0], "pwd", 4))
