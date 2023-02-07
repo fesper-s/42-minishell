@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/01 13:02:30 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/07 08:52:00 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 typedef struct s_line
 {
 	char			*cmd;
+	pid_t			child;
 	char			**cmds;
 	char			*infile;
 	char			*outfile;
@@ -49,7 +50,7 @@ extern int	g_status;
 void	open_files(t_line **line);
 int		expand_var(t_line **line, t_env *env);
 void	insert_exec(t_line **line);
-void	exec_cmds(t_line **line, pid_t pid, char *path, int *fd);
+void	exec_cmds(t_line **line, char *path, int *fd, int *fdd);
 void	pipeline(t_line **line, int size);
 void	cmd_process(t_line **line, t_env **env);
 void	minishell(char **envp);

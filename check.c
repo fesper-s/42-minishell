@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 14:42:32 by gussoare          #+#    #+#             */
-/*   Updated: 2023/02/01 09:13:18 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/07 09:07:16 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,8 @@ int	check_operator(t_line **line, char **cmds)
 			(*line)->extract_op = 1;
 		else if (!strncmp(cmds[i], "<<", 2) && cmds[i + 1])
 		{
-			(*line)->insert_op = ft_strdup(cmds[i + 1]);
-			buffer = malloc((cmds_count(cmds) + 1) * sizeof(char *));
+			(*line)->insert_op = ft_strdup((*line)->cmds[i + 1]);
+			buffer = malloc((cmds_count((*line)->cmds) - 1) * sizeof(char *));
 			j = 0;
 			i = -1;
 			while (cmds[++i])

@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/01 13:37:53 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/07 10:38:59 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ void insert_exec(t_line **line)
 
 	if ((*line)->insert_op)
 	{
-		eof = ft_strdup((*line)->insert_op);
 		while (1)
 		{
 			eof = readline("> ");
@@ -55,24 +54,22 @@ void insert_exec(t_line **line)
 			}
 			if (!ft_strncmp((*line)->insert_op, eof, ft_strlen((*line)->insert_op)))
 				break ;
-			if ((*line)->outfile)
-				printf("%s", eof);
+			//((*line)->outfile)
+			//printf("%s", eof);
 			free(eof);
 		}
 		free(eof);
 	}
 }
 
-void	exec_cmds(t_line **line, pid_t pid, char *path, int *fd)
+void	exec_cmds(t_line **line, char *path, int *fd, int *fdd)
 {
-	static int	fdd;
-
-	if (pid == 0)
+	if ((*line)->child == 0)
 	{
 		if ((*line)->infile_id > 0)
 			dup2((*line)->infile_id, 0);
 		else
-			dup2(fdd, 0);
+			dup2(*fdd, 0);
 		if ((*line)->next != 0)
 			dup2(fd[1], 1);
 		if ((*line)->outfile_id > 0)
@@ -81,16 +78,18 @@ void	exec_cmds(t_line **line, pid_t pid, char *path, int *fd)
 		if (!path || handle_builtins((*line)->cmds, line))
 		{
 			if (!path)
-				ft_putchar_fd('0', 1);
+				printf(0);
 			exit(EXIT_SUCCESS);
 		}
 		else
+		{
 			execve(path, (*line)->cmds, (*line)->env);
+		}
 	}
 	else
 	{	
 		close(fd[1]);
-		fdd = fd[0];
+		*fdd = fd[0];
 		(*line) = (*line)->next;
 	}
 	free(path);
@@ -116,19 +115,20 @@ void open_files(t_line **line)
 void	pipeline(t_line **line, int size)
 {
 	int		fd[2];
-	pid_t	pid;
 	char 	*path;
+	int fdd;
 
+	fdd = 0;
 	while ((*line))
 	{
 		path = find_path(line);
 		insert_exec(line);
 		pipe(fd);
-		pid = fork();
-		if (pid == -1 && print_error("Error: fork\n"))
+		(*line)->child = fork();
+		if ((*line)->child == -1 && print_error("Error: fork\n"))
 			break ;
 		else
-			exec_cmds(line, pid, path, fd);
+			exec_cmds(line, path, fd, &fdd);
 	}
 	while (size--)
 		waitpid(-1, NULL, 0);
