@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/30 14:48:09 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/07 08:38:55 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,7 @@ char	*find_path(t_line **line);
 int		cmds_count(char **split);
 // builtins_utils.c
 int		is_flag(char **cmds, int i);
-void	check_newline(char **cmds, int *newline, int *buffer, int i);
-void	expanding(t_line **line, t_env *env);
+void	expanding(t_line **line, t_env *env, int j, int index);
 int		cmds_til_pipe(char **cmds);
 int		check_dir(char **cmds, char **env);
 // list_utils.c
@@ -92,20 +91,14 @@ t_line	*ft_lst_new(char **cmds, char *infile, char *outfile);
 int		ft_lst_size(t_line *lst);
 t_line	*ft_lst_last(t_line *lst);
 // builtins.c
-char	*smart_trim(char *cmd);
+void	smart_trim(t_line **line, int index);
 int		handle_cd(char **cmds, t_env **env);
 int		handle_pwd(t_env *env);
 int		handle_env(t_env *env);
 int		handle_builtins(char **cmds, t_env **env);
 // echo.c
-void	isexpand(char *cmd, int *i, char **env);
-int		check_expvar(char *cmds, t_env *env);
-void	print_echo(t_env *env, char ***cmds, int i, int *buffer);
-int		handle_echo(char **cmds, t_env *env);
-// echo-utils.c
-int		check_dollar_sign(char *cmd);
-int		check_cmdinenv(char *cmd, char **env);
-void	no_cmdinenv(char *cmd, int *i);
+void	check_newline(char **cmds, int *newline, int *buffer, int i);
+int		handle_echo(char **cmds);
 // chdir.c
 void	return_dir(t_env **env, int j);
 void	relative_path(char *cmd, t_env **env, int j);

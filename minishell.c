@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/31 11:13:21 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/07 08:37:03 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	g_status;
 
-void	question_mark(t_line **line)
+void	question_mark(t_line **line, int index)
 {
 	int		i;
 	int		j;
@@ -24,8 +24,8 @@ void	question_mark(t_line **line)
 
 	aux = ft_itoa(g_status);
 	buffer = ft_strdup((*line)->cmds[0]);
-	free((*line)->cmds[0]);
-	(*line)->cmds[0] = malloc(sizeof(char) * (ft_strlen(buffer) \
+	free((*line)->cmds[index]);
+	(*line)->cmds[index] = malloc(sizeof(char) * (ft_strlen(buffer) \
 		- 2 + ft_strlen(aux) + 1));
 	j = -1;
 	i = -1;
@@ -36,15 +36,12 @@ void	question_mark(t_line **line)
 			i += 2;
 			k = -1;
 			while (aux[++k])
-				(*line)->cmds[0][++j] = aux[k];
+				(*line)->cmds[index][++j] = aux[k];
 		}
 		else
-		{
-			printf("e aqui será que entra?\n");
-			(*line)->cmds[0][++j] = buffer[i];
-		}
+			(*line)->cmds[index][++j] = buffer[i];
 	}
-	(*line)->cmds[0][j + 1] = 0;
+	(*line)->cmds[index][j + 1] = 0;
 	free(aux);
 	free(buffer);
 }
@@ -53,22 +50,29 @@ void	expand_var(t_line **line, t_env *env)
 {
 	int		single_quote;
 	int		i;
+	int		j;
 
 	single_quote = 0;
-	if ((*line)->cmds[0][0] == '\'')
-		single_quote = 1;
-	(*line)->cmds[0] = smart_trim((*line)->cmds[0]);
-	i = -1;
-	while ((*line)->cmds[0][++i])
+	j = -1;
+	while ((*line)->cmds[++j])
 	{
-		if (!single_quote && (*line)->cmds[0][i] == '$')
+		if ((*line)->cmds[j][0] == '\'')
+			single_quote = 1;
+		smart_trim(line, j);
+		i = -1;
+		while ((*line)->cmds[j][++i])
 		{
-			if ((*line)->cmds[0][i + 1] == '?')
-				question_mark(line);
-			else if ((*line)->cmds[0][i + 1])
-				expanding(line, env);
-			g_status = 127;
-		} 
+			if (!single_quote && (*line)->cmds[j][i] == '$')
+			{
+				if ((*line)->cmds[j][i + 1] == '?')
+					question_mark(line, j);
+				else if ((*line)->cmds[j][i + 1])
+				{
+					expanding(line, env, i, j);
+					i = -1;
+				}
+			}
+		}
 	}
 }
 
@@ -132,14 +136,14 @@ void	cmd_process(t_line **line, t_env **env)
 	head = (*line);
 	if (!(*line)->cmds[0])
 		return ;
-	expand_var(line, *env);
-	isbuiltin = handle_builtins((*line)->cmds, env);
 	while (*line)
 	{
 		(*line)->env = ft_strdupp((*env)->env);
 		*line = (*line)->next;
 	}
 	*line = head;
+	expand_var(line, *env);
+	isbuiltin = handle_builtins((*line)->cmds, env);
 	if (!isbuiltin && !check_dir((*line)->cmds, (*env)->env))
 	{
 		pipeline(line, size);
