@@ -88,10 +88,11 @@ void chexpand(t_line **line, char *env, int index)
 	if (!env)
 	{
 		buffer = ft_strdup((*line)->cmds[index]);
-		if (buffer[0] == '$')
-			aux = ft_calloc(sizeof(char), ft_strlen(&buffer[til_dollar_sign(buffer + 1) + 1]));
+		free((*line)->cmds[index]);
+		if (buffer[0] == '$')		
+			aux = malloc(sizeof(char) * ft_strlen(&buffer[til_dollar_sign(buffer + 1) + 1]));
 		else
-			aux = ft_calloc(sizeof(char), til_dollar_sign(buffer));
+			aux = malloc(sizeof(char) * til_dollar_sign(buffer));
 		i = -1;
 		j = -1;
 		while (buffer[++i])
@@ -105,6 +106,8 @@ void chexpand(t_line **line, char *env, int index)
 		}
 		aux[++j] = 0;
 		(*line)->cmds[index] = ft_strdup(aux);
+		if (j == 0)
+			(*line)->cmds[index] = NULL;
 		free(aux);
 		free(buffer);
 		return ;
