@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/07 08:38:55 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/07 11:01:55 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,14 @@
 typedef struct s_line
 {
 	char			*cmd;
+	pid_t			child;
 	char			**cmds;
 	char			*infile;
 	char			*outfile;
 	int				infile_id;
 	int				outfile_id;
+	int				extract_op;
+	char			*insert_op;
 	char			**env;
 	struct s_line	*next;
 }					t_line;
@@ -44,12 +47,15 @@ typedef struct s_env
 extern int	g_status;
 
 // minishell.c
+void	open_files(t_line **line);
 void	expand_var(t_line **line, t_env *env);
-void	exec_cmds(t_line **line, pid_t pid, int *fdd, int *fd);
+void	insert_exec(t_line **line);
+void	exec_cmds(t_line **line, char *path, int *fd, int *fdd);
 void	pipeline(t_line **line, int size);
 void	cmd_process(t_line **line, t_env **env);
 void	minishell(char **envp);
 //check.c
+int		check_operator(t_line **line, char **cmds);
 int		check_quote_on(char *cmd);
 int		organize_line(t_line **line);
 int		check_double_pipes(t_line *line);
@@ -92,29 +98,29 @@ int		ft_lst_size(t_line *lst);
 t_line	*ft_lst_last(t_line *lst);
 // builtins.c
 void	smart_trim(t_line **line, int index);
-int		handle_cd(char **cmds, t_env **env);
-int		handle_pwd(t_env *env);
-int		handle_env(t_env *env);
-int		handle_builtins(char **cmds, t_env **env);
+int		handle_cd(char **cmds, t_line **env);
+int		handle_pwd(t_line *env);
+int		handle_env(t_line *env);
+int		handle_builtins(char **cmds, t_line **env);
 // echo.c
 void	check_newline(char **cmds, int *newline, int *buffer, int i);
 int		handle_echo(char **cmds);
 // chdir.c
-void	return_dir(t_env **env, int j);
-void	relative_path(char *cmd, t_env **env, int j);
-void	chpwd(char *cmd, t_env **env, int j);
+void	return_dir(t_line **env, int j);
+void	relative_path(char *cmd, t_line **env, int j);
+void	chpwd(char *cmd, t_line **env, int j);
 char	*tilde_home(char *cmd, char *home);
 char	*no_argincd(char **env);
 // export.c
-void	add_to_env(char *cmd, t_env **env);
-int		exporting(char *cmd, t_env **env);
-void	chenvvar(char *cmd, t_env **env, int i);
+void	add_to_env(char *cmd, t_line **env);
+int		exporting(char *cmd, t_line **env);
+void	chenvvar(char *cmd, t_line **env, int i);
 int		count_cmdlen(char *cmd);
-int		handle_export(char **cmds, t_env **env);
+int		handle_export(char **cmds, t_line **env);
 // unset.c
 void	attr_buffer(char ***buffer, char *cmd, char **env);
 int		check_cmd_env(char **env, char *cmd);
-int		handle_unset(char **cmds, t_env **env);
+int		handle_unset(char **cmds, t_line **env);
 // memory.c
 char	**ft_strdupp(char **str);
 int		free_charpp(char **str);

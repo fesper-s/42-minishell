@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 14:42:32 by gussoare          #+#    #+#             */
-/*   Updated: 2023/01/26 14:00:23 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/07 09:07:16 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,49 @@ int check_files(char **cmds)
 	return (1);
 }
 
+int	check_operator(t_line **line, char **cmds)
+{
+	int		i;
+	int 	j;
+	char	**buffer;
+
+	buffer = NULL;
+	i = -1;
+	while (cmds[++i])
+	{
+		if ((cmds[i][0] == '<' || cmds[i][0] == '>') && !cmds[i + 1])
+		{
+			print_error("zsh: parse error\n");
+			return (0);
+		}
+		else if (!strncmp(cmds[i], "<<<", 3) || !strncmp(cmds[i], ">>>", 3))
+		{
+			print_error("Error: multiples '<' or '>' operator\n");
+			return (0);
+		}
+		else if (!strncmp(cmds[i], ">>", 2) && cmds[i + 1])
+			(*line)->extract_op = 1;
+		else if (!strncmp(cmds[i], "<<", 2) && cmds[i + 1])
+		{
+			(*line)->insert_op = ft_strdup((*line)->cmds[i + 1]);
+			buffer = malloc((cmds_count((*line)->cmds) - 1) * sizeof(char *));
+			j = 0;
+			i = -1;
+			while (cmds[++i])
+			{
+				if (!ft_strncmp(cmds[i], "<<", 2))
+					break ;
+				buffer[j] = ft_strdup(cmds[i]);
+				j++;
+			}
+			buffer[j] = 0;
+			free_charpp((*line)->cmds);
+			(*line)->cmds = ft_strdupp(buffer);
+			free_charpp(buffer);
+		}
+	}
+	return (1);
+}
 
 int	organize_line(t_line **line)
 {
@@ -89,12 +132,12 @@ int	organize_line(t_line **line)
 		free_charpp(split_line);
 		return (0);
 	}
+	free_charpp(split_line);
 	check_for_pipes(line, (*line)->cmds);
 	*line = head;
 	if (!init_files(line))
 		return (0);
 	*line = head;
-	free_charpp(split_line);
 	return (1);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/07 08:37:03 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/07 11:13:54 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,48 +49,88 @@ void	question_mark(t_line **line, int index)
 void	expand_var(t_line **line, t_env *env)
 {
 	int		single_quote;
+	void	*head;
 	int		i;
 	int		j;
 
-	single_quote = 0;
-	j = -1;
-	while ((*line)->cmds[++j])
+	head = *line;
+	while (*line)
 	{
-		if ((*line)->cmds[j][0] == '\'')
-			single_quote = 1;
-		smart_trim(line, j);
-		i = -1;
-		while ((*line)->cmds[j][++i])
+		single_quote = 0;
+		j = -1;
+		while ((*line)->cmds[++j])
 		{
-			if (!single_quote && (*line)->cmds[j][i] == '$')
+			if ((*line)->cmds[j][0] == '\'')
+				single_quote = 1;
+			smart_trim(line, j);
+			i = -1;
+			while ((*line)->cmds[j][++i])
 			{
-				if ((*line)->cmds[j][i + 1] == '?')
-					question_mark(line, j);
-				else if ((*line)->cmds[j][i + 1])
+				if (!single_quote && (*line)->cmds[j][i] == '$')
 				{
-					expanding(line, env, i, j);
-					i = -1;
+					if ((*line)->cmds[j][i + 1] == '?')
+						question_mark(line, j);
+					else if ((*line)->cmds[j][i + 1])
+					{
+						expanding(line, env, i, j);
+						i = -1;
+					}
 				}
 			}
 		}
+		*line = (*line)->next;
+	}
+	*line = head;
+}
+
+void insert_exec(t_line **line)
+{
+	char	*eof;
+
+	if ((*line)->insert_op)
+	{
+		while (1)
+		{
+			eof = readline("> ");
+			if (!eof)
+			{
+				printf("\n");
+				break ;
+			}
+			if (!ft_strncmp((*line)->insert_op, eof, ft_strlen((*line)->insert_op)))
+				break ;
+			//((*line)->outfile)
+			//printf("%s", eof);
+			free(eof);
+		}
+		free(eof);
 	}
 }
 
-void	exec_cmds(t_line **line, pid_t pid, int *fdd, int *fd)
+void	exec_cmds(t_line **line, char *path, int *fd, int *fdd)
 {
-	char	*path;
-
-	path = find_path(line);
-	if (pid == 0)
+	if ((*line)->child == 0)
 	{
-		dup2(*fdd, 0);
+		if ((*line)->infile_id > 0)
+			dup2((*line)->infile_id, 0);
+		else
+			dup2(*fdd, 0);
 		if ((*line)->next != 0)
 			dup2(fd[1], 1);
+		if ((*line)->outfile_id > 0)
+			dup2((*line)->outfile_id, 1);
 		close(fd[0]);
-		execve(path, (*line)->cmds, (*line)->env);
+		if (!path || handle_builtins((*line)->cmds, line))
+		{
+			if (!path)
+				printf(0);
+			exit(EXIT_SUCCESS);
+		}
+		else
+			execve(path, (*line)->cmds, (*line)->env);
 	}
 	else
-	{
+	{	
 		close(fd[1]);
 		*fdd = fd[0];
 		(*line) = (*line)->next;
@@ -98,29 +138,43 @@ void	exec_cmds(t_line **line, pid_t pid, int *fdd, int *fd)
 	free(path);
 }
 
+void open_files(t_line **line)
+{
+	if ((*line)->infile)
+		(*line)->infile_id = open((*line)->infile, O_RDONLY);
+	if ((*line)->infile_id  == -1)
+		printf("Error: no such file or directory: %s\n", (*line)->infile);
+	if ((*line)->outfile)
+	{
+		if ((*line)->extract_op)
+			(*line)->outfile_id  = open((*line)->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		else
+			(*line)->outfile_id  = open((*line)->outfile, O_WRONLY | O_CREAT | O_TRUNC , 0644);
+	}
+	if ((*line)->outfile_id  == -1)
+		printf("Error: no such file or directory: %s\n", (*line)->outfile);
+}
+
 void	pipeline(t_line **line, int size)
 {
 	int		fd[2];
-	pid_t	pid;
-	int		fdd;
-	char	*path;
+	char 	*path;
+	int fdd;
 
 	fdd = 0;
 	while ((*line))
 	{
 		path = find_path(line);
-		if (!path)
-			break ;
+		insert_exec(line);
 		pipe(fd);
-		pid = fork();
-		if (pid == -1 && print_error("Error: fork\n"))
+		(*line)->child = fork();
+		if ((*line)->child == -1 && print_error("Error: fork\n"))
 			break ;
 		else
 		{
-			exec_cmds(line, pid, &fdd, fd);
+			exec_cmds(line, path, fd, &fdd);
 			g_status = 0;
 		}
-		free(path);
 	}
 	while (size--)
 		waitpid(-1, NULL, 0);
@@ -128,7 +182,6 @@ void	pipeline(t_line **line, int size)
 
 void	cmd_process(t_line **line, t_env **env)
 {
-	int		isbuiltin;
 	void	*head;
 	int		size;
 
@@ -138,13 +191,13 @@ void	cmd_process(t_line **line, t_env **env)
 		return ;
 	while (*line)
 	{
+		open_files(line);
 		(*line)->env = ft_strdupp((*env)->env);
 		*line = (*line)->next;
 	}
 	*line = head;
 	expand_var(line, *env);
-	isbuiltin = handle_builtins((*line)->cmds, env);
-	if (!isbuiltin && !check_dir((*line)->cmds, (*env)->env))
+	if (!check_dir((*line)->cmds, (*env)->env))
 	{
 		pipeline(line, size);
 		(*line) = head;
@@ -170,8 +223,7 @@ void	minishell(char **envp)
 		else
 			break ;
 		if (organize_line(&line))
-		{
-			if (ft_strncmp(line->cmd, "exit", 5) == 0)
+		{			if (ft_strncmp(line->cmd, "exit", 5) == 0)
 				break ;
 			cmd_process(&line, &env);
 			line = head;

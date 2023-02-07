@@ -21,7 +21,8 @@ int	file_len(char **cmd)
 	j = 0;
 	while (cmd[++i])
 	{
-		if ((cmd[i][0] == '>' || cmd[i][0] == '<') && (cmd[i + 1]))
+		if ((cmd[i][0] == '>' || (cmd[i][0] == '<' && !cmd[i][0]) ) \
+			&& (cmd[i + 1]))
 			j += 2;
 	}
 	return (i - j);
@@ -46,12 +47,15 @@ int	init_files(t_line **line)
 	head = (*line);
 	while ((*line))
 	{
+		if (!check_operator(line, (*line)->cmds))
+			return (0);
 		i = -1;
 		j = -1;
 		buffer = malloc((file_len((*line)->cmds) + 1) * sizeof(char *));
 		while ((*line)->cmds[++i])
 		{
-			if ((*line)->cmds[i][0] == '<' && (*line)->cmds[i + 1])
+			if ((*line)->cmds[i][0] == '<' && (*line)->cmds[i + 1] \
+				&& (*line)->cmds[i][1] != '<')
 				(*line)->infile = ft_strdup((*line)->cmds[++i]);
 			else if ((*line)->cmds[i][0] == '>' && (*line)->cmds[i + 1])
 					(*line)->outfile = ft_strdup((*line)->cmds[++i]);
@@ -68,6 +72,8 @@ int	init_cmds(t_line **line, char **split)
 {
 	int	len;
 
+	if (!split[0])
+		return(0);
 	len = cmds_count(split);
 	if (split[0][0] == '|' || split[len - 1][0] == '|')
 	{

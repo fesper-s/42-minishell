@@ -184,6 +184,8 @@ int	check_dir(char **cmds, char **env)
 {
 	int	i;
 
+	if (!cmds[0])
+		return (0);
 	i = -1;
 	while (env[++i])
 		if (!ft_strncmp(env[i], "PWD=", 4))
