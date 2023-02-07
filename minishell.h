@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/06 15:46:59 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/07 08:38:55 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ t_line	*ft_lst_new(char **cmds, char *infile, char *outfile);
 int		ft_lst_size(t_line *lst);
 t_line	*ft_lst_last(t_line *lst);
 // builtins.c
-char	*smart_trim(char *cmd);
+void	smart_trim(t_line **line, int index);
 int		handle_cd(char **cmds, t_env **env);
 int		handle_pwd(t_env *env);
 int		handle_env(t_env *env);

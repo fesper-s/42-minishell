@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/06 12:47:54 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/07 08:37:03 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	expand_var(t_line **line, t_env *env)
 	{
 		if ((*line)->cmds[j][0] == '\'')
 			single_quote = 1;
-		(*line)->cmds[j] = smart_trim((*line)->cmds[j]);
+		smart_trim(line, j);
 		i = -1;
 		while ((*line)->cmds[j][++i])
 		{

@@ -6,29 +6,29 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 10:42:52 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/06 13:31:16 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/07 08:38:36 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*smart_trim(char *cmd)
+void	smart_trim(t_line **line, int index)
 {
 	char	*temp;
 
 	temp = NULL;
-	if (cmd[0] == '\'' || cmd[ft_strlen(cmd) - 1] == '\'')
-		temp = ft_strtrim(cmd, "\'");
-	else if (cmd[0] == '\"' || cmd[ft_strlen(cmd) - 1] == '\"')
-		temp = ft_strtrim(cmd, "\"");
+	if ((*line)->cmds[index][0] == '\'' || (*line)->cmds[index][ft_strlen((*line)->cmds[index]) - 1] == '\'')
+		temp = ft_strtrim((*line)->cmds[index], "\'");
+	else if ((*line)->cmds[index][0] == '\"' || (*line)->cmds[index][ft_strlen((*line)->cmds[index]) - 1] == '\"')
+		temp = ft_strtrim((*line)->cmds[index], "\"");
 	else
-		temp = ft_strdup(cmd);
+		temp = ft_strdup((*line)->cmds[index]);
 	if (temp)
 	{
-		free(cmd);
-		cmd = temp;
+		free((*line)->cmds[index]);
+		(*line)->cmds[index] = ft_strdup(temp);
+		free(temp);
 	}
-	return (cmd);
 }
 
 int	handle_cd(char **cmds, t_env **env)

@@ -112,9 +112,9 @@ void chexpand(t_line **line, char *env, int index)
 	aux = ft_strdup(env + count_cmdlen(env) + 1);
 	buffer = ft_strdup((*line)->cmds[index]);
 	free((*line)->cmds[index]);
-	(*line)->cmds[index] = ft_calloc(sizeof(char), (ft_strlen(buffer) - (count_cmdlen(env) - 1) + ft_strlen(aux) + 1));
+	(*line)->cmds[index] = ft_calloc(sizeof(char), (ft_strlen(buffer) - count_cmdlen(env) - 1 + ft_strlen(aux) + 1));
 	i = -1;
-	j = -1;
+	j = 0;
 	while (buffer[++i])
 	{
 		if (buffer[i] == '$')
@@ -122,15 +122,23 @@ void chexpand(t_line **line, char *env, int index)
 			joiner = ft_strdup((*line)->cmds[index]);
 			free((*line)->cmds[index]);
 			(*line)->cmds[index] = ft_strjoin(joiner, aux);
+			free(joiner);
 			i += count_cmdlen(env);
 			j += ft_strlen(aux);
 			while (buffer[++i])
-				(*line)->cmds[index][++j] = buffer[i];
+			{
+				(*line)->cmds[index][j] = buffer[i];
+				j++;
+			}
 			break ;
 		}
 		else
-			(*line)->cmds[index][++j] = buffer[i];
+		{
+			(*line)->cmds[index][j] = buffer[i];
+			j++;
+		}
 	}
+	(*line)->cmds[index][j] = 0;
 	free(aux);
 	free(buffer);
 }
@@ -147,10 +155,17 @@ int	search_varenv(t_line **line, t_env *env, int index, int j)
 		if (buffer[til_dollar_sign(buffer)] == '$' && \
 			!ft_strncmp(env->env[i], buffer, ft_strlen(buffer) - \
 			ft_strlen(&buffer[til_dollar_sign(buffer)])))
+		{
+			free(buffer);
 			return (i);
+		}
 		else if (!ft_strncmp(env->env[i], buffer, count_export_len(buffer)))
+		{
+			free(buffer);
 			return (i);
+		}
 	}
+	free(buffer);
 	return (-1);
 }
 
