@@ -109,12 +109,10 @@ void chexpand(t_line **line, char *env, int index)
 		free(buffer);
 		return ;
 	}
-	//printf("cmds -> %s\nenv -> %s\n", (*line)->cmds[index], env);
 	aux = ft_strdup(env + count_cmdlen(env) + 1);
 	buffer = ft_strdup((*line)->cmds[index]);
-	//printf("aux -> %s\nbuffer -> %s\n", aux, buffer);
 	free((*line)->cmds[index]);
-	(*line)->cmds[index] = malloc(sizeof(char) * (ft_strlen(buffer) - (count_cmdlen(env) + 1) + ft_strlen(aux) + 1));
+	(*line)->cmds[index] = ft_calloc(sizeof(char), (ft_strlen(buffer) - (count_cmdlen(env) - 1) + ft_strlen(aux) + 1));
 	i = -1;
 	j = -1;
 	while (buffer[++i])
@@ -122,10 +120,8 @@ void chexpand(t_line **line, char *env, int index)
 		if (buffer[i] == '$')
 		{
 			joiner = ft_strdup((*line)->cmds[index]);
-			//printf("joiner -> %s\n", joiner);
 			free((*line)->cmds[index]);
 			(*line)->cmds[index] = ft_strjoin(joiner, aux);
-			//printf("aux -> %s\ncmds -> %s\n", aux, (*line)->cmds[index]);
 			i += count_cmdlen(env);
 			j += ft_strlen(aux);
 			while (buffer[++i])
