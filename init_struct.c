@@ -19,6 +19,8 @@ int	file_len(char **cmd)
 
 	i = -1;
 	j = 0;
+	if (!cmd[0])
+	return (0);
 	while (cmd[++i])
 	{
 		if ((cmd[i][0] == '>' || (cmd[i][0] == '<' && !cmd[i][0]) ) \
@@ -47,8 +49,6 @@ int	init_files(t_line **line)
 	head = (*line);
 	while ((*line))
 	{
-		if (!check_operator(line, (*line)->cmds))
-			return (0);
 		i = -1;
 		j = -1;
 		buffer = malloc((file_len((*line)->cmds) + 1) * sizeof(char *));

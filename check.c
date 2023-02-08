@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 14:42:32 by gussoare          #+#    #+#             */
-/*   Updated: 2023/02/07 09:07:16 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/08 09:37:38 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,20 +94,28 @@ int	check_operator(t_line **line, char **cmds)
 		else if (!strncmp(cmds[i], "<<", 2) && cmds[i + 1])
 		{
 			(*line)->insert_op = ft_strdup((*line)->cmds[i + 1]);
-			buffer = malloc((cmds_count((*line)->cmds) - 1) * sizeof(char *));
-			j = 0;
-			i = -1;
-			while (cmds[++i])
+			if (cmds_count((*line)->cmds) > 2)
 			{
-				if (!ft_strncmp(cmds[i], "<<", 2))
-					break ;
-				buffer[j] = ft_strdup(cmds[i]);
-				j++;
+				buffer = malloc((cmds_count((*line)->cmds) - 1) * sizeof(char *));
+				j = 0;
+				i = -1;
+				while (cmds[++i])
+				{
+					if (!ft_strncmp(cmds[i], "<<", 2))
+						break ;
+					buffer[j] = ft_strdup(cmds[i]);
+					j++;
+				}
+				buffer[j] = 0;
+				free_charpp((*line)->cmds);
+				(*line)->cmds = ft_strdupp(buffer);
+				free_charpp(buffer);
 			}
-			buffer[j] = 0;
-			free_charpp((*line)->cmds);
-			(*line)->cmds = ft_strdupp(buffer);
-			free_charpp(buffer);
+			else
+			{
+				free_charpp((*line)->cmds);
+				(*line)->cmds = ft_calloc(1, sizeof(char *));
+			}
 		}
 	}
 	return (1);
@@ -134,6 +142,13 @@ int	organize_line(t_line **line)
 	}
 	free_charpp(split_line);
 	check_for_pipes(line, (*line)->cmds);
+	*line = head;
+	while ((*line))
+	{
+		if (!check_operator(line, (*line)->cmds))
+			return (0);
+		(*line) = (*line)->next;
+	}
 	*line = head;
 	if (!init_files(line))
 		return (0);

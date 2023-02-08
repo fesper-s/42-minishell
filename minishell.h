@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/07 15:00:46 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/08 10:16:45 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct s_line
 	int				outfile_id;
 	int				extract_op;
 	char			*insert_op;
+	char			**insert_char;
 	char			*path;
 	struct s_line	*next;
 }					t_line;
@@ -49,9 +50,11 @@ extern int	g_status;
 // minishell.c
 void	open_files(t_line **line);
 void	expand_var(t_line **line, t_env *env);
+void	insert_operation(t_line **line, char *eof);
 void	insert_exec(t_line **line);
 void	exec_cmds(t_line **line, t_env **env, int *fd, int *fdd);
 void	pipeline(t_line **line, t_env **env, int size);
+void	check_builtins(t_line **line, t_env **env, int size);
 void	cmd_process(t_line **line, t_env **env);
 void	minishell(char **envp);
 //check.c
@@ -83,6 +86,7 @@ void	handle_sigint(int signum);
 // utils.c
 char	*check_for_path(char **env, char *env_path);
 char	*check_cmdpath(char *env_path, char **path, char *cmd);
+int		is_builtin(t_line **line);
 char	*find_path(t_line **line, t_env **env);
 int		cmds_count(char **split);
 // builtins_utils.c
