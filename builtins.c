@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 10:42:52 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/07 11:00:47 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/07 15:32:24 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	smart_trim(t_line **line, int index)
 	}
 }
 
-int	handle_cd(char **cmds, t_line **env)
+int	handle_cd(char **cmds, t_env **env)
 {
 	char	*home;
 	int		i;
@@ -60,7 +60,7 @@ int	handle_cd(char **cmds, t_line **env)
 	return (1);
 }
 
-int	handle_pwd(t_line *env)
+int	handle_pwd(t_env *env)
 {
 	int		i;
 	char	*buffer;
@@ -78,7 +78,7 @@ int	handle_pwd(t_line *env)
 	return (1);
 }
 
-int	handle_env(t_line *env)
+int	handle_env(t_env *env)
 {
 	int		i;
 	int		path;
@@ -97,21 +97,15 @@ int	handle_env(t_line *env)
 	return (1);
 }
 
-int	handle_builtins(char **cmds, t_line **env)
+int	handle_builtins(char **cmds, t_env **env)
 {
 	if (!cmds[0])
 		return (0);
 	if (!ft_strncmp(cmds[0], "echo", 5))
 		return (handle_echo(cmds));
-	if (!ft_strncmp(cmds[0], "cd", 3))
-		return (handle_cd(cmds, env));
 	if (!ft_strncmp(cmds[0], "pwd", 4))
 		return (handle_pwd(*env));
 	if (!ft_strncmp(cmds[0], "env", 4))
 		return (handle_env(*env));
-	if (!ft_strncmp(cmds[0], "export", 7))
-		return (handle_export(cmds, env));
-	if (!ft_strncmp(cmds[0], "unset", 6))
-		return (handle_unset(cmds, env));
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/07 11:01:55 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/07 15:00:46 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef struct s_line
 	int				outfile_id;
 	int				extract_op;
 	char			*insert_op;
-	char			**env;
+	char			*path;
 	struct s_line	*next;
 }					t_line;
 
@@ -50,8 +50,8 @@ extern int	g_status;
 void	open_files(t_line **line);
 void	expand_var(t_line **line, t_env *env);
 void	insert_exec(t_line **line);
-void	exec_cmds(t_line **line, char *path, int *fd, int *fdd);
-void	pipeline(t_line **line, int size);
+void	exec_cmds(t_line **line, t_env **env, int *fd, int *fdd);
+void	pipeline(t_line **line, t_env **env, int size);
 void	cmd_process(t_line **line, t_env **env);
 void	minishell(char **envp);
 //check.c
@@ -83,44 +83,47 @@ void	handle_sigint(int signum);
 // utils.c
 char	*check_for_path(char **env, char *env_path);
 char	*check_cmdpath(char *env_path, char **path, char *cmd);
-char	*find_path(t_line **line);
+char	*find_path(t_line **line, t_env **env);
 int		cmds_count(char **split);
 // builtins_utils.c
 int		is_flag(char **cmds, int i);
+int		search_varenv(t_line **line, t_env *env, int index, int j);
+void	chexpand(t_line **line, t_env *l_env, char *env, int index);
+int		check_varenv(char **env, char *str);
 void	expanding(t_line **line, t_env *env, int j, int index);
 int		cmds_til_pipe(char **cmds);
 int		check_dir(char **cmds, char **env);
 // list_utils.c
 void	lst_free(t_line **lst);
 void	ft_lst_add_back(t_line **lst, t_line *new);
-t_line	*ft_lst_new(char **cmds, char *infile, char *outfile);
+t_line	*ft_lst_new(char **cmds);
 int		ft_lst_size(t_line *lst);
 t_line	*ft_lst_last(t_line *lst);
 // builtins.c
 void	smart_trim(t_line **line, int index);
-int		handle_cd(char **cmds, t_line **env);
-int		handle_pwd(t_line *env);
-int		handle_env(t_line *env);
-int		handle_builtins(char **cmds, t_line **env);
+int		handle_cd(char **cmds, t_env **env);
+int		handle_pwd(t_env *env);
+int		handle_env(t_env *env);
+int		handle_builtins(char **cmds, t_env **env);
 // echo.c
 void	check_newline(char **cmds, int *newline, int *buffer, int i);
 int		handle_echo(char **cmds);
 // chdir.c
-void	return_dir(t_line **env, int j);
-void	relative_path(char *cmd, t_line **env, int j);
-void	chpwd(char *cmd, t_line **env, int j);
+void	return_dir(t_env **env, int j);
+void	relative_path(char *cmd, t_env **env, int j);
+void	chpwd(char *cmd, t_env **env, int j);
 char	*tilde_home(char *cmd, char *home);
 char	*no_argincd(char **env);
 // export.c
-void	add_to_env(char *cmd, t_line **env);
-int		exporting(char *cmd, t_line **env);
-void	chenvvar(char *cmd, t_line **env, int i);
+void	add_to_env(char *cmd, t_env **env);
+int		exporting(char *cmd, t_env **env);
+void	chenvvar(char *cmd, t_env *env, int i);
 int		count_cmdlen(char *cmd);
-int		handle_export(char **cmds, t_line **env);
+int		handle_export(char **cmds, t_env **env);
 // unset.c
 void	attr_buffer(char ***buffer, char *cmd, char **env);
 int		check_cmd_env(char **env, char *cmd);
-int		handle_unset(char **cmds, t_line **env);
+int		handle_unset(char **cmds, t_env **env);
 // memory.c
 char	**ft_strdupp(char **str);
 int		free_charpp(char **str);

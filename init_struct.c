@@ -86,7 +86,7 @@ int	init_cmds(t_line **line, char **split)
 
 void	init_linked_list(t_line **line, char **before_pipe, char **after_pipe)
 {
-	ft_lst_add_back(line, ft_lst_new(ft_strdupp(after_pipe), NULL, NULL));
+	ft_lst_add_back(line, ft_lst_new(ft_strdupp(after_pipe)));
 	free_charpp((*line)->cmds);
 	(*line)->cmds = ft_strdupp(before_pipe);
 	free_charpp(before_pipe);
