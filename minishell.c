@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
+<<<<<<< HEAD
+/*   Updated: 2023/02/07 12:21:01 by fesper-s         ###   ########.fr       */
+=======
 /*   Updated: 2023/02/07 15:32:45 by gussoare         ###   ########.fr       */
+>>>>>>> 020fcef3c64576a51e8e9e4d93aeba5549d222cf
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +77,8 @@ void	expand_var(t_line **line, t_env *env)
 					else if ((*line)->cmds[j][i + 1])
 					{
 						expanding(line, env, i, j);
+						if ((*line)->cmds[j] == NULL)
+							break ;
 						i = -1;
 					}
 				}
