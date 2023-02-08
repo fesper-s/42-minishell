@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/08 10:16:45 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/08 14:30:58 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void	lst_free(t_line **lst);
 void	ft_lst_add_back(t_line **lst, t_line *new);
 t_line	*ft_lst_new(char **cmds);
 int		ft_lst_size(t_line *lst);
-t_line	*ft_lst_last(t_line *lst);
+void	ft_lst_add_next(t_line **lst, t_line *new);
 // builtins.c
 void	smart_trim(t_line **line, int index);
 int		handle_cd(char **cmds, t_env **env);

@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/08 13:00:32 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/08 14:27:52 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,16 +132,16 @@ void insert_exec(t_line **line)
 	}
 }
 
-/*void	print_insert(t_line **line)
+void	print_insert(t_line **line)
 {
 	int i;
 	i = -1;
-
-	while ((*line)->insert_char[++i])
-		printf("%s\n", (*line)->insert_char[i]);
-		write
+	if ((*line)->insert_char)
+	{
+		while ((*line)->insert_char[++i])
+			printf("%s\n", (*line)->insert_char[i]);
+	}
 }
-*/
 void	exec_cmds(t_line **line, t_env **env, int *fd, int *fdd)
 {
 	if ((*line)->child == 0)
@@ -158,7 +158,7 @@ void	exec_cmds(t_line **line, t_env **env, int *fd, int *fdd)
 		if (check_dir((*line)->cmds, (*env)->env) || handle_builtins\
 			((*line)->cmds, env) || !(*line)->path)
 		{
-			
+			print_insert(line);
 			if (!(*line)->path)
 				printf("");
 			exit(EXIT_SUCCESS);
