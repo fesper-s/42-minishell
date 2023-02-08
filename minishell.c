@@ -6,84 +6,13 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/08 08:06:52 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/08 09:07:39 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int	g_status;
-
-void	question_mark(t_line **line, int index)
-{
-	int		i;
-	int		j;
-	int		k;
-	char	*buffer;
-	char	*aux;
-
-	aux = ft_itoa(g_status);
-	buffer = ft_strdup((*line)->cmds[0]);
-	free((*line)->cmds[index]);
-	(*line)->cmds[index] = malloc(sizeof(char) * (ft_strlen(buffer) \
-		- 2 + ft_strlen(aux) + 1));
-	j = -1;
-	i = -1;
-	while (buffer[++i])
-	{
-		if (!ft_strncmp(&buffer[i], "$?", 2))
-		{
-			i += 2;
-			k = -1;
-			while (aux[++k])
-				(*line)->cmds[index][++j] = aux[k];
-		}
-		else
-			(*line)->cmds[index][++j] = buffer[i];
-	}
-	(*line)->cmds[index][j + 1] = 0;
-	free(aux);
-	free(buffer);
-}
-
-void	expand_var(t_line **line, t_env *env)
-{
-	int		single_quote;
-	void	*head;
-	int		i;
-	int		j;
-
-	head = *line;
-	while (*line)
-	{
-		single_quote = 0;
-		j = -1;
-		while ((*line)->cmds[++j])
-		{
-			if ((*line)->cmds[j][0] == '\'')
-				single_quote = 1;
-			smart_trim(line, j);
-			i = -1;
-			while ((*line)->cmds[j][++i])
-			{
-				if (!single_quote && (*line)->cmds[j][i] == '$')
-				{
-					if ((*line)->cmds[j][i + 1] == '?')
-						question_mark(line, j);
-					else if ((*line)->cmds[j][i + 1])
-					{
-						expanding(line, env, i, j);
-						if ((*line)->cmds[j] == NULL)
-							break ;
-						i = -1;
-					}
-				}
-			}
-		}
-		*line = (*line)->next;
-	}
-	*line = head;
-}
 
 void insert_exec(t_line **line)
 {
@@ -125,7 +54,7 @@ void	exec_cmds(t_line **line, t_env **env, int *fd, int *fdd)
 		if (handle_builtins((*line)->cmds, env) || !(*line)->path)
 		{
 			if (!(*line)->path)
-				printf(0);
+				printf("");
 			exit(EXIT_SUCCESS);
 		}
 		else
@@ -195,13 +124,13 @@ void	cmd_process(t_line **line, t_env **env)
 		*line = (*line)->next;
 	}
 	*line = head;
-	expand_var(line, *env);
 	if (!ft_strncmp((*line)->cmds[0], "export", ft_strlen((*line)->cmds[0])))
 		handle_export((*line)->cmds, env);
 	if (!ft_strncmp((*line)->cmds[0], "unset", ft_strlen((*line)->cmds[0])))
 		handle_unset((*line)->cmds, env);
 	if (!ft_strncmp((*line)->cmds[0], "cd", ft_strlen((*line)->cmds[0])))
 		handle_cd((*line)->cmds, env);
+	expand_var(line, *env);
 	if (!check_dir((*line)->cmds, (*env)->env))
 	{
 		pipeline(line, env, size);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/07 15:00:46 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/08 08:43:48 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ extern int	g_status;
 
 // minishell.c
 void	open_files(t_line **line);
-void	expand_var(t_line **line, t_env *env);
 void	insert_exec(t_line **line);
 void	exec_cmds(t_line **line, t_env **env, int *fd, int *fdd);
 void	pipeline(t_line **line, t_env **env, int size);
@@ -87,11 +86,8 @@ char	*find_path(t_line **line, t_env **env);
 int		cmds_count(char **split);
 // builtins_utils.c
 int		is_flag(char **cmds, int i);
-int		search_varenv(t_line **line, t_env *env, int index, int j);
-void	chexpand(t_line **line, t_env *l_env, char *env, int index);
-int		check_varenv(char **env, char *str);
-void	expanding(t_line **line, t_env *env, int j, int index);
 int		cmds_til_pipe(char **cmds);
+int		count_export_len(char *str);
 int		check_dir(char **cmds, char **env);
 // list_utils.c
 void	lst_free(t_line **lst);
@@ -128,5 +124,13 @@ int		handle_unset(char **cmds, t_env **env);
 char	**ft_strdupp(char **str);
 int		free_charpp(char **str);
 void	exiting(t_line **line, t_env **env);
+// expand.c
+void	expand_var(t_line **line, t_env *env);
+void	question_mark(t_line **line, int index);
+void	expanding(t_line **line, t_env *env, int j, int index);
+int		search_varenv(t_line **line, t_env *env, int index, int j);
+void	chexpand(t_line **line, t_env *l_env, char *env, int index);
+int		til_dollar_sign(char *str);
+int		check_varenv(char **env, char *str);
 
 #endif
