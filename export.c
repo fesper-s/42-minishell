@@ -6,13 +6,13 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 08:00:46 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/07 10:58:31 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/07 15:17:05 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	add_to_env(char *cmd, t_line **env)
+void	add_to_env(char *cmd, t_env **env)
 {
 	int		i;
 	char	**buffer;
@@ -33,7 +33,7 @@ void	add_to_env(char *cmd, t_line **env)
 	free_charpp(buffer);
 }
 
-int	exporting(char *cmd, t_line **env)
+int	exporting(char *cmd, t_env **env)
 {
 	int	i;
 	int	isattr;
@@ -71,7 +71,7 @@ int	count_cmdlen(char *cmd)
 	return (len);
 }
 
-int	handle_export(char **cmds, t_line **env)
+int	handle_export(char **cmds, t_env **env)
 {
 	int	changed;
 	int	i;

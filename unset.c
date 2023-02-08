@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 11:25:22 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/01 12:58:25 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/07 13:29:52 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	check_cmd_env(char **env, char *cmd)
 	return (0);
 }
 
-int	handle_unset(char **cmds, t_line **env)
+int	handle_unset(char **cmds, t_env **env)
 {
 	int		i;
 	char	**buffer;
