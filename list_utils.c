@@ -52,6 +52,7 @@ t_line	*ft_lst_new(char **cmds)
 	new->extract_op = 0;
 	new->child = 0;
 	new->insert_op = NULL;
+	new->insert_char = NULL;
 	new->path = NULL;
 	new->next = 0;
 	return (new);
@@ -79,6 +80,8 @@ void	lst_free(t_line **lst)
 	while (buffer)
 	{
 		free_charpp(buffer->cmds);
+		if (buffer->insert_char)
+			free_charpp(buffer->insert_char);
 		if (buffer->path)
 			free(buffer->path);
 		if (buffer->insert_op)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/08 08:06:52 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/09 14:28:20 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,32 @@ void	expand_var(t_line **line, t_env *env)
 	*line = head;
 }
 
+void	insert_operation(t_line **line, char *eof)
+{
+	int		i;
+	char	**buffer;
+
+	i = -1;
+	buffer = NULL;
+	if (!(*line)->insert_char)
+	{
+		(*line)->insert_char = malloc(2 * sizeof(char *));
+		(*line)->insert_char[0] = ft_strdup(eof);
+		(*line)->insert_char[1] = 0;
+	}
+	else
+	{
+		buffer = malloc((cmds_count((*line)->insert_char) + 2) * sizeof(char *));
+		while ((*line)->insert_char[++i])
+			buffer[i] = ft_strdup((*line)->insert_char[i]);
+		buffer[i] = ft_strdup(eof);
+		buffer[i + 1] = 0;
+		free_charpp((*line)->insert_char);
+		(*line)->insert_char = ft_strdupp(buffer);
+		free_charpp(buffer);
+	}
+}
+
 void insert_exec(t_line **line)
 {
 	char	*eof;
@@ -94,21 +120,30 @@ void insert_exec(t_line **line)
 		while (1)
 		{
 			eof = readline("> ");
-			if (!eof)
+			if (!eof[0])
 			{
 				printf("\n");
 				break ;
 			}
-			if (!ft_strncmp((*line)->insert_op, eof, ft_strlen((*line)->insert_op)))
+			if (!ft_strncmp((*line)->insert_op, eof, ft_strlen((*line)->insert_op)) && ft_strlen((*line)->insert_op) == ft_strlen(eof))
 				break ;
-			//((*line)->outfile)
-			//printf("%s", eof);
+			insert_operation(line, eof);
 			free(eof);
 		}
 		free(eof);
 	}
 }
 
+void	print_insert(t_line **line)
+{
+	int i;
+	i = -1;
+	if ((*line)->insert_char && (*line)->next)
+	{		
+		while ((*line)->insert_char[++i])
+			printf("%s\n", (*line)->insert_char[i]);
+	}
+}
 void	exec_cmds(t_line **line, t_env **env, int *fd, int *fdd)
 {
 	if ((*line)->child == 0)
@@ -122,10 +157,12 @@ void	exec_cmds(t_line **line, t_env **env, int *fd, int *fdd)
 		if ((*line)->outfile_id > 0)
 			dup2((*line)->outfile_id, 1);
 		close(fd[0]);
-		if (handle_builtins((*line)->cmds, env) || !(*line)->path)
+		if (check_dir((*line)->cmds, (*env)->env) || handle_builtins\
+			((*line)->cmds, env) || !(*line)->path)
 		{
+			print_insert(line);
 			if (!(*line)->path)
-				printf(0);
+				printf("");
 			exit(EXIT_SUCCESS);
 		}
 		else
@@ -180,6 +217,20 @@ void	pipeline(t_line **line, t_env **env, int size)
 		waitpid(-1, NULL, 0);
 }
 
+void	check_builtins(t_line **line, t_env **env, int size)
+{
+	if ((*line)->cmds[0] && size == 1)
+	{
+		if (!ft_strncmp((*line)->cmds[0], "export", ft_strlen((*line)->cmds[0])))
+			handle_export((*line)->cmds, env);
+		if (!ft_strncmp((*line)->cmds[0], "unset", ft_strlen((*line)->cmds[0])))
+			handle_unset((*line)->cmds, env);
+		if (!ft_strncmp((*line)->cmds[0], "cd", ft_strlen((*line)->cmds[0])))
+			handle_cd((*line)->cmds, env);
+	}
+}
+
+
 void	cmd_process(t_line **line, t_env **env)
 {
 	void	*head;
@@ -187,8 +238,6 @@ void	cmd_process(t_line **line, t_env **env)
 
 	size = ft_lst_size((*line));
 	head = (*line);
-	if (!(*line)->cmds[0])
-		return ;
 	while (*line)
 	{
 		open_files(line);
@@ -196,17 +245,9 @@ void	cmd_process(t_line **line, t_env **env)
 	}
 	*line = head;
 	expand_var(line, *env);
-	if (!ft_strncmp((*line)->cmds[0], "export", ft_strlen((*line)->cmds[0])))
-		handle_export((*line)->cmds, env);
-	if (!ft_strncmp((*line)->cmds[0], "unset", ft_strlen((*line)->cmds[0])))
-		handle_unset((*line)->cmds, env);
-	if (!ft_strncmp((*line)->cmds[0], "cd", ft_strlen((*line)->cmds[0])))
-		handle_cd((*line)->cmds, env);
-	if (!check_dir((*line)->cmds, (*env)->env))
-	{
-		pipeline(line, env, size);
-		(*line) = head;
-	}
+	check_builtins(line, env, size);
+	pipeline(line, env, size);
+	(*line) = head;
 }
 
 void	minishell(char **envp)
@@ -228,7 +269,8 @@ void	minishell(char **envp)
 		else
 			break ;
 		if (organize_line(&line))
-		{			if (ft_strncmp(line->cmd, "exit", 5) == 0)
+		{
+			if (ft_strncmp(line->cmd, "exit", 5) == 0)
 				break ;
 			cmd_process(&line, &env);
 			line = head;

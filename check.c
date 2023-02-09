@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 14:42:32 by gussoare          #+#    #+#             */
-/*   Updated: 2023/02/07 09:07:16 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/09 13:54:38 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ int check_files(char **cmds)
 	outfile = 0;
 	while (cmds[++i])
 	{
-		if (cmds[i][0] == '<')
+		if (cmds[i][0] == '<' && cmds[i][1] != '<')
 			infile++;
-		if (cmds[i][0] == '>')
+		if (cmds[i][0] == '>' && cmds[i][1] != '>')
 			outfile++;
 	 	if (infile > 1 || outfile > 1)
 		{
@@ -69,45 +69,70 @@ int check_files(char **cmds)
 	return (1);
 }
 
+void	ft_lst_add_next(t_line **lst, t_line *new)
+{
+	void	*next;
+
+	if (!lst)
+		return ;
+	next = (*lst)->next;
+	(*lst)->next = new;
+	new->next = next;
+}
+
 int	check_operator(t_line **line, char **cmds)
 {
 	int		i;
 	int 	j;
 	char	**buffer;
 
+	(void)cmds;
 	buffer = NULL;
 	i = -1;
-	while (cmds[++i])
+	while ((*line)->cmds[++i])
 	{
-		if ((cmds[i][0] == '<' || cmds[i][0] == '>') && !cmds[i + 1])
+		if (((*line)->cmds[i][0] == '<' || (*line)->cmds[i][0] == '>') && !(*line)->cmds[i + 1])
 		{
 			print_error("zsh: parse error\n");
 			return (0);
 		}
-		else if (!strncmp(cmds[i], "<<<", 3) || !strncmp(cmds[i], ">>>", 3))
+		else if (!ft_strncmp((*line)->cmds[i], "<<<", 3) || !ft_strncmp((*line)->cmds[i], ">>>", 3))
 		{
 			print_error("Error: multiples '<' or '>' operator\n");
 			return (0);
 		}
-		else if (!strncmp(cmds[i], ">>", 2) && cmds[i + 1])
+		else if (!ft_strncmp((*line)->cmds[i], ">>", 2) && (*line)->cmds[i + 1])
 			(*line)->extract_op = 1;
-		else if (!strncmp(cmds[i], "<<", 2) && cmds[i + 1])
+		else if (!ft_strncmp((*line)->cmds[i], "<<", 2) && (*line)->cmds[i + 1])
 		{
 			(*line)->insert_op = ft_strdup((*line)->cmds[i + 1]);
-			buffer = malloc((cmds_count((*line)->cmds) - 1) * sizeof(char *));
 			j = 0;
 			i = -1;
-			while (cmds[++i])
+			if (cmds_count((*line)->cmds) > 2)
 			{
-				if (!ft_strncmp(cmds[i], "<<", 2))
-					break ;
-				buffer[j] = ft_strdup(cmds[i]);
-				j++;
+				buffer = malloc((cmds_count((*line)->cmds) - 1) * sizeof(char *));
+				while ((*line)->cmds[++i])
+				{
+					if (!ft_strncmp((*line)->cmds[i], "<<", 2))
+						i += 2;
+					if (!(*line)->cmds[i])
+						break ;
+					buffer[j++] = ft_strdup((*line)->cmds[i]);
+				}
+				i = -1;
+				buffer[j] = 0;
+				free_charpp((*line)->cmds);
+				//Criando uma função que crie um nó somente para o heredoc e concatene seu next com o comando anterior
+				if (buffer[0])
+					ft_lst_add_next(line, ft_lst_new(ft_strdupp(buffer)));
+				(*line)->cmds = ft_calloc(1, sizeof(char *));
+				free_charpp(buffer);
 			}
-			buffer[j] = 0;
-			free_charpp((*line)->cmds);
-			(*line)->cmds = ft_strdupp(buffer);
-			free_charpp(buffer);
+			else
+			{
+				free_charpp((*line)->cmds);
+				(*line)->cmds = ft_calloc(1, sizeof(char *));
+			}
 		}
 	}
 	return (1);
@@ -134,6 +159,13 @@ int	organize_line(t_line **line)
 	}
 	free_charpp(split_line);
 	check_for_pipes(line, (*line)->cmds);
+	*line = head;
+	while ((*line))
+	{
+		if (!check_operator(line, (*line)->cmds))
+			return (0);
+		(*line) = (*line)->next;
+	}
 	*line = head;
 	if (!init_files(line))
 		return (0);
