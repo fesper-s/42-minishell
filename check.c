@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 14:42:32 by gussoare          #+#    #+#             */
-/*   Updated: 2023/02/08 14:32:32 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/09 13:54:38 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,15 @@ int check_files(char **cmds)
 	return (1);
 }
 
-void	ft_lst_add_next(t_line **lst, t_line *new);
+void	ft_lst_add_next(t_line **lst, t_line *new)
 {
-	void *head;
+	void	*next;
 
-	head = *line;
-	ft_lst_new(ft_strdupp((*line)->cmds))
-
+	if (!lst)
+		return ;
+	next = (*lst)->next;
+	(*lst)->next = new;
+	new->next = next;
 }
 
 int	check_operator(t_line **line, char **cmds)
@@ -104,27 +106,27 @@ int	check_operator(t_line **line, char **cmds)
 		else if (!ft_strncmp((*line)->cmds[i], "<<", 2) && (*line)->cmds[i + 1])
 		{
 			(*line)->insert_op = ft_strdup((*line)->cmds[i + 1]);
+			j = 0;
+			i = -1;
 			if (cmds_count((*line)->cmds) > 2)
 			{
 				buffer = malloc((cmds_count((*line)->cmds) - 1) * sizeof(char *));
-				j = 0;
-				i = -1;
 				while ((*line)->cmds[++i])
 				{
 					if (!ft_strncmp((*line)->cmds[i], "<<", 2))
 						i += 2;
-					buffer[j] = ft_strdup((*line)->cmds[i]);
-					j++;
+					if (!(*line)->cmds[i])
+						break ;
+					buffer[j++] = ft_strdup((*line)->cmds[i]);
 				}
 				i = -1;
 				buffer[j] = 0;
 				free_charpp((*line)->cmds);
-				(*line)->cmds = ft_strdupp(buffer);
-				free_charpp(buffer);
 				//Criando uma função que crie um nó somente para o heredoc e concatene seu next com o comando anterior
-				//if ((*line)->cmds[0])
-				//	ft_lst_add_next(t_line **lst, t_line *new);
-
+				if (buffer[0])
+					ft_lst_add_next(line, ft_lst_new(ft_strdupp(buffer)));
+				(*line)->cmds = ft_calloc(1, sizeof(char *));
+				free_charpp(buffer);
 			}
 			else
 			{

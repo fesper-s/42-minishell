@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/08 14:27:52 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/09 14:24:24 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,12 +118,12 @@ void insert_exec(t_line **line)
 		while (1)
 		{
 			eof = readline("> ");
-			if (!eof)
+			if (!eof[0])
 			{
 				printf("\n");
 				break ;
 			}
-			if (!ft_strncmp((*line)->insert_op, eof, ft_strlen((*line)->insert_op)))
+			if (!ft_strncmp((*line)->insert_op, eof, ft_strlen((*line)->insert_op)) && ft_strlen((*line)->insert_op) == ft_strlen(eof))
 				break ;
 			insert_operation(line, eof);
 			free(eof);
@@ -136,8 +136,8 @@ void	print_insert(t_line **line)
 {
 	int i;
 	i = -1;
-	if ((*line)->insert_char)
-	{
+	if ((*line)->insert_char && (*line)->next)
+	{		
 		while ((*line)->insert_char[++i])
 			printf("%s\n", (*line)->insert_char[i]);
 	}
