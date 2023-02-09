@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/09 14:24:24 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/09 14:28:20 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ void	expand_var(t_line **line, t_env *env)
 					else if ((*line)->cmds[j][i + 1])
 					{
 						expanding(line, env, i, j);
+						if ((*line)->cmds[j] == NULL)
+							break ;
 						i = -1;
 					}
 				}
