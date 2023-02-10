@@ -52,20 +52,24 @@ char	*check_cmdpath(char *env_path, char **path, char *cmd)
 
 int	is_builtin(t_line **line)
 {
-	if (!ft_strncmp((*line)->cmds[0], "export", ft_strlen((*line)->cmds[0])))
-		return (1);
-	else if (!ft_strncmp((*line)->cmds[0], "unset", ft_strlen((*line)->cmds[0])))
-		return (1);
-	else if (!ft_strncmp((*line)->cmds[0], "env", ft_strlen((*line)->cmds[0])))
-		return (1);
-	else if (!ft_strncmp((*line)->cmds[0], "cd", ft_strlen((*line)->cmds[0])))
-		return (1);
-	else if (!ft_strncmp((*line)->cmds[0], "pwd", ft_strlen((*line)->cmds[0])))
-		return (1);
-	else if (!ft_strncmp((*line)->cmds[0], "echo", ft_strlen((*line)->cmds[0])))
-		return (1);
-	else
-		return (0);
+	int i;
+
+	i = 0;
+	if (!ft_strncmp((*line)->cmds[0], "export", 7))
+		i = 1;
+	if (!ft_strncmp((*line)->cmds[0], "unset", 6))
+		i = 1;
+	if (!ft_strncmp((*line)->cmds[0], "env", 4))
+		i = 1;
+	if (!ft_strncmp((*line)->cmds[0], "cd", 3))
+		i = 1;
+	if (!ft_strncmp((*line)->cmds[0], "pwd", 4))
+		i = 1;
+	if (!ft_strncmp((*line)->cmds[0], "echo", 5))
+		i = 1;
+	if (i == 1)
+		g_status = 0;
+	return (0);
 }
 
 char	*find_path(t_line **line, t_env **env)
@@ -74,23 +78,25 @@ char	*find_path(t_line **line, t_env **env)
 	char	*env_path;
 	char	**path;
 
-	if (!(*line)->cmds[0])
-		return (NULL);
-	if (is_builtin(line))
+	g_status = 127;
+	if (!(*line)->cmds[0] || is_builtin(line))
 		return (NULL);
 	env_path = check_for_path((*env)->env, NULL);
 	if (access((*line)->cmds[0], F_OK | X_OK) == 0)
 	{
 		free(env_path);
+		g_status = 0;
 		return (ft_strdup((*line)->cmds[0]));
 	}
 	path = ft_split(env_path, ':');
 	cmd_path = check_cmdpath(env_path, path, (*line)->cmds[0]);
 	free(env_path);
+	g_status = 0;
 	if (cmd_path)
 		return (cmd_path);
 	path_error(path, (*line)->cmds[0]);
 	free_charpp(path);
+	g_status = 127;
 	return (0);
 }
 

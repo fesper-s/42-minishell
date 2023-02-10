@@ -32,6 +32,7 @@ void	expand_var(t_line **line, t_env *env)
 			i = -1;
 			while ((*line)->cmds[j][++i])
 			{
+
 				if (!single_quote && (*line)->cmds[j][i] == '$')
 				{
 					if ((*line)->cmds[j][i + 1] == '?')
