@@ -3,14 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 10:19:33 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/07 10:59:17 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/10 12:13:41 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	is_flag(char **cmds, int i)
+{
+	int	j;
+
+	while (--i >= 1)
+	{
+		j = 0;
+		if (cmds[i][j] == '-')
+			j++;
+		while (cmds[i][j])
+		{
+			if (cmds[i][j] != 'n')
+				return (0);
+			j++;
+		}
+	}
+	return (1);
+}
 
 void	check_newline(char **cmds, int *newline, int *buffer, int i)
 {
