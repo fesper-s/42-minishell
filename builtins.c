@@ -74,7 +74,6 @@ int	handle_pwd(t_env *env)
 	printf("%s\n", buffer);
 	free(buffer);
 	free(buffer_aux);
-	g_status = 0;
 	return (1);
 }
 
