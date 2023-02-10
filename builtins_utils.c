@@ -12,25 +12,6 @@
 
 #include "minishell.h"
 
-int	is_flag(char **cmds, int i)
-{
-	int	j;
-
-	while (--i >= 1)
-	{
-		j = 0;
-		if (cmds[i][j] == '-')
-			j++;
-		while (cmds[i][j])
-		{
-			if (cmds[i][j] != 'n')
-				return (0);
-			j++;
-		}
-	}
-	return (1);
-}
-
 int	cmds_til_pipe(char **cmds)
 {
 	int	i;

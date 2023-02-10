@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/10 10:04:05 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/10 12:13:58 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ int		is_builtin(t_line **line);
 char	*find_path(t_line **line, t_env **env);
 int		cmds_count(char **split);
 // builtins_utils.c
-int		is_flag(char **cmds, int i);
 int		cmds_til_pipe(char **cmds);
 int		count_export_len(char *str);
 int		check_dir(char **cmds, char **env);
@@ -107,6 +106,7 @@ int		handle_pwd(t_env *env);
 int		handle_env(t_env *env);
 int		handle_builtins(char **cmds, t_env **env);
 // echo.c
+int		is_flag(char **cmds, int i);
 void	check_newline(char **cmds, int *newline, int *buffer, int i);
 int		handle_echo(char **cmds);
 // chdir.c

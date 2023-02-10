@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 08:38:10 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/10 10:01:27 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/10 13:44:03 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,17 +61,17 @@ void	question_mark(t_line **line, int index)
 	char	*aux;
 
 	aux = ft_itoa(g_status);
-	buffer = ft_strdup((*line)->cmds[0]);
+	buffer = ft_strdup((*line)->cmds[index]);
 	free((*line)->cmds[index]);
-	(*line)->cmds[index] = malloc(sizeof(char) * (ft_strlen(buffer) \
-		- 2 + ft_strlen(aux) + 1));
+	(*line)->cmds[index] = malloc(sizeof(char) * (ft_strlen(buffer) - 2\
+		+ ft_strlen(aux) + 1));
 	j = -1;
 	i = -1;
 	while (buffer[++i])
 	{
 		if (!ft_strncmp(&buffer[i], "$?", 2))
 		{
-			i += 2;
+			i++;
 			k = -1;
 			while (aux[++k])
 				(*line)->cmds[index][++j] = aux[k];
@@ -88,7 +88,7 @@ void	expanding(t_line **line, t_env *env, int j, int index)
 {
 	int	env_posi;
 
-	env_posi = search_varenv(&(*line)->cmds[index][0], env, j);
+	env_posi = search_varenv((*line)->cmds[index], env, j);
 	if (env_posi == -1)
 		chexpand(line, env, NULL, index);
 	else
@@ -123,25 +123,24 @@ int	search_varenv(char *cmds, t_env *env, int j)
 	return (-1);
 }
 
-
-int	size_malloc(char *buf)
+int	exp_malloc(char *buf)
 {
-	int len;
-	int rm;
+    int len;
+    int rm;
 
-	len = ft_strlen(buf);
-	rm = 0;
-	if (buf[0] == '$')
-		rm = til_dollar_sign(&buf[1]) + 1;
-	else
+    len = ft_strlen(buf);
+    rm = 0;
+    if (buf[0] == '$')
+        rm = til_dollar_sign(&buf[1]) + 1;
+    else
 	{
-		rm = til_dollar_sign(&buf[til_dollar_sign(buf)] + 1);
-		if (rm == 0)
-			rm = 1;
-	}
-	return (len - rm + 1);
+        rm = til_dollar_sign(&buf[til_dollar_sign(buf)] + 1);
+        if (rm == 0)
+            rm = 1;
+    }
+    len =  len - rm + 1;
+	return (len);
 }
-
 
 void chexpand(t_line **line, t_env *l_env, char *env, int index)
 {
@@ -155,14 +154,14 @@ void chexpand(t_line **line, t_env *l_env, char *env, int index)
 	{
 		buffer = ft_strdup((*line)->cmds[index]);
 		free((*line)->cmds[index]);
-		aux = malloc(sizeof(char) * size_malloc(buffer));
+		aux = malloc(sizeof(char) * exp_malloc(buffer));
 		i = -1;
 		j = -1;
 		while (buffer[++i])
 		{
 			if (buffer[i] == '$' && check_varenv(l_env->env, &buffer[i + 1]))
 				aux[++j] = buffer[i];
-			else if (buffer[i] == '$')
+			else if (buffer[i] == '$' && buffer[i + 1])
 				i += count_export_len(&buffer[i + 1]);
 			else
 				aux[++j] = buffer[i];
@@ -187,7 +186,7 @@ void chexpand(t_line **line, t_env *l_env, char *env, int index)
 	int k = -1;
 	while (buffer[++i])
 	{
-		if (!dollar && buffer[i] == '$' )
+		if (!dollar && buffer[i] == '$')
 		{
 			dollar = 1;
 			j = -1;
@@ -221,7 +220,7 @@ int	check_varenv(char **env, char *str)
 	while (env[++i])
 	{
 		if (!ft_strncmp(env[i], str, count_cmdlen(env[i])) && \
-			env[i][ft_strlen(str)] == '=')
+			env[i][count_export_len(str)] == '=')
 			return (1);
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/10 10:06:53 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/10 12:16:55 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void insert_exec(t_line **line)
 				break ;
 			}
 			g_status = 130;
-			if (!ft_strncmp((*line)->insert_op, eof, ft_strlen((*line)->insert_op)) && ft_strlen((*line)->insert_op) == ft_strlen(eof))
+			if (!ft_strncmp((*line)->insert_op, eof, ft_strlen(eof) + 1))
 				break ;
 			insert_operation(line, eof);
 			free(eof);
@@ -102,12 +102,10 @@ void	exec_cmds(t_line **line, t_env **env, int *fd, int *fdd)
 		if ((*line)->outfile_id > 0)
 			dup2((*line)->outfile_id, 1);
 		close(fd[0]);
-		if (check_dir((*line)->cmds, (*env)->env) || handle_builtins\
-			((*line)->cmds, env) || !(*line)->path)
+		if (check_dir((*line)->cmds, (*env)->env) || !(*line)->path)
 		{
+			handle_builtins((*line)->cmds, env);
 			print_insert(line);
-		//	if (!(*line)->path)
-		//		printf("NULL");
 			exit(EXIT_SUCCESS);
 		}
 		else
@@ -153,10 +151,7 @@ void	pipeline(t_line **line, t_env **env, int size)
 		if ((*line)->child == -1 && print_error("Error: fork\n"))
 			break ;
 		else
-		{
 			exec_cmds(line, env, fd, &fdd);
-			g_status = 0;
-		}
 	}
 	while (size--)
 		waitpid(-1, NULL, 0);
@@ -166,11 +161,11 @@ void	check_builtins(t_line **line, t_env **env, int size)
 {
 	if ((*line)->cmds[0] && size == 1)
 	{
-		if (!ft_strncmp((*line)->cmds[0], "export", ft_strlen((*line)->cmds[0])))
+		if (!ft_strncmp((*line)->cmds[0], "export", 7))
 			handle_export((*line)->cmds, env);
-		if (!ft_strncmp((*line)->cmds[0], "unset", ft_strlen((*line)->cmds[0])))
+		if (!ft_strncmp((*line)->cmds[0], "unset", 6))
 			handle_unset((*line)->cmds, env);
-		if (!ft_strncmp((*line)->cmds[0], "cd", ft_strlen((*line)->cmds[0])))
+		if (!ft_strncmp((*line)->cmds[0], "cd", 3))
 			handle_cd((*line)->cmds, env);
 	}
 }
