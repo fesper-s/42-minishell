@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 08:38:10 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/09 13:44:37 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/10 10:01:27 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ void	expand_var(t_line **line, t_env *env)
 						i = -1;
 					}
 				}
-				break ;
 			}
 		}
 		*line = (*line)->next;
@@ -93,7 +92,6 @@ void	expanding(t_line **line, t_env *env, int j, int index)
 	while ((*line)->cmds[index][i] == '$' && (*line)->cmds[index][i + 1] == '$')
 		i++;
 	env_posi = search_varenv(&(*line)->cmds[index][i], env, j);
-	printf("cmds -> %s\nenv_posi -> %d\n", (*line)->cmds[index], env_posi);
 	if (env_posi == -1)
 		chexpand(line, env, NULL, index);
 	else
@@ -106,7 +104,6 @@ int	search_varenv(char *cmds, t_env *env, int j)
 	int		i;
 
 	buffer = ft_strdup(&cmds[j + 1]);
-	printf("buffer -> %s\n", buffer);
 	i = -1;
 	while (env->env[++i])
 	{
@@ -192,7 +189,6 @@ void chexpand(t_line **line, t_env *l_env, char *env, int index)
 			(*line)->cmds[index][++k] = buffer[i];
 	}
 	(*line)->cmds[index][k + 1] = 0;
-	printf("cmds -> %s\n", (*line)->cmds[index]);
 	free(buffer);
 	free(aux);
 }
