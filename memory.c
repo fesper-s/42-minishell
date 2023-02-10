@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   memory.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 12:28:11 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/08 14:14:10 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/10 16:10:53 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,10 @@ void	exiting(t_line **line, t_env **env)
 	free_charpp((*env)->env);
 	free(*env);
 	printf("exit\n");
+}
+
+void	free_two(char **p1, char **p2)
+{
+	free(p1[0]);
+	free(p2[0]);
 }

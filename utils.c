@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 17:25:37 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/08 08:49:42 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/10 15:36:14 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ int	is_builtin(t_line **line)
 {
 	if (!ft_strncmp((*line)->cmds[0], "export", ft_strlen((*line)->cmds[0])))
 		return (1);
-	else if (!ft_strncmp((*line)->cmds[0], "unset", ft_strlen((*line)->cmds[0])))
+	else if (!ft_strncmp((*line)->cmds[0], "unset", \
+		ft_strlen((*line)->cmds[0])))
 		return (1);
 	else if (!ft_strncmp((*line)->cmds[0], "env", ft_strlen((*line)->cmds[0])))
 		return (1);
