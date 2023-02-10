@@ -120,11 +120,6 @@ void insert_exec(t_line **line)
 		while (1)
 		{
 			eof = readline("> ");
-			if (!eof[0])
-			{
-				printf("\n");
-				break ;
-			}
 			if (!ft_strncmp((*line)->insert_op, eof, ft_strlen((*line)->insert_op)) && ft_strlen((*line)->insert_op) == ft_strlen(eof))
 				break ;
 			insert_operation(line, eof);
@@ -161,8 +156,8 @@ void	exec_cmds(t_line **line, t_env **env, int *fd, int *fdd)
 			((*line)->cmds, env) || !(*line)->path)
 		{
 			print_insert(line);
-			if (!(*line)->path)
-				printf("");
+		//	if (!(*line)->path)
+		//		printf("NULL");
 			exit(EXIT_SUCCESS);
 		}
 		else
