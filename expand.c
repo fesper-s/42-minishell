@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 08:38:10 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/10 12:16:34 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/10 13:44:03 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,15 +62,15 @@ void	question_mark(t_line **line, int index)
 	aux = ft_itoa(g_status);
 	buffer = ft_strdup((*line)->cmds[index]);
 	free((*line)->cmds[index]);
-	(*line)->cmds[index] = malloc(sizeof(char) * (ft_strlen(buffer) \
-		- 2 + ft_strlen(aux) + 1));
+	(*line)->cmds[index] = malloc(sizeof(char) * (ft_strlen(buffer) - 2\
+		+ ft_strlen(aux) + 1));
 	j = -1;
 	i = -1;
 	while (buffer[++i])
 	{
 		if (!ft_strncmp(&buffer[i], "$?", 2))
 		{
-			i += 2;
+			i++;
 			k = -1;
 			while (aux[++k])
 				(*line)->cmds[index][++j] = aux[k];
