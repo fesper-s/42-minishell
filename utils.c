@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 17:25:37 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/07 15:34:52 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/08 08:49:42 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,24 @@ char	*check_cmdpath(char *env_path, char **path, char *cmd)
 	return (NULL);
 }
 
+int	is_builtin(t_line **line)
+{
+	if (!ft_strncmp((*line)->cmds[0], "export", ft_strlen((*line)->cmds[0])))
+		return (1);
+	else if (!ft_strncmp((*line)->cmds[0], "unset", ft_strlen((*line)->cmds[0])))
+		return (1);
+	else if (!ft_strncmp((*line)->cmds[0], "env", ft_strlen((*line)->cmds[0])))
+		return (1);
+	else if (!ft_strncmp((*line)->cmds[0], "cd", ft_strlen((*line)->cmds[0])))
+		return (1);
+	else if (!ft_strncmp((*line)->cmds[0], "pwd", ft_strlen((*line)->cmds[0])))
+		return (1);
+	else if (!ft_strncmp((*line)->cmds[0], "echo", ft_strlen((*line)->cmds[0])))
+		return (1);
+	else
+		return (0);
+}
+
 char	*find_path(t_line **line, t_env **env)
 {
 	char	*cmd_path;
@@ -58,17 +76,7 @@ char	*find_path(t_line **line, t_env **env)
 
 	if (!(*line)->cmds[0])
 		return (NULL);
-	if (!ft_strncmp((*line)->cmds[0], "export", ft_strlen((*line)->cmds[0])))
-		return (NULL);
-	if (!ft_strncmp((*line)->cmds[0], "unset", ft_strlen((*line)->cmds[0])))
-		return (NULL);
-	if (!ft_strncmp((*line)->cmds[0], "env", ft_strlen((*line)->cmds[0])))
-		return (NULL);
-	if (!ft_strncmp((*line)->cmds[0], "cd", ft_strlen((*line)->cmds[0])))
-		return (NULL);
-	if (!ft_strncmp((*line)->cmds[0], "pwd", ft_strlen((*line)->cmds[0])))
-		return (NULL);
-	if (!ft_strncmp((*line)->cmds[0], "echo", ft_strlen((*line)->cmds[0])))
+	if (is_builtin(line))
 		return (NULL);
 	env_path = check_for_path((*env)->env, NULL);
 	if (access((*line)->cmds[0], F_OK | X_OK) == 0)
