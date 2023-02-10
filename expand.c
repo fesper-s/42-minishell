@@ -32,6 +32,7 @@ void	expand_var(t_line **line, t_env *env)
 			i = -1;
 			while ((*line)->cmds[j][++i])
 			{
+
 				if (!single_quote && (*line)->cmds[j][i] == '$')
 				{
 					if ((*line)->cmds[j][i + 1] == '?')
@@ -86,12 +87,8 @@ void	question_mark(t_line **line, int index)
 void	expanding(t_line **line, t_env *env, int j, int index)
 {
 	int	env_posi;
-	int	i;
 
-	i = 0;
-	while ((*line)->cmds[index][i] == '$' && (*line)->cmds[index][i + 1] == '$')
-		i++;
-	env_posi = search_varenv(&(*line)->cmds[index][i], env, j);
+	env_posi = search_varenv(&(*line)->cmds[index][0], env, j);
 	if (env_posi == -1)
 		chexpand(line, env, NULL, index);
 	else
@@ -126,6 +123,26 @@ int	search_varenv(char *cmds, t_env *env, int j)
 	return (-1);
 }
 
+
+int	size_malloc(char *buf)
+{
+	int len;
+	int rm;
+
+	len = ft_strlen(buf);
+	rm = 0;
+	if (buf[0] == '$')
+		rm = til_dollar_sign(&buf[1]) + 1;
+	else
+	{
+		rm = til_dollar_sign(&buf[til_dollar_sign(buf)] + 1);
+		if (rm == 0)
+			rm = 1;
+	}
+	return (len - rm + 1);
+}
+
+
 void chexpand(t_line **line, t_env *l_env, char *env, int index)
 {
 	char	*buffer;
@@ -138,21 +155,14 @@ void chexpand(t_line **line, t_env *l_env, char *env, int index)
 	{
 		buffer = ft_strdup((*line)->cmds[index]);
 		free((*line)->cmds[index]);
-		if (buffer[0] == '$') {
-			aux = malloc(sizeof(char) * (ft_strlen(&buffer[\
-				til_dollar_sign(&buffer[1])])));
-		}
-		else
-			aux = malloc(sizeof(char) * (ft_strlen(buffer) - \
-				(ft_strlen(&buffer[til_dollar_sign(buffer) + 1]) - \
-					til_dollar_sign(buffer) - 1) + 1));
+		aux = malloc(sizeof(char) * size_malloc(buffer));
 		i = -1;
 		j = -1;
 		while (buffer[++i])
 		{
 			if (buffer[i] == '$' && check_varenv(l_env->env, &buffer[i + 1]))
 				aux[++j] = buffer[i];
-			else if (buffer[i] == '$' && (buffer[i + 1] && buffer[i + 1] != '$'))
+			else if (buffer[i] == '$')
 				i += count_export_len(&buffer[i + 1]);
 			else
 				aux[++j] = buffer[i];
@@ -177,7 +187,7 @@ void chexpand(t_line **line, t_env *l_env, char *env, int index)
 	int k = -1;
 	while (buffer[++i])
 	{
-		if (!dollar && buffer[i] == '$' && buffer[i + 1] != '$')
+		if (!dollar && buffer[i] == '$' )
 		{
 			dollar = 1;
 			j = -1;

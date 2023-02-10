@@ -40,6 +40,18 @@ void	insert_operation(t_line **line, char *eof)
 	}
 }
 
+void return_null(int signum)
+{
+	if (signum == SIGINT)
+	{
+		ioctl(STDIN_FILENO, TIOCSTI, "\n");
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		g_status = 666;
+	}
+
+}
+
 void insert_exec(t_line **line)
 {
 	char	*eof;
@@ -48,7 +60,16 @@ void insert_exec(t_line **line)
 	{
 		while (1)
 		{
+			signal(SIGINT, return_null);
 			eof = readline("> ");
+			if (!eof || g_status == 666)
+			{
+				g_status = 130;
+				if (!eof)
+					printf("\n");
+				break ;
+			}
+			g_status = 130;
 			if (!ft_strncmp((*line)->insert_op, eof, ft_strlen((*line)->insert_op)) && ft_strlen((*line)->insert_op) == ft_strlen(eof))
 				break ;
 			insert_operation(line, eof);
