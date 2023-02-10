@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/10 12:16:55 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/10 16:41:51 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,7 +184,7 @@ void	cmd_process(t_line **line, t_env **env)
 		*line = (*line)->next;
 	}
 	*line = head;
-	expand_var(line, *env);
+	expand_var(line, *env, 0);
 	check_builtins(line, env, size);
 	pipeline(line, env, size);
 	(*line) = head;

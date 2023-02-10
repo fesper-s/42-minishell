@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/10 12:13:58 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/10 16:44:51 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,13 +129,20 @@ int		handle_unset(char **cmds, t_env **env);
 char	**ft_strdupp(char **str);
 int		free_charpp(char **str);
 void	exiting(t_line **line, t_env **env);
+void	free_two(char **p1, char **p2);
+// init_expand.c
+void	apply_expand(t_line **line, t_env *env, int single_quote, int *j);
+void	expand_var(t_line **line, t_env *env, int j);
 // expand.c
-void	expand_var(t_line **line, t_env *env);
-void	question_mark(t_line **line, int index);
 void	expanding(t_line **line, t_env *env, int j, int index);
+void	null_chexpand(t_line **line, t_env *l_env, int index, int i);
+char	*init_values(char **aux, char *env, t_line **line, int index);
+void	chexpand(t_line **line, char *env, int index, int i);
+// expand_utils.c
 int		search_varenv(char *cmds, t_env *env, int j);
-void	chexpand(t_line **line, t_env *l_env, char *env, int index);
+void	question_mark(t_line **line, int index, int i, int j);
 int		til_dollar_sign(char *str);
 int		check_varenv(char **env, char *str);
+int		exp_malloc(char *buf);
 
 #endif
