@@ -80,13 +80,54 @@ void	ft_lst_add_next(t_line **lst, t_line *new)
 	new->next = next;
 }
 
+void	rm_insert_op(t_line **line, char **cmds, int i)
+{
+	char	**buffer;
+	int		j;
+
+	j = 0;
+	buffer = NULL;
+	buffer = malloc((cmds_count(cmds) - 1) * sizeof(char *));
+	while (cmds[++i])
+	{
+		if (!ft_strncmp(cmds[i], "<<", 2))
+			i += 2;
+		if (!cmds[i])
+			break ;
+		buffer[j++] = ft_strdup(cmds[i]);
+	}
+	buffer[j] = 0;
+	free_charpp((*line)->cmds);
+	if (buffer[0])
+		ft_lst_add_next(line, ft_lst_new(ft_strdupp(buffer)));
+	free_charpp(buffer);
+	(*line)->cmds = malloc(sizeof(char *));
+	(*line)->cmds[0] = 0;
+}
+
+void	check_heredocs(t_line **line, char **cmds, int *i)
+{
+	if (!ft_strncmp(cmds[*i], ">>", 2) && cmds[*i + 1])
+			(*line)->extract_op = 1;
+	else if (!ft_strncmp(cmds[*i], "<<", 2) && cmds[*i + 1])
+	{
+		(*line)->insert_op = ft_strdup(cmds[*i + 1]);
+		*i = -1;
+		if (cmds_count(cmds) > 2)
+			rm_insert_op(line, cmds, *i);
+		else
+		{
+			free_charpp((*line)->cmds);
+			(*line)->cmds = ft_calloc(1, sizeof(char *));
+		}
+		*i = -1;
+	}
+}
+
 int	check_operator(t_line **line, char **cmds)
 {
 	int		i;
-	int		j;
-	char	**buffer;
 
-	buffer = NULL;
 	i = -1;
 	while (cmds[++i])
 	{
@@ -95,7 +136,7 @@ int	check_operator(t_line **line, char **cmds)
 			print_error("zsh: parse error\n");
 			return (0);
 		}
-		if ((cmds[i][0] == '<' || cmds[i][0] == '>') && \
+		else if ((cmds[i][0] == '<' || cmds[i][0] == '>') && \
 			(cmds[i + 1][0] == '<' || cmds[i + 1][0] == '>'))
 		{
 			print_error("zsh: parse error\n");
@@ -107,51 +148,17 @@ int	check_operator(t_line **line, char **cmds)
 			print_error("Error: multiples '<' or '>' operator\n");
 			return (0);
 		}
-		else if (!ft_strncmp(cmds[i], ">>", 2) && cmds[i + 1])
-			(*line)->extract_op = 1;
-		else if (!ft_strncmp(cmds[i], "<<", 2) && cmds[i + 1])
-		{
-			(*line)->insert_op = ft_strdup(cmds[i + 1]);
-			j = 0;
-			i = -1;
-			if (cmds_count(cmds) > 2)
-			{
-				buffer = malloc((cmds_count(cmds) - 1) * sizeof(char *));
-				while (cmds[++i])
-				{
-					if (!ft_strncmp(cmds[i], "<<", 2))
-						i += 2;
-					if (!cmds[i])
-						break ;
-					buffer[j++] = ft_strdup(cmds[i]);
-				}
-				i = -1;
-				buffer[j] = 0;
-				free_charpp((*line)->cmds);
-				if (buffer[0])
-					ft_lst_add_next(line, ft_lst_new(ft_strdupp(buffer)));
-				free_charpp(buffer);
-				(*line)->cmds = malloc(sizeof(char *));
-				(*line)->cmds[0] = 0;
-			}
-			else
-			{
-				free_charpp((*line)->cmds);
-				(*line)->cmds = ft_calloc(1, sizeof(char *));
-			}
-		}
+		check_heredocs(line, cmds, &i);
 	}
 	return (1);
 }
 
-int	organize_line(t_line **line)
+int cut_cmd(t_line **line)
 {
-	char	**split_line;
-	void	*head;
+	char **split_line;
 
 	if (!(*line)->cmd[0])
 		return (0);
-	head = *line;
 	if (!check_double_pipes(*line) || check_quote_on((*line)->cmd))
 		return (0);
 	(*line)->cmd = check_space((*line)->cmd);
@@ -164,6 +171,16 @@ int	organize_line(t_line **line)
 		return (0);
 	}
 	free_charpp(split_line);
+	return (1);
+}
+
+int	organize_line(t_line **line)
+{
+	void	*head;
+
+	head = (*line);
+	if (!cut_cmd(line))
+		return (0);
 	check_for_pipes(line, (*line)->cmds);
 	*line = head;
 	while ((*line))
@@ -175,7 +192,6 @@ int	organize_line(t_line **line)
 	*line = head;
 	if (!init_files(line))
 		return (0);
-	*line = head;
 	return (1);
 }
 

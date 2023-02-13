@@ -72,6 +72,9 @@ int	is_builtin(t_line **line)
 	if (!ft_strncmp((*line)->cmds[0], "echo", 5))
 		i = 1;
 	if (i == 1)
+	{
 		g_status = 0;
+		return (1);
+	}
 	return (0);
 }
