@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/13 09:18:36 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/13 10:43:55 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,7 +213,7 @@ void	minishell(char **envp)
 			break ;
 		if (organize_line(&line))
 		{
-			if (ft_strncmp(line->cmd, "exit", 5) == 0)
+			if (!ft_strncmp(line->cmds[0], "exit", 5))
 				break ;
 			cmd_process(&line, &env);
 			line = head;
