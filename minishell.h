@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/13 14:31:29 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/13 15:38:57 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,25 +49,28 @@ typedef struct s_env
 extern int	g_status;
 
 // minishell.c
-void	open_files(t_line **line);
-void	insert_operation(t_line **line, char *eof);
-void	insert_exec(t_line **line);
-void	exec_cmds(t_line **line, t_env **env, int *fd, int *fdd);
-void	pipeline(t_line **line, t_env **env, int size);
-void	check_builtins(t_line **line, t_env **env, int size);
 void	cmd_process(t_line **line, t_env **env);
+int		organize_line(t_line **line);
 void	minishell(char **envp);
 //check.c
+int		check_files(char **cmds);
 int		check_operator(t_line **line, char **cmds);
-int		check_quote_on(char *cmd);
-int		organize_line(t_line **line);
-int		check_double_pipes(t_line *line);
-char	*check_space(char *cmd);
-char	*put_space(char *cmd, int x);
+void	check_builtins(t_line **line, t_env **env, int size);
 void	check_for_pipes(t_line **line, char **cmds);
+char	*check_space(char *cmd);
+//check_utils.c
+void	rm_insert_op(t_line **line, char **cmds, int i);
+char	*put_space(char *cmd, int x);
+int		check_quote_on(char *cmd);
+int		check_double_pipes(t_line *line);
+int		cut_cmd(t_line **line);
+// list_utils.c
+void	ft_lst_add_back(t_line **lst, t_line *new);
+t_line	*ft_lst_last(t_line *lst);
+t_line	*ft_lst_new(char **cmds);
+int		ft_lst_size(t_line *lst);
+void	ft_lst_add_next(t_line **lst, t_line *new);
 //init_struct.c
-int		file_len(char **cmd);
-void	ch_cmd_data(t_line **line, char ***buffer, int j);
 int		init_files(t_line **line);
 int		init_cmds(t_line **line, char **split);
 void	init_linked_list(t_line **line, char **before_pipe, char **after_pipe);
@@ -89,24 +92,17 @@ char	*check_cmdpath(char *env_path, char **path, char *cmd);
 char	*find_path(t_line **line, t_env **env);
 int		cmds_count(char **split);
 void	free_lstcontent(t_line **buffer);
-// builtins_utils.c
-int		cmds_til_pipe(char **cmds);
-int		count_export_len(char *str);
-int		check_dir(char **cmds);
-int		is_builtin(t_line **line);
-// list_utils.c
-void	lst_free(t_line **lst);
-void	ft_lst_add_back(t_line **lst, t_line *new);
-t_line	*ft_lst_last(t_line *lst);
-t_line	*ft_lst_new(char **cmds);
-int		ft_lst_size(t_line *lst);
-void	ft_lst_add_next(t_line **lst, t_line *new);
 // builtins.c
 void	smart_trim(t_line **line, int index);
 int		handle_cd(char **cmds, t_env **env);
 int		handle_pwd(t_env *env);
 int		handle_env(t_env *env);
 int		handle_builtins(char **cmds, t_env **env);
+// builtins_utils.c
+int		tilpipe(char **cmds);
+int		count_export_len(char *str);
+int		check_dir(char **cmds);
+int		is_builtin(t_line **line);
 // echo.c
 int		is_flag(char **cmds, int i);
 void	check_newline(char **cmds, int *newline, int *buffer, int i);
@@ -120,7 +116,6 @@ char	*no_argincd(char **env);
 // export.c
 void	add_to_env(char *cmd, t_env **env);
 int		exporting(char *cmd, t_env **env);
-void	chenvvar(char *cmd, t_env *env, int i);
 int		count_cmdlen(char *cmd);
 int		handle_export(char **cmds, t_env **env);
 // unset.c
@@ -132,6 +127,7 @@ char	**ft_strdupp(char **str);
 int		free_charpp(char **str);
 void	exiting(t_line **line, t_env **env);
 void	free_two(char **p1, char **p2);
+void	lst_free(t_line **lst);
 // init_expand.c
 void	apply_expand(t_line **line, t_env *env, int single_quote, int *j);
 void	expand_var(t_line **line, t_env *env, int j);
@@ -146,5 +142,19 @@ void	question_mark(t_line **line, int index, int i, int j);
 int		til_dollar_sign(char *str);
 int		check_varenv(char **env, char *str);
 int		exp_malloc(char *buf);
+//heredoc.c
+void	print_insert(t_line **line);
+void	insert_operation(t_line **line, char *eof);
+void	return_null(int signum);
+void	insert_exec(t_line **line);
+void	check_heredocs(t_line **line, char **cmds, int *i);
+//exec.c
+void	handle_cmd(t_line **line, t_env **env);
+void	exec_cmds(t_line **line, t_env **env, int *fd, int *fdd);
+void	pipeline(t_line **line, t_env **env, int size);
+//file_utils.c
+void	ch_cmd_data(t_line **line, char ***buffer, int j);
+void	open_files(t_line **line);
+int		file_len(char **cmd);
 
 #endif
