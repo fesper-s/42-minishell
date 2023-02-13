@@ -53,3 +53,25 @@ int	check_dir(char **cmds, char **env)
 	}
 	return (0);
 }
+
+int	is_builtin(t_line **line)
+{
+	int	i;
+
+	i = 0;
+	if (!ft_strncmp((*line)->cmds[0], "export", 7))
+		i = 1;
+	if (!ft_strncmp((*line)->cmds[0], "unset", 6))
+		i = 1;
+	if (!ft_strncmp((*line)->cmds[0], "env", 4))
+		i = 1;
+	if (!ft_strncmp((*line)->cmds[0], "cd", 3))
+		i = 1;
+	if (!ft_strncmp((*line)->cmds[0], "pwd", 4))
+		i = 1;
+	if (!ft_strncmp((*line)->cmds[0], "echo", 5))
+		i = 1;
+	if (i == 1)
+		g_status = 0;
+	return (0);
+}

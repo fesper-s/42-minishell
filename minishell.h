@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/10 16:44:51 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/13 09:07:36 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,13 +85,14 @@ void	handle_sigint(int signum);
 // utils.c
 char	*check_for_path(char **env, char *env_path);
 char	*check_cmdpath(char *env_path, char **path, char *cmd);
-int		is_builtin(t_line **line);
 char	*find_path(t_line **line, t_env **env);
 int		cmds_count(char **split);
+void	free_lstcontent(t_line **buffer);
 // builtins_utils.c
 int		cmds_til_pipe(char **cmds);
 int		count_export_len(char *str);
 int		check_dir(char **cmds, char **env);
+int		is_builtin(t_line **line);
 // list_utils.c
 void	lst_free(t_line **lst);
 void	ft_lst_add_back(t_line **lst, t_line *new);
