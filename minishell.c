@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/10 16:41:51 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/13 09:18:36 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ void	insert_operation(t_line **line, char *eof)
 	}
 	else
 	{
-		buffer = malloc((cmds_count((*line)->insert_char) + 2) * sizeof(char *));
+		buffer = malloc((cmds_count((*line)->insert_char) + 2) * \
+			sizeof(char *));
 		while ((*line)->insert_char[++i])
 			buffer[i] = ft_strdup((*line)->insert_char[i]);
 		buffer[i] = ft_strdup(eof);
@@ -40,7 +41,7 @@ void	insert_operation(t_line **line, char *eof)
 	}
 }
 
-void return_null(int signum)
+void	return_null(int signum)
 {
 	if (signum == SIGINT)
 	{
@@ -49,10 +50,9 @@ void return_null(int signum)
 		rl_on_new_line();
 		g_status = 666;
 	}
-
 }
 
-void insert_exec(t_line **line)
+void	insert_exec(t_line **line)
 {
 	char	*eof;
 
@@ -81,7 +81,8 @@ void insert_exec(t_line **line)
 
 void	print_insert(t_line **line)
 {
-	int i;
+	int	i;
+
 	i = -1;
 	if ((*line)->insert_char && (*line)->next)
 	{		
@@ -89,6 +90,7 @@ void	print_insert(t_line **line)
 			printf("%s\n", (*line)->insert_char[i]);
 	}
 }
+
 void	exec_cmds(t_line **line, t_env **env, int *fd, int *fdd)
 {
 	if ((*line)->child == 0)
@@ -119,20 +121,22 @@ void	exec_cmds(t_line **line, t_env **env, int *fd, int *fdd)
 	}
 }
 
-void open_files(t_line **line)
+void	open_files(t_line **line)
 {
 	if ((*line)->infile)
 		(*line)->infile_id = open((*line)->infile, O_RDONLY);
-	if ((*line)->infile_id  == -1)
+	if ((*line)->infile_id == -1)
 		printf("Error: no such file or directory: %s\n", (*line)->infile);
 	if ((*line)->outfile)
 	{
 		if ((*line)->extract_op)
-			(*line)->outfile_id  = open((*line)->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			(*line)->outfile_id = open((*line)->outfile, O_WRONLY | O_CREAT \
+				| O_APPEND, 0644);
 		else
-			(*line)->outfile_id  = open((*line)->outfile, O_WRONLY | O_CREAT | O_TRUNC , 0644);
+			(*line)->outfile_id = open((*line)->outfile, O_WRONLY | O_CREAT \
+				| O_TRUNC, 0644);
 	}
-	if ((*line)->outfile_id  == -1)
+	if ((*line)->outfile_id == -1)
 		printf("Error: no such file or directory: %s\n", (*line)->outfile);
 }
 
@@ -169,7 +173,6 @@ void	check_builtins(t_line **line, t_env **env, int size)
 			handle_cd((*line)->cmds, env);
 	}
 }
-
 
 void	cmd_process(t_line **line, t_env **env)
 {

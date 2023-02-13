@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 10:42:52 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/07 15:32:24 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/13 09:01:40 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,11 @@ void	smart_trim(t_line **line, int index)
 	char	*temp;
 
 	temp = NULL;
-	if ((*line)->cmds[index][0] == '\'' || (*line)->cmds[index][ft_strlen((*line)->cmds[index]) - 1] == '\'')
+	if ((*line)->cmds[index][0] == '\'' || (*line)->cmds[index][\
+		ft_strlen((*line)->cmds[index]) - 1] == '\'')
 		temp = ft_strtrim((*line)->cmds[index], "\'");
-	else if ((*line)->cmds[index][0] == '\"' || (*line)->cmds[index][ft_strlen((*line)->cmds[index]) - 1] == '\"')
+	else if ((*line)->cmds[index][0] == '\"' || (*line)->cmds[index][\
+		ft_strlen((*line)->cmds[index]) - 1] == '\"')
 		temp = ft_strtrim((*line)->cmds[index], "\"");
 	else
 		temp = ft_strdup((*line)->cmds[index]);

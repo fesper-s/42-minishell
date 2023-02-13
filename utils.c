@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 17:25:37 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/10 16:47:19 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/13 09:08:43 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,28 +50,6 @@ char	*check_cmdpath(char *env_path, char **path, char *cmd)
 	return (NULL);
 }
 
-int	is_builtin(t_line **line)
-{
-	int i;
-
-	i = 0;
-	if (!ft_strncmp((*line)->cmds[0], "export", 7))
-		i = 1;
-	if (!ft_strncmp((*line)->cmds[0], "unset", 6))
-		i = 1;
-	if (!ft_strncmp((*line)->cmds[0], "env", 4))
-		i = 1;
-	if (!ft_strncmp((*line)->cmds[0], "cd", 3))
-		i = 1;
-	if (!ft_strncmp((*line)->cmds[0], "pwd", 4))
-		i = 1;
-	if (!ft_strncmp((*line)->cmds[0], "echo", 5))
-		i = 1;
-	if (i == 1)
-		g_status = 0;
-	return (0);
-}
-
 char	*find_path(t_line **line, t_env **env)
 {
 	char	*cmd_path;
@@ -108,4 +86,20 @@ int	cmds_count(char **split)
 	while (split[i])
 		i++;
 	return (i);
+}
+
+void	free_lstcontent(t_line **buffer)
+{
+	if ((*buffer)->insert_char)
+		free_charpp((*buffer)->insert_char);
+	if ((*buffer)->path)
+		free((*buffer)->path);
+	if ((*buffer)->insert_op)
+		free((*buffer)->insert_op);
+	if ((*buffer)->cmd)
+		free((*buffer)->cmd);
+	if ((*buffer)->infile)
+		free((*buffer)->infile);
+	if ((*buffer)->outfile)
+		free((*buffer)->outfile);
 }

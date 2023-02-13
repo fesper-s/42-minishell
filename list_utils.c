@@ -80,18 +80,7 @@ void	lst_free(t_line **lst)
 	while (buffer)
 	{
 		free_charpp(buffer->cmds);
-		if (buffer->insert_char)
-			free_charpp(buffer->insert_char);
-		if (buffer->path)
-			free(buffer->path);
-		if (buffer->insert_op)
-			free(buffer->insert_op);
-		if (buffer->cmd)
-			free(buffer->cmd);
-		if (buffer->infile)
-			free(buffer->infile);
-		if (buffer->outfile)
-			free(buffer->outfile);
+		free_lstcontent(&buffer);
 		buffer = buffer->next;
 	}
 	buffer = *lst;

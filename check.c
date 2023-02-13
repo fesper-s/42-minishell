@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 14:42:32 by gussoare          #+#    #+#             */
-/*   Updated: 2023/02/09 13:54:38 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/13 09:14:38 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,13 +95,14 @@ int	check_operator(t_line **line, char **cmds)
 			print_error("zsh: parse error\n");
 			return (0);
 		}
-		if ((cmds[i][0] == '<' || cmds[i][0] == '>') &&\
-			 (cmds[i + 1][0] == '<' || cmds[i + 1][0] == '>'))
+		if ((cmds[i][0] == '<' || cmds[i][0] == '>') && \
+			(cmds[i + 1][0] == '<' || cmds[i + 1][0] == '>'))
 		{
 			print_error("zsh: parse error\n");
 			return (0);
 		}
-		else if (!ft_strncmp(cmds[i], "<<<", 3) || !ft_strncmp(cmds[i], ">>>", 3))
+		else if (!ft_strncmp(cmds[i], "<<<", 3) || \
+			!ft_strncmp(cmds[i], ">>>", 3))
 		{
 			print_error("Error: multiples '<' or '>' operator\n");
 			return (0);
@@ -175,7 +176,6 @@ int	organize_line(t_line **line)
 	if (!init_files(line))
 		return (0);
 	*line = head;
-
 	return (1);
 }
 
@@ -197,7 +197,8 @@ void	check_for_pipes(t_line **line, char **cmds)
 		{
 			if (cmds[i][0] == '|')
 			{
-				a_p = malloc((cmds_count(cmds) - cmds_til_pipe(cmds)) * sizeof(char *));
+				a_p = malloc((cmds_count(cmds) - cmds_til_pipe(cmds)) * \
+					sizeof(char *));
 				while (cmds[++i])
 					a_p[j++] = ft_strdup(cmds[i]);
 				break ;
@@ -245,11 +246,13 @@ char	*check_space(char *cmd)
 	i = 0;
 	while (cmd[i])
 	{
-		if (cmd[i] == '<' && (cmd[i + 1] != '<' && cmd[i + 1] != ' ' && cmd[i + 1])) 
+		if (cmd[i] == '<' && (cmd[i + 1] != '<' && cmd[i + 1] != ' ' && \
+			cmd[i + 1]))
 			cmd = put_space(cmd, i + 1);
 		else if (cmd[i] != ' ' && cmd[i] != '<' && cmd[i + 1] == '<')
 			cmd = put_space(cmd, i + 1);
-		else if (cmd[i] == '>' && (cmd[i + 1] != '>' && cmd[i + 1] != ' ' && cmd[i + 1]))
+		else if (cmd[i] == '>' && (cmd[i + 1] != '>' && cmd[i + 1] != ' ' \
+			&& cmd[i + 1]))
 			cmd = put_space(cmd, i + 1);
 		else if (cmd[i] != ' ' && cmd[i] != '>' && cmd[i + 1] == '>')
 			cmd = put_space(cmd, i + 1);
@@ -263,7 +266,7 @@ char	*check_space(char *cmd)
 	return (cmd);
 }
 
-int check_double_pipes(t_line *line)
+int	check_double_pipes(t_line *line)
 {
 	int	i;
 
