@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 11:43:56 by gussoare          #+#    #+#             */
-/*   Updated: 2023/02/13 11:52:45 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/13 15:39:22 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	exec_cmds(t_line **line, t_env **env, int *fd, int *fdd)
 		if ((*line)->outfile_id > 0)
 			dup2((*line)->outfile_id, 1);
 		close(fd[0]);
-		if (check_dir((*line)->cmds, (*env)->env) || !(*line)->path)
+		if (check_dir((*line)->cmds) || !(*line)->path)
 			handle_cmd(line, env);
 		else
 			execve((*line)->path, (*line)->cmds, (*env)->env);

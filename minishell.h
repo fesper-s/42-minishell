@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/13 12:39:09 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/13 15:38:57 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <readline/history.h>
 # include <sys/ioctl.h>
 # include <sys/wait.h>
+# include <dirent.h>
 
 typedef struct s_line
 {
@@ -100,7 +101,7 @@ int		handle_builtins(char **cmds, t_env **env);
 // builtins_utils.c
 int		tilpipe(char **cmds);
 int		count_export_len(char *str);
-int		check_dir(char **cmds, char **env);
+int		check_dir(char **cmds);
 int		is_builtin(t_line **line);
 // echo.c
 int		is_flag(char **cmds, int i);

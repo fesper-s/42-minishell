@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 17:25:37 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/13 09:08:43 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/13 15:24:48 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,21 +55,34 @@ char	*find_path(t_line **line, t_env **env)
 	char	*cmd_path;
 	char	*env_path;
 	char	**path;
+	DIR		*dir;
+	int		i;
 
-	g_status = 127;
 	if (!(*line)->cmds[0] || is_builtin(line))
 		return (NULL);
 	env_path = check_for_path((*env)->env, NULL);
 	if (access((*line)->cmds[0], F_OK | X_OK) == 0)
 	{
+		g_status = 126;
 		free(env_path);
-		g_status = 0;
 		return (ft_strdup((*line)->cmds[0]));
 	}
 	path = ft_split(env_path, ':');
 	cmd_path = check_cmdpath(env_path, path, (*line)->cmds[0]);
 	free(env_path);
 	g_status = 0;
+	i = 0;
+	while ((*line)->cmds[++i])
+	{
+		dir = opendir((*line)->cmds[i]);
+		int fd;
+		fd = open((*line)->cmds[i], O_RDONLY);
+		if (!dir && (*line)->cmds[i] && (*line)->cmds[i][0] != '-' && fd == -1)
+			g_status = 1;
+		close(fd);
+		if (dir)
+			closedir(dir);
+	}
 	if (cmd_path)
 		return (cmd_path);
 	path_error(path, (*line)->cmds[0]);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 08:00:46 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/07 15:17:05 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/13 14:35:06 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int	handle_export(char **cmds, t_env **env)
 				changed = 1;
 			}
 		}
-		if (!changed && ft_strchr(cmds[i], '='))
+		if (!changed)
 			exporting(cmds[i], env);
 	}
 	return (1);

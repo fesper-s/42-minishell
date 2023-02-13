@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 14:42:32 by gussoare          #+#    #+#             */
-/*   Updated: 2023/02/13 12:05:46 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/13 15:38:23 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,8 @@ void	check_for_pipes(t_line **line, char **cmd)
 
 	i = -1;
 	j = 0;
+	b_p = NULL;
+	a_p = NULL;
 	if (cmds_count(cmd) != tilpipe(cmd))
 	{
 		b_p = malloc((tilpipe(cmd) + 1) * sizeof(char *));

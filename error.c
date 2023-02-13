@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 14:52:21 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/01/31 09:54:27 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/13 11:36:12 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,10 @@ void	error_display(char *cmd)
 
 void	dir_error(char *path)
 {
-	ft_putstr_fd("cd: no such file or directory: ", 2);
+	ft_putstr_fd("minishell: cd: no such file or directory: ", 2);
 	ft_putstr_fd(path, 2);
 	ft_putstr_fd("\n", 2);
+	g_status = 1;
 }
 
 int	export_error(char *str)

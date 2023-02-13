@@ -35,20 +35,17 @@ int	count_export_len(char *str)
 	return (len);
 }
 
-int	check_dir(char **cmds, char **env)
+int	check_dir(char **cmds)
 {
-	int	i;
+	DIR	*dir;
 
 	if (!cmds[0])
 		return (0);
-	i = -1;
-	while (env[++i])
-		if (!ft_strncmp(env[i], "PWD=", 4))
-			break ;
-	if (!chdir(cmds[0]))
+	dir = opendir(cmds[0]);
+	if (dir)
 	{
-		chdir(env[i]);
 		check_dir_error(cmds[0]);
+		closedir(dir);
 		return (1);
 	}
 	return (0);
@@ -56,25 +53,17 @@ int	check_dir(char **cmds, char **env)
 
 int	is_builtin(t_line **line)
 {
-	int	i;
-
-	i = 0;
 	if (!ft_strncmp((*line)->cmds[0], "export", 7))
-		i = 1;
-	if (!ft_strncmp((*line)->cmds[0], "unset", 6))
-		i = 1;
-	if (!ft_strncmp((*line)->cmds[0], "env", 4))
-		i = 1;
-	if (!ft_strncmp((*line)->cmds[0], "cd", 3))
-		i = 1;
-	if (!ft_strncmp((*line)->cmds[0], "pwd", 4))
-		i = 1;
-	if (!ft_strncmp((*line)->cmds[0], "echo", 5))
-		i = 1;
-	if (i == 1)
-	{
-		g_status = 0;
 		return (1);
-	}
+	if (!ft_strncmp((*line)->cmds[0], "unset", 6))
+		return (1);
+	if (!ft_strncmp((*line)->cmds[0], "env", 4))
+		return (1);
+	if (!ft_strncmp((*line)->cmds[0], "cd", 3))
+		return (1);
+	if (!ft_strncmp((*line)->cmds[0], "pwd", 4))
+		return (1);
+	if (!ft_strncmp((*line)->cmds[0], "echo", 5))
+		return (1);
 	return (0);
 }

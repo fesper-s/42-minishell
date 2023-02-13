@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/13 12:08:39 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/13 15:36:31 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	minishell(char **envp)
 			break ;
 		if (organize_line(&line))
 		{
-			if (ft_strncmp(line->cmd, "exit", 5) == 0)
+			if (!ft_strncmp(line->cmds[0], "exit", 5))
 				break ;
 			cmd_process(&line, &env);
 			lst_free(&line);
