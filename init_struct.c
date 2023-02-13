@@ -12,33 +12,6 @@
 
 #include "minishell.h"
 
-int	file_len(char **cmd)
-{
-	int	i;
-	int	j;
-
-	i = -1;
-	j = 0;
-	if (!cmd[0])
-		return (0);
-	while (cmd[++i])
-	{
-		if ((cmd[i][0] == '>' || (cmd[i][0] == '<' && !cmd[i][0])) && \
-			(cmd[i + 1]))
-			j += 2;
-	}
-	return (i - j);
-}
-
-void	ch_cmd_data(t_line **line, char ***buffer, int j)
-{
-	buffer[0][j + 1] = 0;
-	free_charpp((*line)->cmds);
-	(*line)->cmds = ft_strdupp(buffer[0]);
-	free_charpp(buffer[0]);
-	(*line) = (*line)->next;
-}
-
 int	init_files(t_line **line)
 {
 	int		i;

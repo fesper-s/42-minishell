@@ -71,24 +71,13 @@ int	ft_lst_size(t_line *lst)
 	return (i);
 }
 
-void	lst_free(t_line **lst)
+void	ft_lst_add_next(t_line **lst, t_line *new)
 {
-	t_line	*buffer;
-	t_line	*del;
+	void	*next;
 
-	buffer = *lst;
-	while (buffer)
-	{
-		free_charpp(buffer->cmds);
-		free_lstcontent(&buffer);
-		buffer = buffer->next;
-	}
-	buffer = *lst;
-	while (buffer)
-	{
-		del = buffer;
-		buffer = buffer->next;
-		free(del);
-	}
-	*lst = NULL;
+	if (!lst)
+		return ;
+	next = (*lst)->next;
+	(*lst)->next = new;
+	new->next = next;
 }

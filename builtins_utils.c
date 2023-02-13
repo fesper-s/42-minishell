@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int	cmds_til_pipe(char **cmds)
+int	tilpipe(char **cmds)
 {
 	int	i;
 
