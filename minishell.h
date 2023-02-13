@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/13 09:07:36 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/13 14:31:29 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <readline/history.h>
 # include <sys/ioctl.h>
 # include <sys/wait.h>
+# include <dirent.h>
 
 typedef struct s_line
 {
@@ -91,7 +92,7 @@ void	free_lstcontent(t_line **buffer);
 // builtins_utils.c
 int		cmds_til_pipe(char **cmds);
 int		count_export_len(char *str);
-int		check_dir(char **cmds, char **env);
+int		check_dir(char **cmds);
 int		is_builtin(t_line **line);
 // list_utils.c
 void	lst_free(t_line **lst);

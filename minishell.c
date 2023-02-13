@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/13 10:43:55 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/13 14:31:21 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void	exec_cmds(t_line **line, t_env **env, int *fd, int *fdd)
 		if ((*line)->outfile_id > 0)
 			dup2((*line)->outfile_id, 1);
 		close(fd[0]);
-		if (check_dir((*line)->cmds, (*env)->env) || !(*line)->path)
+		if (check_dir((*line)->cmds) || !(*line)->path)
 		{
 			handle_builtins((*line)->cmds, env);
 			print_insert(line);
