@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/14 09:00:52 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/14 10:23:58 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,24 @@ int	organize_line(t_line **line)
 	while ((*line))
 	{
 		if (!check_operator(line, (*line)->cmds))
+		{
+			*line = head;
+			lst_free(line);
 			return (0);
+		}
 		(*line) = (*line)->next;
 	}
 	*line = head;
+	//int i;
+	// while (*line)
+	// {
+	// 	i = -1;
+	// 	while ((*line)->cmds[++i])
+	// 		printf("cmds[%d]--> %s\n", i, (*line)->cmds[i]);
+	// 	printf("cmds[%d]--> %s\n", i, (*line)->cmds[i]);
+	// 	(*line) = (*line)->next;
+	// }
+	// *line = head;
 	if (!init_files(line))
 		return (0);
 	return (1);
@@ -72,8 +86,9 @@ void	minishell(char **envp)
 			break ;
 		if (organize_line(&line))
 		{
-			if (!ft_strncmp(line->cmds[0], "exit", 5))
-				break ;
+			if (line->cmds[0])
+				if (!ft_strncmp(line->cmds[0], "exit", 5))
+					break ;
 			cmd_process(&line, &env);
 			lst_free(&line);
 		}

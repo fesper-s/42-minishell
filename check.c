@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 14:42:32 by gussoare          #+#    #+#             */
-/*   Updated: 2023/02/14 09:01:48 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/14 10:16:45 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,12 @@ int	check_operator(t_line **line, char **cmds)
 			print_error("Error: multiples '<' or '>' operator\n");
 			return (0);
 		}
-		check_heredocs(line, cmds, &i);
+		else
+			check_heredocs(line, cmds, &i);
+		if (i == -1)
+		{
+			break ;
+		}
 	}
 	return (1);
 }

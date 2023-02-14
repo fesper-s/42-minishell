@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 17:25:37 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/14 08:57:13 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/14 10:23:32 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,9 @@ char	*find_path(t_line **line, t_env **env)
 	char	*env_path;
 	char	**path;
 
-	validate_dir((*line)->cmds);
 	if (!(*line)->cmds[0] || is_builtin(line))
 		return (NULL);
+	validate_dir((*line)->cmds);
 	env_path = check_for_path((*env)->env, NULL);
 	if (access((*line)->cmds[0], F_OK | X_OK) == 0)
 	{

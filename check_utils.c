@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 11:53:59 by gussoare          #+#    #+#             */
-/*   Updated: 2023/02/13 12:01:43 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/14 09:19:43 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	rm_insert_op(t_line **line, char **cmds, int i)
 		if (!cmds[i])
 			break ;
 		buffer[j++] = ft_strdup(cmds[i]);
+
 	}
 	buffer[j] = 0;
 	free_charpp((*line)->cmds);

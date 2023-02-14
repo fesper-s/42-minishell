@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 11:43:56 by gussoare          #+#    #+#             */
-/*   Updated: 2023/02/13 15:39:22 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/14 10:23:40 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void	handle_cmd(t_line **line, t_env **env)
 {
 	handle_builtins((*line)->cmds, env);
 	print_insert(line);
+	if (!(*line)->cmds[0])
+		printf("minishell: : command not found\n");
 	exit(EXIT_SUCCESS);
 }
 
