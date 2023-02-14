@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 10:42:52 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/14 10:00:22 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/14 12:27:11 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,19 +88,11 @@ int	handle_pwd(t_env *env)
 int	handle_env(t_env *env)
 {
 	int		i;
-	int		path;
 
-	path = 0;
+	g_status = 0;
 	i = -1;
 	while (env->env[++i])
-		if (!ft_strncmp(env->env[i], "PATH=", 5))
-			path = 1;
-	i = -1;
-	while (path && env->env[++i])
 		printf("%s\n", env->env[i]);
-	if (!path)
-		path_error(NULL, "env");
-	g_status = 0;
 	return (1);
 }
 

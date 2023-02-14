@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 11:25:22 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/07 13:29:52 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/14 12:12:45 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,38 @@ int	check_cmd_env(char **env, char *cmd)
 	return (0);
 }
 
+int	validate_for_unset(char *cmds)
+{
+	int	i;
+
+	i = -1;
+	while (cmds[++i])
+	{
+		if (ft_isdigit(cmds[i]) && i == 0)
+		{
+			export_error(cmds, "unset");
+			return (1);
+		}
+		if (!ft_isalnum(cmds[i]) && cmds[i] != '_')
+		{
+			export_error(cmds, "unset");
+			return (1);
+		}
+	}
+	return (0);
+}
+
 int	handle_unset(char **cmds, t_env **env)
 {
 	int		i;
 	char	**buffer;
 
+	g_status = 0;
 	i = 0;
 	while (cmds[1] && cmds[++i])
 	{
+		if (validate_for_unset(cmds[i]))
+			break ;
 		if (check_cmd_env((*env)->env, cmds[i]))
 		{
 			buffer = malloc(sizeof(char *) * cmds_count((*env)->env));
@@ -64,6 +88,5 @@ int	handle_unset(char **cmds, t_env **env)
 			free_charpp(buffer);
 		}
 	}
-	g_status = 0;
 	return (1);
 }

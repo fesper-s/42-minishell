@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 14:52:21 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/13 11:36:12 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/14 12:13:57 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,11 @@ void	dir_error(char *path)
 	g_status = 1;
 }
 
-int	export_error(char *str)
+int	export_error(char *str, char *msg)
 {
-	ft_putstr_fd("minishell: export: `", 2);
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(msg, 2);
+	ft_putstr_fd(": `", 2);
 	ft_putstr_fd(str, 2);
 	ft_putstr_fd("': not a valid identifier\n", 2);
 	g_status = 1;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 17:25:37 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/14 10:23:32 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/14 12:20:02 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,14 +77,19 @@ char	*find_path(t_line **line, t_env **env)
 	char	**path;
 
 	if (!(*line)->cmds[0] || is_builtin(line))
+	{
+		if (!(*line)->cmds[0])
+			g_status = 127;
 		return (NULL);
+	}
 	validate_dir((*line)->cmds);
 	env_path = check_for_path((*env)->env, NULL);
 	if (access((*line)->cmds[0], F_OK | X_OK) == 0)
 	{
 		g_status = 126;
 		if (!ft_strncmp((*line)->cmds[0], "/bin", 4) || \
-			!ft_strncmp((*line)->cmds[0], "/usr/bin", 8))
+			!ft_strncmp((*line)->cmds[0], "/usr/bin", 8) || \
+			!ft_strncmp((*line)->cmds[0], "./", 2))
 			g_status = 0;
 		free(env_path);
 		return (ft_strdup((*line)->cmds[0]));
