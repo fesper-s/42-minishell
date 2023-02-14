@@ -65,5 +65,5 @@ void	init_linked_list(t_line **line, char **before_pipe, char **after_pipe)
 	free_charpp(before_pipe);
 	free_charpp(after_pipe);
 	(*line) = (*line)->next;
-	check_for_pipes(line, (*line)->cmds);
+	check_for_pipes(line, (*line)->cmds, -1, 0);
 }

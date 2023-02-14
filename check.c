@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 14:42:32 by gussoare          #+#    #+#             */
-/*   Updated: 2023/02/13 15:38:23 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/14 09:01:48 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,15 +83,11 @@ void	check_builtins(t_line **line, t_env **env, int size)
 	}
 }
 
-void	check_for_pipes(t_line **line, char **cmd)
+void	check_for_pipes(t_line **line, char **cmd, int i, int j)
 {
-	int		i;
-	int		j;
 	char	**b_p;
 	char	**a_p;
 
-	i = -1;
-	j = 0;
 	b_p = NULL;
 	a_p = NULL;
 	if (cmds_count(cmd) != tilpipe(cmd))
