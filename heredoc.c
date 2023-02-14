@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 11:48:10 by gussoare          #+#    #+#             */
-/*   Updated: 2023/02/14 12:20:32 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/14 13:50:54 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	check_heredocs(t_line **line, char **cmds, int *i)
 	else if (!ft_strncmp(cmds[*i], "<<", 2) && cmds[*i + 1])
 	{
 		smart_trim(line, *i + 1);
-		(*line)->insert_op =  ft_strdup(cmds[*i + 1]);
+		(*line)->insert_op = ft_strdup(cmds[*i + 1]);
 		*i = -1;
 		if (cmds_count(cmds) > 2)
 			rm_insert_op(line, cmds, *i);

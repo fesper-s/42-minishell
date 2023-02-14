@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 12:28:11 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/14 08:57:54 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/14 13:05:33 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ void	free_two(char **p1, char **p2)
 	free(p2[0]);
 }
 
-void	free_ppp(char *p, char **pp)
+void	free_ppp(char **p, char **pp)
 {
-	free(p);
+	free(p[0]);
 	free_charpp(pp);
 }

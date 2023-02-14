@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 17:25:37 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/14 12:20:02 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/14 14:01:11 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,21 +85,14 @@ char	*find_path(t_line **line, t_env **env)
 	validate_dir((*line)->cmds);
 	env_path = check_for_path((*env)->env, NULL);
 	if (access((*line)->cmds[0], F_OK | X_OK) == 0)
-	{
-		g_status = 126;
-		if (!ft_strncmp((*line)->cmds[0], "/bin", 4) || \
-			!ft_strncmp((*line)->cmds[0], "/usr/bin", 8) || \
-			!ft_strncmp((*line)->cmds[0], "./", 2))
-			g_status = 0;
-		free(env_path);
-		return (ft_strdup((*line)->cmds[0]));
-	}
+		return (checking_exe(line, &env_path));
 	path = ft_split(env_path, ':');
 	cmd_path = check_cmdpath(env_path, path, (*line)->cmds[0]);
+	free(env_path);
 	if (cmd_path)
 		return (cmd_path);
 	path_error(path, (*line)->cmds[0]);
-	free_ppp(env_path, path);
+	free_charpp(path);
 	g_status = 127;
 	return (0);
 }

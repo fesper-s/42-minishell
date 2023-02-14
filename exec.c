@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 11:43:56 by gussoare          #+#    #+#             */
-/*   Updated: 2023/02/14 12:43:55 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/14 13:50:11 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ void	handle_cmd(t_line **line, t_env **env)
 {
 	handle_builtins((*line)->cmds, env);
 	print_insert(line);
-	if (!(*line)->cmds[0] && !(*line)->insert_op && !(*line)->infile && !(*line)->outfile)
+	if (!(*line)->cmds[0] && !(*line)->insert_op && !(*line)->infile && \
+		!(*line)->outfile)
 		printf("minishell: : command not found\n");
 	exit(EXIT_SUCCESS);
 }

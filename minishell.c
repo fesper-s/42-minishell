@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/14 12:42:17 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/14 13:52:02 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	organize_line(t_line **line)
 	*line = head;
 	while ((*line))
 	{
-		if (!check_operator(line, (*line)->cmds))
+		if (!check_operator(line, (*line)->cmds, -1))
 		{
 			*line = head;
 			lst_free(line);
@@ -53,16 +53,6 @@ int	organize_line(t_line **line)
 		(*line) = (*line)->next;
 	}
 	*line = head;
-	// int i;
-	// while (*line)
-	// {
-	// 	i = -1;
-	// 	while ((*line)->cmds[++i])
-	// 		printf("cmds[%d]--> %s\n", i, (*line)->cmds[i]);
-	// 	printf("cmds[%d]--> %s\n", i, (*line)->cmds[i]);
-	// 	(*line) = (*line)->next;
-	// }
-	// *line = head;
 	if (!init_files(line))
 		return (0);
 	return (1);
