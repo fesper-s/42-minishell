@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 11:43:56 by gussoare          #+#    #+#             */
-/*   Updated: 2023/02/14 10:42:26 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/14 12:43:55 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	handle_cmd(t_line **line, t_env **env)
 {
 	handle_builtins((*line)->cmds, env);
 	print_insert(line);
-	if (!(*line)->cmds[0])
+	if (!(*line)->cmds[0] && !(*line)->insert_op && !(*line)->infile && !(*line)->outfile)
 		printf("minishell: : command not found\n");
 	exit(EXIT_SUCCESS);
 }
@@ -49,6 +49,8 @@ void	exec_cmds(t_line **line, t_env **env, int *fd, int *fdd)
 
 void	check_for_builtins(char **cmds)
 {
+	if (!cmds[0])
+		return ;
 	if (!ft_strncmp(cmds[0], "echo", 5))
 		g_status = 0;
 	if (!ft_strncmp(cmds[0], "pwd", 4))

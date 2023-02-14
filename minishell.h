@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/14 12:14:21 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/14 12:37:29 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ typedef struct s_line
 	int				outfile_id;
 	int				extract_op;
 	char			*insert_op;
+	int				insert_len;
+	int				is_insert;
 	char			**insert_char;
 	char			*path;
 	struct s_line	*next;
