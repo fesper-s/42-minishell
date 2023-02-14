@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   memory.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 12:28:11 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/13 12:00:43 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/14 08:57:54 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,24 +55,8 @@ void	free_two(char **p1, char **p2)
 	free(p2[0]);
 }
 
-void	lst_free(t_line **lst)
+void	free_ppp(char *p, char **pp)
 {
-	t_line	*buffer;
-	t_line	*del;
-
-	buffer = *lst;
-	while (buffer)
-	{
-		free_charpp(buffer->cmds);
-		free_lstcontent(&buffer);
-		buffer = buffer->next;
-	}
-	buffer = *lst;
-	while (buffer)
-	{
-		del = buffer;
-		buffer = buffer->next;
-		free(del);
-	}
-	*lst = NULL;
+	free(p);
+	free_charpp(pp);
 }

@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/13 15:38:57 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/14 09:01:12 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	minishell(char **envp);
 int		check_files(char **cmds);
 int		check_operator(t_line **line, char **cmds);
 void	check_builtins(t_line **line, t_env **env, int size);
-void	check_for_pipes(t_line **line, char **cmds);
+void	check_for_pipes(t_line **line, char **cmds, int i, int j);
 char	*check_space(char *cmd);
 //check_utils.c
 void	rm_insert_op(t_line **line, char **cmds, int i);
@@ -127,6 +127,7 @@ char	**ft_strdupp(char **str);
 int		free_charpp(char **str);
 void	exiting(t_line **line, t_env **env);
 void	free_two(char **p1, char **p2);
+void	free_ppp(char *p, char **pp);
 void	lst_free(t_line **lst);
 // init_expand.c
 void	apply_expand(t_line **line, t_env *env, int single_quote, int *j);
