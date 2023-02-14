@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 17:25:37 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/14 09:07:33 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/14 10:23:32 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,43 +50,51 @@ char	*check_cmdpath(char *env_path, char **path, char *cmd)
 	return (NULL);
 }
 
-char	*find_path(t_line **line, t_env **env)
+void	validate_dir(char **cmds)
 {
-	char	*cmd_path;
-	char	*env_path;
-	char	**path;
-	DIR		*dir;
-	int		i;
+	DIR	*dir;
+	int	i;
+	int	fd;
 
-	if (!(*line)->cmds[0] || is_builtin(line))
-		return (NULL);
-	env_path = check_for_path((*env)->env, NULL);
-	if (access((*line)->cmds[0], F_OK | X_OK) == 0)
-	{
-		g_status = 126;
-		free(env_path);
-		return (ft_strdup((*line)->cmds[0]));
-	}
-	path = ft_split(env_path, ':');
-	cmd_path = check_cmdpath(env_path, path, (*line)->cmds[0]);
-	free(env_path);
 	g_status = 0;
 	i = 0;
-	while ((*line)->cmds[++i])
+	while (cmds[++i])
 	{
-		dir = opendir((*line)->cmds[i]);
-		int fd;
-		fd = open((*line)->cmds[i], O_RDONLY);
-		if (!dir && (*line)->cmds[i] && (*line)->cmds[i][0] != '-' && fd == -1)
+		dir = opendir(cmds[i]);
+		fd = open(cmds[i], O_RDONLY);
+		if (!dir && cmds[i] && cmds[i][0] != '-' && fd == -1)
 			g_status = 1;
 		close(fd);
 		if (dir)
 			closedir(dir);
 	}
+}
+
+char	*find_path(t_line **line, t_env **env)
+{
+	char	*cmd_path;
+	char	*env_path;
+	char	**path;
+
+	if (!(*line)->cmds[0] || is_builtin(line))
+		return (NULL);
+	validate_dir((*line)->cmds);
+	env_path = check_for_path((*env)->env, NULL);
+	if (access((*line)->cmds[0], F_OK | X_OK) == 0)
+	{
+		g_status = 126;
+		if (!ft_strncmp((*line)->cmds[0], "/bin", 4) || \
+			!ft_strncmp((*line)->cmds[0], "/usr/bin", 8))
+			g_status = 0;
+		free(env_path);
+		return (ft_strdup((*line)->cmds[0]));
+	}
+	path = ft_split(env_path, ':');
+	cmd_path = check_cmdpath(env_path, path, (*line)->cmds[0]);
 	if (cmd_path)
 		return (cmd_path);
 	path_error(path, (*line)->cmds[0]);
-	free_charpp(path);
+	free_ppp(env_path, path);
 	g_status = 127;
 	return (0);
 }
@@ -99,20 +107,4 @@ int	cmds_count(char **split)
 	while (split[i])
 		i++;
 	return (i);
-}
-
-void	free_lstcontent(t_line **buffer)
-{
-	if ((*buffer)->insert_char)
-		free_charpp((*buffer)->insert_char);
-	if ((*buffer)->insert_op)
-		free((*buffer)->insert_op);
-	if ((*buffer)->path)
-		free((*buffer)->path);
-	if ((*buffer)->cmd)
-		free((*buffer)->cmd);
-	if ((*buffer)->infile)
-		free((*buffer)->infile);
-	if ((*buffer)->outfile)
-		free((*buffer)->outfile);
 }

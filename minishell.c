@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 13:51:41 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/14 09:58:42 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/14 10:23:58 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	organize_line(t_line **line)
 	head = (*line);
 	if (!cut_cmd(line))
 		return (0);
-	check_for_pipes(line, (*line)->cmds);
+	check_for_pipes(line, (*line)->cmds, -1, 0);
 	*line = head;
 	while ((*line))
 	{
@@ -53,7 +53,7 @@ int	organize_line(t_line **line)
 		(*line) = (*line)->next;
 	}
 	*line = head;
-	// int i;
+	//int i;
 	// while (*line)
 	// {
 	// 	i = -1;

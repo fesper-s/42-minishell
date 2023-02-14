@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 14:42:32 by gussoare          #+#    #+#             */
-/*   Updated: 2023/02/14 08:53:22 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/14 10:16:45 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ int	check_operator(t_line **line, char **cmds)
 			check_heredocs(line, cmds, &i);
 		if (i == -1)
 		{
-			printf("ITS RIGHT!! FUCK\n");
 			break ;
 		}
 	}
@@ -89,15 +88,11 @@ void	check_builtins(t_line **line, t_env **env, int size)
 	}
 }
 
-void	check_for_pipes(t_line **line, char **cmd)
+void	check_for_pipes(t_line **line, char **cmd, int i, int j)
 {
-	int		i;
-	int		j;
 	char	**b_p;
 	char	**a_p;
 
-	i = -1;
-	j = 0;
 	b_p = NULL;
 	a_p = NULL;
 	if (cmds_count(cmd) != tilpipe(cmd))
