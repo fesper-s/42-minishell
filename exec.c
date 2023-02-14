@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 11:43:56 by gussoare          #+#    #+#             */
-/*   Updated: 2023/02/14 12:34:34 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/14 12:43:55 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,18 @@ void	exec_cmds(t_line **line, t_env **env, int *fd, int *fdd)
 	}
 }
 
+void	check_for_builtins(char **cmds)
+{
+	if (!cmds[0])
+		return ;
+	if (!ft_strncmp(cmds[0], "echo", 5))
+		g_status = 0;
+	if (!ft_strncmp(cmds[0], "pwd", 4))
+		g_status = 0;
+	if (!ft_strncmp(cmds[0], "env", 4))
+		g_status = 0;
+}
+
 void	pipeline(t_line **line, t_env **env, int size)
 {
 	int	fd[2];
@@ -57,6 +69,7 @@ void	pipeline(t_line **line, t_env **env, int size)
 	{
 		(*line)->path = find_path(line, env);
 		insert_exec(line);
+		check_for_builtins((*line)->cmds);
 		pipe(fd);
 		(*line)->child = fork();
 		if ((*line)->child == -1 && print_error("Error: fork\n"))

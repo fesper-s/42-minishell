@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 14:04:49 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/14 12:18:09 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/14 12:37:29 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int		print_error(char *str);
 void	cmd_error(char *cmd);
 void	error_display(char *cmd);
 void	dir_error(char *path);
-int		export_error(char *str);
+int		export_error(char *str, char *msg);
 // more_error.c
 void	path_error(char **path, char *cmd);
 void	check_dir_error(char *str);
@@ -154,6 +154,7 @@ void	check_heredocs(t_line **line, char **cmds, int *i);
 //exec.c
 void	handle_cmd(t_line **line, t_env **env);
 void	exec_cmds(t_line **line, t_env **env, int *fd, int *fdd);
+void	check_for_builtins(char **cmds);
 void	pipeline(t_line **line, t_env **env, int size);
 //file_utils.c
 void	ch_cmd_data(t_line **line, char ***buffer, int j);

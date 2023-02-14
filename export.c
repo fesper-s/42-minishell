@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 08:00:46 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/13 14:35:06 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/14 12:15:15 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,14 @@ int	exporting(char *cmd, t_env **env)
 				break ;
 			}
 			if (!ft_isalnum(cmd[i]))
-				return (export_error(cmd));
+				return (export_error(cmd, "export"));
 		}
 		if (isattr)
 			add_to_env(cmd, env);
 		g_status = 0;
 	}
 	else
-		export_error(cmd);
+		export_error(cmd, "export");
 	return (0);
 }
 
@@ -90,6 +90,7 @@ int	handle_export(char **cmds, t_env **env)
 				free((*env)->env[j]);
 				(*env)->env[j] = ft_strdup(cmds[i]);
 				changed = 1;
+				g_status = 0;
 			}
 		}
 		if (!changed)
