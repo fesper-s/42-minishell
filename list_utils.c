@@ -53,6 +53,8 @@ t_line	*ft_lst_new(char **cmds)
 	new->child = 0;
 	new->insert_op = NULL;
 	new->insert_char = NULL;
+	new->insert_len = 0;
+	new->is_insert = 0;
 	new->path = NULL;
 	new->next = 0;
 	return (new);
@@ -80,4 +82,6 @@ void	ft_lst_add_next(t_line **lst, t_line *new)
 	next = (*lst)->next;
 	(*lst)->next = new;
 	new->next = next;
+	new->insert_op = NULL;
+	new->is_insert = 1;
 }

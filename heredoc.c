@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 11:48:10 by gussoare          #+#    #+#             */
-/*   Updated: 2023/02/14 10:16:53 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/14 12:20:32 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ void	print_insert(t_line **line)
 	int	i;
 
 	i = -1;
-	if ((*line)->insert_char && (*line)->next)
-	{		
-		while ((*line)->insert_char[++i])
+	if ((*line)->insert_char && (*line)->next && (*line)->next->is_insert)
+	{
+		while (++i < (*line)->insert_len)
 			printf("%s\n", (*line)->insert_char[i]);
 	}
 }
@@ -31,6 +31,7 @@ void	insert_operation(t_line **line, char *eof)
 
 	i = -1;
 	buffer = NULL;
+	(*line)->insert_len++;
 	if (!(*line)->insert_char)
 	{
 		(*line)->insert_char = malloc(2 * sizeof(char *));
@@ -95,8 +96,9 @@ void	check_heredocs(t_line **line, char **cmds, int *i)
 			(*line)->extract_op = 1;
 	else if (!ft_strncmp(cmds[*i], "<<", 2) && cmds[*i + 1])
 	{
+		smart_trim(line, *i + 1);
+		(*line)->insert_op =  ft_strdup(cmds[*i + 1]);
 		*i = -1;
-		(*line)->insert_op = ft_strdup(cmds[*i + 1]);
 		if (cmds_count(cmds) > 2)
 			rm_insert_op(line, cmds, *i);
 		else
