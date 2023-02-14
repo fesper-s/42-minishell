@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 17:25:37 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/13 15:24:48 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/14 09:07:33 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,10 +105,10 @@ void	free_lstcontent(t_line **buffer)
 {
 	if ((*buffer)->insert_char)
 		free_charpp((*buffer)->insert_char);
-	if ((*buffer)->path)
-		free((*buffer)->path);
 	if ((*buffer)->insert_op)
 		free((*buffer)->insert_op);
+	if ((*buffer)->path)
+		free((*buffer)->path);
 	if ((*buffer)->cmd)
 		free((*buffer)->cmd);
 	if ((*buffer)->infile)

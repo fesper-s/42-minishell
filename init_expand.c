@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_expand.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 16:44:05 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/13 10:17:04 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/14 09:56:31 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void	apply_expand(t_line **line, t_env *env, int single_quote, int *j)
 	int	i;
 
 	i = -1;
+	if (!(*line)->cmds[*j])
+		return ;
 	while ((*line)->cmds[*j][++i])
 	{
 		if (!single_quote && (*line)->cmds[*j][i] == '$')

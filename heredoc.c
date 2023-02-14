@@ -6,7 +6,7 @@
 /*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 11:48:10 by gussoare          #+#    #+#             */
-/*   Updated: 2023/02/13 11:55:27 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/14 09:19:20 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,14 +95,15 @@ void	check_heredocs(t_line **line, char **cmds, int *i)
 			(*line)->extract_op = 1;
 	else if (!ft_strncmp(cmds[*i], "<<", 2) && cmds[*i + 1])
 	{
-		(*line)->insert_op = ft_strdup(cmds[*i + 1]);
 		*i = -1;
+		(*line)->insert_op = ft_strdup(cmds[*i + 1]);
 		if (cmds_count(cmds) > 2)
 			rm_insert_op(line, cmds, *i);
 		else
 		{
 			free_charpp((*line)->cmds);
-			(*line)->cmds = ft_calloc(1, sizeof(char *));
+			(*line)->cmds = malloc(sizeof(char *));
+			(*line)->cmds[0] = 0;
 		}
 		*i = -1;
 	}

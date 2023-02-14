@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
+/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 10:42:52 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/13 14:35:49 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/14 10:00:22 by gussoare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,12 @@ void	smart_trim(t_line **line, int index)
 		free((*line)->cmds[index]);
 		(*line)->cmds[index] = ft_strdup(temp);
 		free(temp);
+	}
+	if (!ft_strlen((*line)->cmds[0]))
+	{
+		free((*line)->cmds[index]);
+		(*line)->cmds[index] = malloc(sizeof(char *));
+		(*line)->cmds[index] = 0;
 	}
 }
 
