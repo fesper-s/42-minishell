@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 17:25:37 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/14 14:01:11 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/15 08:00:11 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,14 @@ void	validate_dir(char **cmds)
 	int	i;
 	int	fd;
 
+	if (!ft_strncmp(cmds[0], "expr", 5))
+	{
+		if (g_status == 0)
+			g_status = 1;
+		else
+			g_status = 0;
+		return ;
+	}
 	g_status = 0;
 	i = 0;
 	while (cmds[++i])

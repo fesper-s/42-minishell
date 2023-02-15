@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 11:48:10 by gussoare          #+#    #+#             */
-/*   Updated: 2023/02/14 13:50:54 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/15 08:10:15 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,12 @@ void	insert_exec(t_line **line)
 			eof = readline("> ");
 			if (!eof || g_status == 666)
 			{
-				g_status = 130;
+				g_status = 1;
 				if (!eof)
 					printf("\n");
 				break ;
 			}
-			g_status = 130;
+			g_status = 0;
 			if (!ft_strncmp((*line)->insert_op, eof, ft_strlen(eof) + 1))
 				break ;
 			insert_operation(line, eof);

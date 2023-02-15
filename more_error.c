@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/23 11:26:57 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/14 14:01:21 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/15 08:07:23 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,10 @@ void	check_dir_error(char *str)
 char	*checking_exe(t_line **line, char **env_path)
 {
 	g_status = 126;
-	if (!ft_strncmp((*line)->cmds[0], "/bin", 4) || \
-		!ft_strncmp((*line)->cmds[0], "/usr/bin", 8) || \
+	if (!ft_strncmp((*line)->cmds[0], "/bin/", 5) || \
+		!ft_strncmp((*line)->cmds[0], "/usr/bin/", 9) || \
 		!ft_strncmp((*line)->cmds[0], "./", 2))
-	g_status = 0;
+		g_status = 0;
 	free(env_path[0]);
 	return (ft_strdup((*line)->cmds[0]));
 }
