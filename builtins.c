@@ -6,7 +6,7 @@
 /*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 10:42:52 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/14 12:27:11 by fesper-s         ###   ########.fr       */
+/*   Updated: 2023/02/14 13:32:27 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ void	smart_trim(t_line **line, int index)
 	}
 	if (!ft_strlen((*line)->cmds[0]))
 	{
-		free((*line)->cmds[index]);
-		(*line)->cmds[index] = malloc(sizeof(char *));
-		(*line)->cmds[index] = 0;
+		free_charpp((*line)->cmds);
+		(*line)->cmds = malloc(sizeof(char *));
+		(*line)->cmds[0] = 0;
 	}
 }
 

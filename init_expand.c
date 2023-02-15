@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_expand.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gussoare <gussoare@student.42.rio>         +#+  +:+       +#+        */
+/*   By: fesper-s <fesper-s@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 16:44:05 by fesper-s          #+#    #+#             */
-/*   Updated: 2023/02/14 09:56:31 by gussoare         ###   ########.fr       */
+/*   Updated: 2023/02/14 13:36:37 by fesper-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ void	expand_var(t_line **line, t_env *env, int j)
 			if ((*line)->cmds[j][0] == '\'')
 				single_quote = 1;
 			smart_trim(line, j);
+			if (!(*line)->cmds[0])
+				break ;
 			apply_expand(line, env, single_quote, &j);
 		}
 		*line = (*line)->next;
