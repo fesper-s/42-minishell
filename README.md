@@ -6,8 +6,27 @@
 
 The objective of this project is to create a simple shell in C.
 
-## Usage
-Compile with `make` and execute - `./minishell`.
+## Requirements for Minishell
+For Minishell program to run, it's needed Readline Lib. To download it on:
+
+Ubuntu:
+```bash
+sudo apt install libreadline-dev 
+```
+MacOs:
+```bash
+brew install readline
+```
+
+## How to use Minishell
+Compile using:
+```bash
+make
+```
+Execute using:
+```bash
+./minishell
+```
 
 ##
 
