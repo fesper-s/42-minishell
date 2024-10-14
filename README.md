@@ -13,7 +13,7 @@ Ubuntu:
 ```bash
 sudo apt install libreadline-dev 
 ```
-MacOs:
+MacOS:
 ```bash
 brew install readline
 ```
